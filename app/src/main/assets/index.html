@@ -3,45 +3,406 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مرحباً بك في تطبيق رامي النجار</title>
+    <title>رامي النجار - نجار محترف</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            text-align: center; 
-            padding: 20px; 
-            background-color: #170F0B; 
-            color: #F5EBE1; 
+        :root {
+            --primary: #D4AF37;
+            --primary-dark: #B5952F;
+            --bg-dark: #170F0B;
+            --surface-dark: #231711;
+            --surface-variant: #33231A;
+            --text-primary: #F5EBE1;
+            --text-secondary: #C2B2A3;
+            --border-dark: #4A3423;
+            --whatsapp: #25D366;
+        }
+        
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: var(--surface-dark);
+            padding: 15px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--border-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        header {
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: linear-gradient(rgba(23, 15, 11, 0.8), rgba(23, 15, 11, 0.8)), url('https://images.unsplash.com/photo-1598305086036-7c975a538568?auto=format&fit=crop&q=80') center/cover;
+            margin-top: 60px; /* Offset for navbar */
         }
-        h1 { 
-            color: #D4AF37; 
-            font-size: 2.5rem;
+
+        h1 {
+            font-size: 3rem;
+            color: var(--primary);
             margin-bottom: 10px;
         }
-        p {
-            font-size: 1.2rem;
-            color: #C2B2A3;
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 20px;
         }
-        .container {
-            background-color: #231711;
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--bg-dark);
+            padding: 12px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Sections */
+        section {
+            padding: 60px 20px;
+        }
+
+        h2.section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        h2.section-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: -10px;
+            left: 25%;
+        }
+
+        /* About */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            background-color: var(--surface-dark);
             padding: 30px;
-            border-radius: 15px;
-            border: 2px solid #4A3423;
-            max-width: 90%;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-radius: 10px;
+            border: 1px solid var(--border-dark);
+        }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background-color: var(--surface-dark);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-dark);
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* Portfolio */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 2px solid var(--border-dark);
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s;
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .portfolio-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(23, 15, 11, 0.9);
+            overflow: hidden;
+            width: 100%;
+            height: 0;
+            transition: .5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .portfolio-item:hover .portfolio-overlay {
+            height: 100%;
+        }
+
+        .portfolio-overlay .text {
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Contact */
+        .contact-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--surface-dark);
+            color: var(--text-primary);
+            padding: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            border: 1px solid var(--primary);
+            transition: background 0.3s;
+        }
+
+        .contact-btn:hover {
+            background-color: var(--surface-variant);
+        }
+
+        .contact-btn.whatsapp {
+            border-color: var(--whatsapp);
+            color: var(--whatsapp);
+        }
+        
+        .contact-btn.whatsapp:hover {
+            background-color: rgba(37, 211, 102, 0.1);
+        }
+
+        footer {
+            background-color: var(--surface-dark);
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--border-dark);
+            margin-top: 40px;
+        }
+
+        /* Utilities */
+        .icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .nav-links { display: none; } /* Could add hamburger menu if needed, but keeping it simple for basic HTML */
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>النجار رامي</h1>
-        <p>هذه هي الصفحة الرئيسية باستخدام HTML.</p>
-        <p>يمكنك تعديل هذا الملف (index.html) لإضافة محتوى الويب الخاص بك.</p>
-    </div>
+
+    <nav>
+        <a href="#" class="logo">رامي للنجارة</a>
+        <ul class="nav-links">
+            <li><a href="#about">من نحن</a></li>
+            <li><a href="#services">الخدمات</a></li>
+            <li><a href="#portfolio">أعمالنا</a></li>
+            <li><a href="#contact">تواصل معنا</a></li>
+        </ul>
+    </nav>
+
+    <header id="home">
+        <h1>رامي النجار</h1>
+        <p class="subtitle">نجار محترف لجميع أعمال الأخشاب والديكورات</p>
+        <a href="#portfolio" class="btn">شاهد أعمالي</a>
+    </header>
+
+    <section id="about">
+        <h2 class="section-title">من أنا</h2>
+        <div class="about-content">
+            <p>أهلاً بك في موقعي! أنا رامي، نجار محترف متخصص في تصميم وتنفيذ كافة أنواع الأعمال الخشبية. بفضل سنوات من الخبرة، أقدم لعملائي جودة استثنائية واهتماماً دقيقاً بالتفاصيل في كل قطعة أصنعها. سواء كنت تبحث عن مطبخ عصري، أبواب متينة، أو ديكورات خشبية فريدة، فأنتم في المكان الصحيح.</p>
+        </div>
+    </section>
+
+    <section id="services" style="background-color: var(--surface-variant);">
+        <h2 class="section-title">خدماتنا</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>مطابخ خشبية</h3>
+                <p>تصميم وتفصيل مطابخ عصرية وكلاسيكية بأجود أنواع الخشب المقاوم للرطوبة.</p>
+            </div>
+            <div class="service-card">
+                <h3>أبواب ونوافذ</h3>
+                <p>صناعة أبواب داخلية وخارجية بمتانة عالية وتصميمات تناسب كافة الأذواق.</p>
+            </div>
+            <div class="service-card">
+                <h3>أثاث منزلي</h3>
+                <p>تنفيذ غرف نوم، طاولات، ودواليب تلبي احتياجاتك ومساحاتك بشكل مثالي.</p>
+            </div>
+            <div class="service-card">
+                <h3>ديكورات خشبية</h3>
+                <p>إضافة لمسات فنية لمنزلك أو مكتبك من خلال تجليد الحوائط وتصميم ديكورات مبتكرة.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio">
+        <h2 class="section-title">معرض الأعمال</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item">
+                <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800" alt="مطبخ خشبي">
+                <div class="portfolio-overlay">
+                    <div class="text">مطبخ عصري من خشب الزان</div>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&q=80&w=800" alt="طاولة خشبية">
+                <div class="portfolio-overlay">
+                    <div class="text">طاولة طعام خشب طبيعي</div>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <img src="https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=80&w=800" alt="باب داخلي">
+                <div class="portfolio-overlay">
+                    <div class="text">أبواب داخلية بتشطيب ممتاز</div>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <img src="https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=80&w=800" alt="ديكور جداري">
+                <div class="portfolio-overlay">
+                    <div class="text">تجليد و ديكورات جدارية</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" style="background-color: var(--surface-variant);">
+        <h2 class="section-title">تواصل معنا</h2>
+        <div class="contact-container">
+            <a href="tel:01116785889" class="contact-btn">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+                اتصال: 01116785889
+            </a>
+            <a href="https://wa.me/201116785889" class="contact-btn whatsapp">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
+                واتساب
+            </a>
+            <a href="https://www.tiktok.com/@ramyalngar11" class="contact-btn">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v7.2c0 1.96-.5 3.96-1.72 5.39-1.1 1.27-2.67 2.05-4.4 2.22-1.87.17-3.85-.31-5.32-1.5-1.58-1.28-2.58-3.15-2.69-5.18-.12-2.12.63-4.24 2.07-5.71 1.4-1.42 3.4-2.16 5.4-2.13v4.06c-1.13-.03-2.31.25-3.15.96-.86.7-1.35 1.76-1.39 2.87-.05 1.34.62 2.7 1.74 3.39 1.15.7 2.65.75 3.86.15 1.05-.52 1.76-1.51 1.99-2.64.08-.34.1-.69.1-1.04-.01-6.19-.01-12.38-.01-18.57z"/></svg>
+                تيك توك
+            </a>
+            <a href="https://www.facebook.com/" class="contact-btn">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+                فيسبوك
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; رامي للنجارة 2026</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
