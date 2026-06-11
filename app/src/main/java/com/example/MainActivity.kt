@@ -31,7 +31,10 @@ class MainActivity : ComponentActivity() {
             val viewModel: PortfolioViewModel = viewModel()
             
             Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                NavHost(navController = navController, startDestination = "portfolio") {
+                NavHost(navController = navController, startDestination = "html") {
+                    composable("html") {
+                        com.example.ui.screens.HtmlScreen()
+                    }
                     composable("portfolio") {
                         PortfolioScreen(
                             innerPadding = innerPadding,
