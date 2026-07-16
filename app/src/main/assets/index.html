@@ -190,6 +190,21 @@
             color: var(--text-secondary);
         }
 
+        .service-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-dark);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover img {
+            transform: scale(1.02);
+        }
+
         /* Portfolio */
         .portfolio-grid {
             display: grid;
@@ -730,7 +745,7 @@
             </div>
             <div class="form-group">
                 <label for="adminPassword">كلمة مرور لوحة التحكم</label>
-                <input type="password" id="adminPassword" class="form-control" placeholder="أدخل كلمة المرور (الافتراضية ramy2026)" onkeydown="if(event.key === 'Enter') submitLogin()">
+                <input type="password" id="adminPassword" class="form-control" placeholder="أدخل كلمة المرور" onkeydown="if(event.key === 'Enter') submitLogin()">
                 <div id="loginError" style="color: var(--error); margin-top: 8px; font-weight: bold; display: none;">❌ كلمة المرور غير صحيحة!</div>
             </div>
             <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
@@ -824,6 +839,10 @@
                         <div class="form-group">
                             <label for="serviceDesc">تفاصيل ووصف الخدمة</label>
                             <textarea id="serviceDesc" rows="3" class="form-control" placeholder="اكتب تفاصيل الخدمة وجودتها والأخشاب المستخدمة"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceImg">رابط صورة الخدمة (يمكنك وضع رابط مباشر للصورة، أو ترك الحقل فارغاً لاستخدام صورة نجارة افتراضية)</label>
+                            <input type="url" id="serviceImg" class="form-control" placeholder="https://example.com/image.jpg">
                         </div>
                         
                         <div style="display: flex; gap: 10px; margin-bottom: 30px;">
@@ -931,10 +950,10 @@
             heroSubtitle: "نجار محترف لجميع أعمال الأخشاب والديكورات",
             aboutText: "أهلاً بك في موقعي! أنا رامي، نجار محترف متخصص في تصميم وتنفيذ كافة أنواع الأعمال الخشبية. بفضل سنوات من الخبرة، أقدم لعملائي جودة استثنائية واهتماماً دقيقاً بالتفاصيل في كل قطعة أصنعها. سواء كنت تبحث عن مطبخ عصري، أبواب متينة، أو ديكورات خشبية فريدة، فأنتم في المكان الصحيح.",
             services: [
-                { id: "s_1", title: "مطابخ خشبية", desc: "تصميم وتفصيل مطابخ عصرية وكلاسيكية بأجود أنواع الخشب المقاوم للرطوبة والحرارة." },
-                { id: "s_2", title: "أبواب ونوافذ", desc: "صناعة أبواب داخلية وخارجية بمتانة عالية وتصميمات فنية تناسب كافة المساحات والأذواق." },
-                { id: "s_3", title: "أثاث منزلي تفصيل", desc: "تنفيذ غرف نوم، طاولات طعام، دواليب، وغرف معيشة تلبي احتياجاتك ومساحاتك بشكل مثالي." },
-                { id: "s_4", title: "ديكورات خشبية", desc: "إضافة لمسات فنية لبيتك أو مكتبك من خلال تجليد الحوائط وتصميم مكتبات تليفزيون معاصرة." }
+                { id: "s_1", title: "مطابخ خشبية", desc: "تصميم وتفصيل مطابخ عصرية وكلاسيكية بأجود أنواع الخشب المقاوم للرطوبة والحرارة.", img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800" },
+                { id: "s_2", title: "أبواب ونوافذ", desc: "صناعة أبواب داخلية وخارجية بمتانة عالية وتصميمات فنية تناسب كافة المساحات والأذواق.", img: "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=80&w=800" },
+                { id: "s_3", title: "أثاث منزلي تفصيل", desc: "تنفيذ غرف نوم، طاولات طعام، دواليب، وغرف معيشة تلبي احتياجاتك ومساحاتك بشكل مثالي.", img: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=800" },
+                { id: "s_4", title: "ديكورات خشبية", desc: "إضافة لمسات فنية لبيتك أو مكتبك من خلال تجليد الحوائط وتصميم مكتبات تليفزيون معاصرة.", img: "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=80&w=800" }
             ],
             portfolio: [
                 { id: "p_1", title: "مطبخ عصري من خشب الزان", img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800" },
@@ -984,6 +1003,21 @@
                     if (!siteData.inquiries) siteData.inquiries = [];
                     if (!siteData.heroTitle) siteData.heroTitle = defaultSiteData.heroTitle;
                     if (!siteData.heroSubtitle) siteData.heroSubtitle = defaultSiteData.heroSubtitle;
+                    
+                    // Backward compatibility: Populate images for existing saved services if they lack it
+                    if (siteData.services) {
+                        const defaultImgMap = {
+                            "s_1": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800",
+                            "s_2": "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=80&w=800",
+                            "s_3": "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=800",
+                            "s_4": "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=80&w=800"
+                        };
+                        siteData.services.forEach(s => {
+                            if (!s.img) {
+                                s.img = defaultImgMap[s.id] || "https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800";
+                            }
+                        });
+                    }
                 } catch(e) {
                     siteData = {...defaultSiteData};
                 }
@@ -1012,8 +1046,10 @@
             const servicesContainer = document.getElementById('services-grid-container');
             servicesContainer.innerHTML = '';
             siteData.services.forEach(service => {
+                const serviceImgUrl = service.img || 'https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800';
                 servicesContainer.innerHTML += `
                     <div class="service-card">
+                        <img src="${serviceImgUrl}" alt="${service.title}" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
                         <h3>${service.title}</h3>
                         <p>${service.desc}</p>
                     </div>
@@ -1244,9 +1280,11 @@
             }
 
             siteData.services.forEach(service => {
+                const serviceImgUrl = service.img || 'https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800';
                 container.innerHTML += `
                     <div class="admin-item-card">
-                        <div class="admin-item-card-header">
+                        <img src="${serviceImgUrl}" class="image-preview" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
+                        <div class="admin-item-card-header" style="border-bottom:none; padding-bottom:0; margin-top:5px;">
                             <strong style="color: var(--primary); font-size: 1.1rem;">${service.title}</strong>
                             <div class="admin-item-actions">
                                 <button class="action-btn edit" onclick="editService('${service.id}')">تعديل</button>
@@ -1263,6 +1301,7 @@
             const id = document.getElementById('editServiceId').value;
             const title = document.getElementById('serviceTitle').value.trim();
             const desc = document.getElementById('serviceDesc').value.trim();
+            const img = document.getElementById('serviceImg').value.trim();
 
             if (!title || !desc) {
                 alert('الرجاء تعبئة اسم الخدمة ووصفها أولاً!');
@@ -1275,13 +1314,15 @@
                 if (index !== -1) {
                     siteData.services[index].title = title;
                     siteData.services[index].desc = desc;
+                    siteData.services[index].img = img;
                 }
             } else {
                 // Adding new service
                 const newService = {
                     id: 's_' + Date.now(),
                     title: title,
-                    desc: desc
+                    desc: desc,
+                    img: img
                 };
                 siteData.services.push(newService);
             }
@@ -1298,6 +1339,7 @@
                 document.getElementById('editServiceId').value = service.id;
                 document.getElementById('serviceTitle').value = service.title;
                 document.getElementById('serviceDesc').value = service.desc;
+                document.getElementById('serviceImg').value = service.img || '';
                 
                 document.getElementById('service-form-title').innerText = 'تعديل الخدمة الحالية';
                 document.getElementById('serviceSubmitBtn').innerText = 'تحديث وتأكيد التعديل ✏️';
@@ -1318,6 +1360,7 @@
             document.getElementById('editServiceId').value = '';
             document.getElementById('serviceTitle').value = '';
             document.getElementById('serviceDesc').value = '';
+            document.getElementById('serviceImg').value = '';
             
             document.getElementById('service-form-title').innerText = 'إضافة خدمة جديدة';
             document.getElementById('serviceSubmitBtn').innerText = 'إضافة الخدمة ➕';
