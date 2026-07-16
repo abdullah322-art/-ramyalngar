@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رامي النجار - نجار محترف</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #D4AF37;
+            --primary-dark: #B5952F;
+            --bg-dark: #170F0B;
+            --surface-dark: #231711;
+            --surface-variant: #33231A;
+            --text-primary: #F5EBE1;
+            --text-secondary: #C2B2A3;
+            --border-dark: #4A3423;
+            --whatsapp: #25D366;
+            --error: #E57373;
+            --success: #81C784;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: var(--surface-dark);
+            padding: 15px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--border-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: linear-gradient(rgba(23, 15, 11, 0.85), rgba(23, 15, 11, 0.85)), url('https://images.unsplash.com/photo-1598305086036-7c975a538568?auto=format&fit=crop&q=80') center/cover;
+            margin-top: 60px; /* Offset for navbar */
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--bg-dark);
+            padding: 12px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            transition: background 0.3s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 20px;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        h2.section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        h2.section-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: -10px;
+            left: 25%;
+        }
+
+        /* About */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            background-color: var(--surface-dark);
+            padding: 35px;
+            border-radius: 10px;
+            border: 1px solid var(--border-dark);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background-color: var(--surface-dark);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-dark);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.15);
+        }
+
+        .service-card h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-dark);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Portfolio */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 2px solid var(--border-dark);
+            aspect-ratio: 4/3;
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s;
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .portfolio-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(23, 15, 11, 0.9);
+            overflow: hidden;
+            width: 100%;
+            height: 0;
+            transition: .5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .portfolio-item:hover .portfolio-overlay {
+            height: 100%;
+        }
+
+        .portfolio-overlay .text {
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
+            border-top: 2px solid var(--primary);
+            border-bottom: 2px solid var(--primary);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Contact */
+        .contact-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--surface-dark);
+            color: var(--text-primary);
+            padding: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            border: 1px solid var(--primary);
+            transition: background 0.3s, transform 0.2s;
+            font-weight: bold;
+        }
+
+        .contact-btn:hover {
+            background-color: var(--surface-variant);
+            transform: translateY(-2px);
+        }
+
+        .contact-btn.whatsapp {
+            border-color: var(--whatsapp);
+            color: var(--whatsapp);
+        }
+        
+        .contact-btn.whatsapp:hover {
+            background-color: rgba(37, 211, 102, 0.1);
+        }
+
+        footer {
+            background-color: var(--surface-dark);
+            text-align: center;
+            padding: 25px;
+            border-top: 1px solid var(--border-dark);
+        }
+
+        /* Utilities */
+        .icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+        
+        /* Modals & Dashboard */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 6, 4, 0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: var(--surface-dark);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-dark);
+            padding-bottom: 10px;
+        }
+
+        .modal-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: var(--error);
+        }
+
+        /* Admin Fullscreen Dashboard */
+        .admin-dashboard {
+            background-color: var(--bg-dark);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            max-width: 1100px;
+            width: 100%;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        .dashboard-header {
+            background-color: var(--surface-dark);
+            padding: 20px;
+            border-bottom: 2px solid var(--border-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            .dashboard-sidebar {
+                width: 100% !important;
+                border-left: none !important;
+                border-bottom: 2px solid var(--border-dark);
+                flex-direction: row !important;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            h1 { font-size: 2.2rem; }
+            .subtitle { font-size: 1.1rem; }
+            .nav-links { display: none; }
+        }
+
+        .dashboard-sidebar {
+            width: 250px;
+            background-color: var(--surface-dark);
+            border-left: 2px solid var(--border-dark);
+            display: flex;
+            flex-direction: column;
+            padding: 15px 10px;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: right;
+            font-size: 1.05rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--surface-variant);
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+        }
+
+        .dashboard-content {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            max-height: 65vh;
+        }
+
+        .dashboard-pane {
+            display: none;
+        }
+
+        .dashboard-pane.active {
+            display: block;
+        }
+
+        /* Form styling inside Admin */
+        .form-group {
+            margin-bottom: 18px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--surface-dark);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.25);
+        }
+
+        /* Cards inside Admin */
+        .admin-card-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .admin-item-card {
+            background-color: var(--surface-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+        }
+
+        .admin-item-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-dark);
+            padding-bottom: 8px;
+        }
+
+        .admin-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #fff;
+        }
+
+        .action-btn.edit {
+            background-color: #2196F3;
+        }
+
+        .action-btn.delete {
+            background-color: var(--error);
+        }
+
+        .action-btn.whatsapp-direct {
+            background-color: var(--whatsapp);
+        }
+
+        .action-btn.call-direct {
+            background-color: #FF9800;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid var(--border-dark);
+        }
+
+        /* Upload Component Styles */
+        .upload-container {
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+            padding: 15px;
+            background-color: var(--surface);
+            margin-top: 5px;
+        }
+
+        .upload-dropzone {
+            border: 2px dashed var(--border-dark);
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .upload-dropzone:hover, .upload-dropzone.dragover {
+            border-color: var(--primary);
+            background-color: rgba(212, 175, 55, 0.05);
+        }
+
+        .upload-dropzone i {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .upload-dropzone .dropzone-text {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin: 5px 0;
+        }
+
+        .upload-dropzone .dropzone-subtext {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .upload-preview {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px dashed var(--border-dark);
+            border-radius: 6px;
+            background-color: var(--bg-dark);
+        }
+
+        .upload-preview img {
+            max-width: 100%;
+            max-height: 180px;
+            object-fit: contain;
+            border-radius: 6px;
+            border: 1px solid var(--border-dark);
+        }
+
+        /* Inquiries styles */
+        .inquiry-card {
+            border-right: 4px solid var(--primary);
+        }
+
+        .inquiry-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        /* Responsive text sizes */
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8rem; }
+            .subtitle { font-size: 1rem; }
+            .section-title { font-size: 1.6rem; }
+            .admin-dashboard { height: 95vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <a href="#" class="logo">رامي للنجارة</a>
+        <ul class="nav-links">
+            <li><a href="#about">من نحن</a></li>
+            <li><a href="#services">الخدمات</a></li>
+            <li><a href="#portfolio">أعمالنا</a></li>
+            <li><a href="#contact">تواصل معنا</a></li>
+            <li><a href="javascript:void(0)" onclick="openLoginModal()" style="color: var(--primary); font-weight: bold; border: 1px dashed var(--primary); padding: 5px 12px; border-radius: 5px; background-color: rgba(212,175,55,0.05); transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='rgba(212,175,55,0.15)'" onmouseout="this.style.backgroundColor='rgba(212,175,55,0.05)'">لوحة التحكم <i class="fas fa-cog" style="margin-right: 5px; margin-left: 5px;"></i></a></li>
+        </ul>
+    </nav>
+
+    <!-- Header / Hero -->
+    <header id="home">
+        <h1 id="hero-title">رامي النجار</h1>
+        <p class="subtitle" id="hero-subtitle">نجار محترف لجميع أعمال الأخشاب والديكورات</p>
+        <a href="#portfolio" class="btn">شاهد أعمالي</a>
+    </header>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">من أنا</h2>
+        <div class="about-content" id="about-text-container">
+            <!-- Loaded Dynamically -->
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" style="background-color: var(--surface-variant);">
+        <h2 class="section-title">خدماتنا</h2>
+        <div class="services-grid" id="services-grid-container">
+            <!-- Loaded Dynamically -->
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio">
+        <h2 class="section-title">معرض الأعمال</h2>
+        <div class="portfolio-grid" id="portfolio-grid-container">
+            <!-- Loaded Dynamically -->
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" style="background-color: var(--surface-variant);">
+        <h2 class="section-title">تواصل معنا</h2>
+        
+        <!-- Contact Form Box -->
+        <div style="max-width: 600px; margin: 0 auto 40px auto; padding: 25px; background-color: var(--surface-dark); border-radius: 10px; border: 1px solid var(--border-dark); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+            <h3 style="text-align: center; color: var(--primary); margin-bottom: 20px; font-size: 1.4rem;">أرسل لنا استفسارك مباشرة</h3>
+            <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                <div style="margin-bottom: 15px; text-align: right;">
+                    <label for="clientName" style="display: block; margin-bottom: 5px; color: var(--primary); font-weight: bold;">الاسم الكامل</label>
+                    <input type="text" id="clientName" required placeholder="أدخل اسمك الكريم" style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid var(--border-dark); background-color: var(--bg-dark); color: var(--text-primary); font-size: 1rem; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-dark)'">
+                </div>
+                <div style="margin-bottom: 15px; text-align: right;">
+                    <label for="clientPhone" style="display: block; margin-bottom: 5px; color: var(--primary); font-weight: bold;">رقم الهاتف</label>
+                    <input type="tel" id="clientPhone" required placeholder="مثال: 01116785889" style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid var(--border-dark); background-color: var(--bg-dark); color: var(--text-primary); font-size: 1rem; outline: none; transition: border-color 0.3s; text-align: right; direction: ltr;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-dark)'">
+                </div>
+                <div style="margin-bottom: 20px; text-align: right;">
+                    <label for="clientMessage" style="display: block; margin-bottom: 5px; color: var(--primary); font-weight: bold;">نوع العمل أو تفاصيل الاستفسار</label>
+                    <textarea id="clientMessage" rows="4" required placeholder="اكتب هنا تفاصيل طلبك (مثال: تفصيل مطبخ خشب زان بمقاس 3x4 متر)" style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid var(--border-dark); background-color: var(--bg-dark); color: var(--text-primary); font-size: 1rem; resize: vertical; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-dark)'"></textarea>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">إرسال الاستفسار</button>
+                <div id="formStatus" style="margin-top: 15px; font-weight: bold; text-align: center; display: none; padding: 10px; border-radius: 5px;"></div>
+            </form>
+        </div>
+
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 20px; font-size: 1.3rem;">أو تواصل معنا عبر القنوات المباشرة</h3>
+        <div class="contact-container" id="contact-buttons-container">
+            <!-- Loaded Dynamically -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; رامي للنجارة 2026</p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">
+            <a href="javascript:void(0)" onclick="openLoginModal()" style="color: var(--primary); text-decoration: none;">دخول لوحة تحكم الإدارة (خاص بالنجار)</a>
+        </p>
+    </footer>
+
+    <!-- MODAL 1: Admin Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-lock" style="color: var(--primary); margin-left: 8px;"></i> تسجيل الدخول للإدارة</div>
+                <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="adminPassword">كلمة مرور لوحة التحكم</label>
+                <input type="password" id="adminPassword" class="form-control" placeholder="أدخل كلمة المرور" onkeydown="if(event.key === 'Enter') submitLogin()">
+                <div id="loginError" style="color: var(--error); margin-top: 8px; font-weight: bold; display: none;"><i class="fas fa-exclamation-circle" style="margin-left: 5px;"></i> كلمة المرور غير صحيحة!</div>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button class="btn" style="padding: 10px 20px;" onclick="submitLogin()">دخول</button>
+                <button class="btn" style="padding: 10px 20px; background-color: var(--surface-variant); color: var(--text-primary);" onclick="closeLoginModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Fullscreen Admin Dashboard -->
+    <div id="dashboardModal" class="modal" style="align-items: flex-start; padding: 40px 20px;">
+        <div class="admin-dashboard">
+            <div class="dashboard-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-cog" style="font-size: 1.8rem; color: var(--primary);"></i>
+                    <div>
+                        <h2 style="color: var(--primary); margin: 0; font-size: 1.6rem;">لوحة تحكم الموقع</h2>
+                        <p style="color: var(--text-secondary); margin: 0; font-size: 0.9rem;">أهلاً بك يا أستاذ رامي، يمكنك التحكم بكافة أقسام الموقع والطلبات من هنا.</p>
+                    </div>
+                </div>
+                <button class="btn" style="background-color: var(--error); color: #fff; padding: 8px 15px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;" onclick="logoutAdmin()">تسجيل الخروج <i class="fas fa-sign-out-alt"></i></button>
+            </div>
+            
+            <div class="dashboard-container">
+                <!-- Sidebar Tabs -->
+                <div class="dashboard-sidebar">
+                    <button class="tab-btn active" onclick="switchTab(event, 'tab-general')"><i class="fas fa-info-circle" style="margin-left: 8px; width: 18px; text-align: center;"></i> معلومات الموقع</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-services')"><i class="fas fa-tools" style="margin-left: 8px; width: 18px; text-align: center;"></i> إدارة الخدمات</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-portfolio')"><i class="fas fa-images" style="margin-left: 8px; width: 18px; text-align: center;"></i> معرض الأعمال</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-inquiries')" id="inquiries-tab-btn"><i class="fas fa-envelope" style="margin-left: 8px; width: 18px; text-align: center;"></i> طلبات العملاء (0)</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-security')"><i class="fas fa-key" style="margin-left: 8px; width: 18px; text-align: center;"></i> كلمة المرور</button>
+                    <button class="tab-btn" onclick="closeDashboard()" style="margin-top: auto; border: 1px solid var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; gap: 8px;">عرض الموقع <i class="fas fa-desktop"></i></button>
+                </div>
+                
+                <!-- Content Area -->
+                <div class="dashboard-content">
+                    
+                    <!-- PANE 1: General Info -->
+                    <div id="tab-general" class="dashboard-pane active">
+                        <h3 style="color: var(--primary); margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">تعديل معلومات الموقع الأساسية</h3>
+                        
+                        <div class="form-group">
+                            <label for="editHeroTitle">العنوان الرئيسي أعلى الموقع</label>
+                            <input type="text" id="editHeroTitle" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="editHeroSubtitle">العنوان الفرعي</label>
+                            <input type="text" id="editHeroSubtitle" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="editAboutText">قسم "من أنا" (مقدمة الموقع)</label>
+                            <textarea id="editAboutText" rows="5" class="form-control"></textarea>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
+                            <div class="form-group">
+                                <label for="editPhone">رقم هاتف الاتصال المباشر</label>
+                                <input type="text" id="editPhone" class="form-control" style="direction: ltr; text-align: right;">
+                            </div>
+                            <div class="form-group">
+                                <label for="editWhatsapp">رقم واتساب (بترميز دولي مثل 201116785889)</label>
+                                <input type="text" id="editWhatsapp" class="form-control" style="direction: ltr; text-align: right;">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
+                            <div class="form-group">
+                                <label for="editTiktok">معرّف تيك توك (بدون @)</label>
+                                <input type="text" id="editTiktok" class="form-control" style="direction: ltr; text-align: right;">
+                            </div>
+                            <div class="form-group">
+                                <label for="editFacebook">رابط صفحة فيسبوك</label>
+                                <input type="url" id="editFacebook" class="form-control" style="direction: ltr; text-align: right;">
+                            </div>
+                        </div>
+                        
+                        <button class="btn" style="width: 100%; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="saveGeneralSettings()">حفظ وتطبيق المعلومات الجديدة <i class="fas fa-check-circle"></i></button>
+                    </div>
+                    
+                    <!-- PANE 2: Services -->
+                    <div id="tab-services" class="dashboard-pane">
+                        <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;" id="service-form-title">إضافة خدمة جديدة</h3>
+                        
+                        <input type="hidden" id="editServiceId">
+                        <div class="form-group">
+                            <label for="serviceTitle">اسم الخدمة</label>
+                            <input type="text" id="serviceTitle" class="form-control" placeholder="مثال: تركيب غرف نوم">
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceDesc">تفاصيل ووصف الخدمة</label>
+                            <textarea id="serviceDesc" rows="3" class="form-control" placeholder="اكتب تفاصيل الخدمة وجودتها والأخشاب المستخدمة"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>صورة الخدمة</label>
+                            <div class="upload-container" id="serviceUploadContainer">
+                                <div class="upload-dropzone" id="serviceDropzone" onclick="document.getElementById('serviceFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'serviceImg', 'servicePreviewImg')">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p class="dropzone-text">اسحب وأسقط صورة الخدمة هنا، أو اضغط للاختيار من جهازك</p>
+                                    <span class="dropzone-subtext">تدعم ملفات الصور JPG, PNG, WebP</span>
+                                    <input type="file" id="serviceFileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(this, 'serviceImg', 'servicePreviewImg')">
+                                </div>
+                                <div class="upload-preview" id="servicePreviewContainer" style="display: none;">
+                                    <img id="servicePreviewImg" src="" alt="معاينة صورة الخدمة">
+                                    <br>
+                                    <button type="button" class="btn" onclick="clearUploadedImage('serviceImg', 'servicePreviewContainer', 'serviceDropzone', 'serviceFileInput')" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: auto;"><i class="fas fa-trash-alt"></i> إزالة الصورة</button>
+                                </div>
+                                <div style="margin-top: 12px;">
+                                    <label for="serviceImg" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">أو أدخل رابطاً مباشراً للصورة:</label>
+                                    <input type="url" id="serviceImg" class="form-control" placeholder="https://example.com/image.jpg" oninput="handleUrlInput('serviceImg', 'servicePreviewImg', 'servicePreviewContainer', 'serviceDropzone')">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 30px;">
+                            <button class="btn" onclick="saveService()" style="flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px;" id="serviceSubmitBtn">إضافة الخدمة <i class="fas fa-plus"></i></button>
+                            <button class="btn" onclick="resetServiceForm()" style="flex: 1; background-color: var(--surface-variant); color: var(--text-primary);" id="serviceCancelBtn">إلغاء التعديل</button>
+                        </div>
+                        
+                        <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">الخدمات الحالية بالموقع</h3>
+                        <div class="admin-card-list" id="admin-services-list">
+                            <!-- Dynamic Admin Services List -->
+                        </div>
+                    </div>
+                    
+                    <!-- PANE 3: Portfolio -->
+                    <div id="tab-portfolio" class="dashboard-pane">
+                        <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;" id="portfolio-form-title">إضافة عمل جديد لمعرض الأعمال</h3>
+                        
+                        <input type="hidden" id="editPortfolioId">
+                        <div class="form-group">
+                            <label for="portfolioTitle">عنوان العمل المنجز</label>
+                            <input type="text" id="portfolioTitle" class="form-control" placeholder="مثال: مطبخ خشب زان عصري">
+                        </div>
+                        <div class="form-group">
+                            <label>صورة العمل المنجز</label>
+                            <div class="upload-container" id="portfolioUploadContainer">
+                                <div class="upload-dropzone" id="portfolioDropzone" onclick="document.getElementById('portfolioFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'portfolioImg', 'portfolioPreviewImg')">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p class="dropzone-text">اسحب وأسقط صورة العمل هنا، أو اضغط للاختيار من جهازك</p>
+                                    <span class="dropzone-subtext">تدعم ملفات الصور JPG, PNG, WebP</span>
+                                    <input type="file" id="portfolioFileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(this, 'portfolioImg', 'portfolioPreviewImg')">
+                                </div>
+                                <div class="upload-preview" id="portfolioPreviewContainer" style="display: none;">
+                                    <img id="portfolioPreviewImg" src="" alt="معاينة صورة العمل">
+                                    <br>
+                                    <button type="button" class="btn" onclick="clearUploadedImage('portfolioImg', 'portfolioPreviewContainer', 'portfolioDropzone', 'portfolioFileInput')" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: auto;"><i class="fas fa-trash-alt"></i> إزالة الصورة</button>
+                                </div>
+                                <div style="margin-top: 12px;">
+                                    <label for="portfolioImg" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">أو أدخل رابطاً مباشراً للصورة:</label>
+                                    <input type="url" id="portfolioImg" class="form-control" placeholder="https://example.com/image.jpg" oninput="handleUrlInput('portfolioImg', 'portfolioPreviewImg', 'portfolioPreviewContainer', 'portfolioDropzone')">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 30px;">
+                            <button class="btn" onclick="savePortfolio()" style="flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px;" id="portfolioSubmitBtn">إضافة لمعرض الأعمال <i class="fas fa-images"></i></button>
+                            <button class="btn" onclick="resetPortfolioForm()" style="flex: 1; background-color: var(--surface-variant); color: var(--text-primary);" id="portfolioCancelBtn">إلغاء التعديل</button>
+                        </div>
+                        
+                        <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">معرض الأعمال الحالي</h3>
+                        <div class="admin-card-list" id="admin-portfolio-list">
+                            <!-- Dynamic Admin Portfolio List -->
+                        </div>
+                    </div>
+                    
+                    <!-- PANE 4: Inquiries -->
+                    <div id="tab-inquiries" class="dashboard-pane">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">
+                            <h3 style="color: var(--primary); margin: 0;">طلبات العملاء الواردة</h3>
+                            <button class="btn" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;" onclick="clearAllInquiries()">حذف جميع الطلبات <i class="fas fa-trash-alt"></i></button>
+                        </div>
+                        
+                        <div id="admin-inquiries-container">
+                            <!-- Inquiries List Loaded Here -->
+                        </div>
+                    </div>
+                    
+                    <!-- PANE 5: Password Security -->
+                    <div id="tab-security" class="dashboard-pane">
+                        <h3 style="color: var(--primary); margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">تعديل كلمة مرور لوحة التحكم</h3>
+                        
+                        <div class="form-group">
+                            <label for="oldPassword">كلمة المرور الحالية</label>
+                            <input type="password" id="oldPassword" class="form-control" placeholder="أدخل كلمة المرور الحالية لتأكيد هويتك">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newPassword">كلمة المرور الجديدة</label>
+                            <input type="password" id="newPassword" class="form-control" placeholder="أدخل كلمة المرور الجديدة">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmNewPassword">تأكيد كلمة المرور الجديدة</label>
+                            <input type="password" id="confirmNewPassword" class="form-control" placeholder="أعد إدخال كلمة المرور الجديدة">
+                        </div>
+                        
+                        <div id="passwordStatus" style="margin-bottom: 15px; font-weight: bold; text-align: center; display: none; padding: 10px; border-radius: 5px;"></div>
+                        
+                        <button class="btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="updateAdminPassword()">تحديث كلمة المرور <i class="fas fa-key"></i></button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Engine -->
+    <script>
+        // Default content template
+        const defaultSiteData = {
+            heroTitle: "رامي النجار",
+            heroSubtitle: "نجار محترف لجميع أعمال الأخشاب والديكورات",
+            aboutText: "أهلاً بك في موقعي! أنا رامي، نجار محترف متخصص في تصميم وتنفيذ كافة أنواع الأعمال الخشبية. بفضل سنوات من الخبرة، أقدم لعملائي جودة استثنائية واهتماماً دقيقاً بالتفاصيل في كل قطعة أصنعها. سواء كنت تبحث عن مطبخ عصري، أبواب متينة، أو ديكورات خشبية فريدة، فأنتم في المكان الصحيح.",
+            services: [
+                { id: "s_1", title: "مطابخ خشبية", desc: "تصميم وتفصيل مطابخ عصرية وكلاسيكية بأجود أنواع الخشب المقاوم للرطوبة والحرارة.", img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800" },
+                { id: "s_2", title: "أبواب ونوافذ", desc: "صناعة أبواب داخلية وخارجية بمتانة عالية وتصميمات فنية تناسب كافة المساحات والأذواق.", img: "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=80&w=800" },
+                { id: "s_3", title: "أثاث منزلي تفصيل", desc: "تنفيذ غرف نوم، طاولات طعام، دواليب، وغرف معيشة تلبي احتياجاتك ومساحاتك بشكل مثالي.", img: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=800" },
+                { id: "s_4", title: "ديكورات خشبية", desc: "إضافة لمسات فنية لبيتك أو مكتبك من خلال تجليد الحوائط وتصميم مكتبات تليفزيون معاصرة.", img: "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=80&w=800" }
+            ],
+            portfolio: [
+                { id: "p_1", title: "مطبخ عصري من خشب الزان", img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800" },
+                { id: "p_2", title: "طاولة طعام خشب طبيعي", img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&q=80&w=800" },
+                { id: "p_3", title: "أبواب داخلية بتشطيب ممتاز", img: "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=80&w=800" },
+                { id: "p_4", title: "تجليد و ديكورات جدارية خشبية", img: "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=80&w=800" }
+            ],
+            contact: {
+                phone: "01116785889",
+                whatsapp: "201116785889",
+                tiktok: "ramyalngar11",
+                facebook: "https://www.facebook.com/"
+            },
+            password: "ramy2026",
+            inquiries: []
+        };
+
+        let siteData = {};
+
+        // Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSiteData();
+            
+            // Smooth scroll setup
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    e.preventDefault();
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+
+        // Local Storage / Data management
+        function loadSiteData() {
+            const savedData = localStorage.getItem('ramy_carpentry_data');
+            if (savedData) {
+                try {
+                    siteData = JSON.parse(savedData);
+                    // Handle retro-compatibility or newly added keys
+                    if (!siteData.password) siteData.password = "ramy2026";
+                    if (!siteData.inquiries) siteData.inquiries = [];
+                    if (!siteData.heroTitle) siteData.heroTitle = defaultSiteData.heroTitle;
+                    if (!siteData.heroSubtitle) siteData.heroSubtitle = defaultSiteData.heroSubtitle;
+                    
+                    // Backward compatibility: Populate images for existing saved services if they lack it
+                    if (siteData.services) {
+                        const defaultImgMap = {
+                            "s_1": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800",
+                            "s_2": "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=80&w=800",
+                            "s_3": "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=800",
+                            "s_4": "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=80&w=800"
+                        };
+                        siteData.services.forEach(s => {
+                            if (!s.img) {
+                                s.img = defaultImgMap[s.id] || "https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800";
+                            }
+                        });
+                    }
+                } catch(e) {
+                    siteData = {...defaultSiteData};
+                }
+            } else {
+                siteData = {...defaultSiteData};
+                saveSiteDataLocally();
+            }
+            renderWebsiteContent();
+        }
+
+        function saveSiteDataLocally() {
+            localStorage.setItem('ramy_carpentry_data', JSON.stringify(siteData));
+        }
+
+        // Render Website dynamic content
+        function renderWebsiteContent() {
+            // Hero
+            document.getElementById('hero-title').innerText = siteData.heroTitle;
+            document.getElementById('hero-subtitle').innerText = siteData.heroSubtitle;
+            document.title = `${siteData.heroTitle} - نجار محترف`;
+
+            // About
+            document.getElementById('about-text-container').innerHTML = `<p>${siteData.aboutText.replace(/\n/g, '<br>')}</p>`;
+
+            // Services
+            const servicesContainer = document.getElementById('services-grid-container');
+            servicesContainer.innerHTML = '';
+            siteData.services.forEach(service => {
+                const serviceImgUrl = service.img || 'https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800';
+                servicesContainer.innerHTML += `
+                    <div class="service-card">
+                        <img src="${serviceImgUrl}" alt="${service.title}" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
+                        <h3>${service.title}</h3>
+                        <p>${service.desc}</p>
+                    </div>
+                `;
+            });
+
+            // Portfolio
+            const portfolioContainer = document.getElementById('portfolio-grid-container');
+            portfolioContainer.innerHTML = '';
+            siteData.portfolio.forEach(item => {
+                portfolioContainer.innerHTML += `
+                    <div class="portfolio-item">
+                        <img src="${item.img}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
+                        <div class="portfolio-overlay">
+                            <div class="text">${item.title}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Contact Channels
+            const buttonsContainer = document.getElementById('contact-buttons-container');
+            buttonsContainer.innerHTML = `
+                <a href="tel:${siteData.contact.phone}" class="contact-btn">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+                    اتصال مباشر: ${siteData.contact.phone}
+                </a>
+                <a href="https://wa.me/${siteData.contact.whatsapp}" class="contact-btn whatsapp">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
+                    تراسل عبر واتساب
+                </a>
+                <a href="https://www.tiktok.com/@${siteData.contact.tiktok}" target="_blank" class="contact-btn">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v7.2c0 1.96-.5 3.96-1.72 5.39-1.1 1.27-2.67 2.05-4.4 2.22-1.87.17-3.85-.31-5.32-1.5-1.58-1.28-2.58-3.15-2.69-5.18-.12-2.12.63-4.24 2.07-5.71 1.4-1.42 3.4-2.16 5.4-2.13v4.06c-1.13-.03-2.31.25-3.15.96-.86.7-1.35 1.76-1.39 2.87-.05 1.34.62 2.7 1.74 3.39 1.15.7 2.65.75 3.86.15 1.05-.52 1.76-1.51 1.99-2.64.08-.34.1-.69.1-1.04-.01-6.19-.01-12.38-.01-18.57z"/></svg>
+                    شاهدنا على تيك توك (@${siteData.contact.tiktok})
+                </a>
+                <a href="${siteData.contact.facebook}" target="_blank" class="contact-btn">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+                    تابعنا على فيسبوك
+                </a>
+            `;
+
+            // Update badge in inquiries tab
+            document.getElementById('inquiries-tab-btn').innerHTML = `<i class="fas fa-envelope" style="margin-left: 8px; width: 18px; text-align: center;"></i> طلبات العملاء (${siteData.inquiries.length})`;
+        }
+
+        // --- Drag-and-Drop and File Upload Handlers ---
+        function handleDragOver(e, element) {
+            e.preventDefault();
+            element.classList.add('dragover');
+        }
+
+        function handleDragLeave(e, element) {
+            e.preventDefault();
+            element.classList.remove('dragover');
+        }
+
+        function handleDrop(e, element, inputId, previewImgId) {
+            e.preventDefault();
+            element.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const fileInput = element.querySelector('input[type="file"]');
+                if (fileInput) {
+                    fileInput.files = files;
+                    handleFileSelect(fileInput, inputId, previewImgId);
+                }
+            }
+        }
+
+        function handleFileSelect(input, inputId, previewImgId) {
+            const file = input.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('الرجاء اختيار ملف صورة صحيح (JPG, PNG, WebP)!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                document.getElementById(inputId).value = base64Data;
+                
+                const previewImg = document.getElementById(previewImgId);
+                previewImg.src = base64Data;
+                
+                const prefix = inputId.replace('Img', '');
+                document.getElementById(`${prefix}PreviewContainer`).style.display = 'block';
+                document.getElementById(`${prefix}Dropzone`).style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearUploadedImage(inputId, previewContainerId, dropzoneId, fileInputId) {
+            document.getElementById(inputId).value = '';
+            document.getElementById(fileInputId).value = '';
+            document.getElementById(previewContainerId).style.display = 'none';
+            document.getElementById(dropzoneId).style.display = 'block';
+        }
+
+        function handleUrlInput(inputId, previewImgId, previewContainerId, dropzoneId) {
+            const urlVal = document.getElementById(inputId).value.trim();
+            if (urlVal) {
+                document.getElementById(previewImgId).src = urlVal;
+                document.getElementById(previewContainerId).style.display = 'block';
+                document.getElementById(dropzoneId).style.display = 'none';
+            } else {
+                document.getElementById(previewContainerId).style.display = 'none';
+                document.getElementById(dropzoneId).style.display = 'block';
+            }
+        }
+
+        // Contact Submission Handler
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('clientName').value;
+            const phone = document.getElementById('clientPhone').value;
+            const message = document.getElementById('clientMessage').value;
+            const statusDiv = document.getElementById('formStatus');
+
+            statusDiv.style.display = 'block';
+            statusDiv.style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
+            statusDiv.style.color = 'var(--primary)';
+            statusDiv.innerText = 'جاري إرسال استفسارك وتجهيز الحفظ...';
+
+            // 1. Create a dynamic inquiry object
+            const newInquiry = {
+                id: 'inq_' + Date.now(),
+                name: name,
+                phone: phone,
+                message: message,
+                timestamp: new Date().toLocaleString('ar-EG')
+            };
+
+            // Add to inquiries in state
+            siteData.inquiries.unshift(newInquiry);
+            saveSiteDataLocally();
+
+            // 2. Android App Interop: If inside webView and has interface
+            if (window.AndroidInterface && typeof window.AndroidInterface.submitForm === 'function') {
+                window.AndroidInterface.submitForm(name, phone, message);
+                statusDiv.style.backgroundColor = 'rgba(37, 211, 102, 0.1)';
+                statusDiv.style.color = '#25D366';
+                statusDiv.innerText = 'تم إرسال وحفظ الاستفسار بنجاح في جهازك!';
+                document.getElementById('contactForm').reset();
+                setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
+                return;
+            }
+
+            // 3. Web browser integrations (Firebase & WhatsApp redirect)
+            const firebaseDbUrl = "https://ramipro-database-default-rtdb.firebaseio.com/inquiries.json";
+            const whatsappUrl = `https://wa.me/${siteData.contact.whatsapp}?text=${encodeURIComponent(`مرحباً أستاذ رامي، لدي استفسار من موقع معرض الأعمال:\n\n*الاسم:* ${name}\n*الهاتف:* ${phone}\n*الرسالة:* ${message}`)}`;
+
+            // Post to Firebase Realtime Database
+            fetch(firebaseDbUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: name,
+                    phone: phone,
+                    message: message,
+                    timestamp: new Date().toISOString()
+                })
+            })
+            .then(response => {
+                statusDiv.style.backgroundColor = 'rgba(37, 211, 102, 0.1)';
+                statusDiv.style.color = '#25D366';
+                statusDiv.innerText = 'تم حفظ استفسارك بنجاح في لوحة التحكم وفي Firebase! جاري توجيهك لواتساب للتأكيد...';
+                setTimeout(() => {
+                    window.open(whatsappUrl, '_blank');
+                    document.getElementById('contactForm').reset();
+                    statusDiv.style.display = 'none';
+                }, 2000);
+            })
+            .catch(error => {
+                // Fallback direct to WhatsApp (completely robust if Firebase offline/unavailable)
+                statusDiv.style.backgroundColor = 'rgba(37, 211, 102, 0.1)';
+                statusDiv.style.color = '#25D366';
+                statusDiv.innerText = 'تم حفظ استفسارك بنجاح في لوحة التحكم! جاري توجيهك لواتساب لإرسال الرسالة المباشرة...';
+                setTimeout(() => {
+                    window.open(whatsappUrl, '_blank');
+                    document.getElementById('contactForm').reset();
+                    statusDiv.style.display = 'none';
+                }, 1500);
+            });
+        }
+
+        // Login Modal Controls
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('adminPassword').focus();
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        function submitLogin() {
+            const passwordEntered = document.getElementById('adminPassword').value;
+            if (passwordEntered === siteData.password) {
+                closeLoginModal();
+                openDashboard();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        // Dashboard Modal Controls
+        function openDashboard() {
+            document.getElementById('dashboardModal').style.display = 'flex';
+            
+            // Populate General Settings Inputs
+            document.getElementById('editHeroTitle').value = siteData.heroTitle;
+            document.getElementById('editHeroSubtitle').value = siteData.heroSubtitle;
+            document.getElementById('editAboutText').value = siteData.aboutText;
+            document.getElementById('editPhone').value = siteData.contact.phone;
+            document.getElementById('editWhatsapp').value = siteData.contact.whatsapp;
+            document.getElementById('editTiktok').value = siteData.contact.tiktok;
+            document.getElementById('editFacebook').value = siteData.contact.facebook;
+
+            // Load Admin lists
+            renderAdminServices();
+            renderAdminPortfolio();
+            renderAdminInquiries();
+        }
+
+        function closeDashboard() {
+            document.getElementById('dashboardModal').style.display = 'none';
+            renderWebsiteContent(); // apply changes instantly to the live view
+        }
+
+        function logoutAdmin() {
+            closeDashboard();
+            alert('تم تسجيل الخروج بنجاح.');
+        }
+
+        // Tab Switch logic inside dashboard
+        function switchTab(evt, tabId) {
+            // Remove active classes
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.dashboard-pane').forEach(pane => pane.classList.remove('active'));
+
+            // Set current active
+            evt.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Action 1: Save General Settings
+        function saveGeneralSettings() {
+            siteData.heroTitle = document.getElementById('editHeroTitle').value;
+            siteData.heroSubtitle = document.getElementById('editHeroSubtitle').value;
+            siteData.aboutText = document.getElementById('editAboutText').value;
+            siteData.contact.phone = document.getElementById('editPhone').value;
+            siteData.contact.whatsapp = document.getElementById('editWhatsapp').value;
+            siteData.contact.tiktok = document.getElementById('editTiktok').value;
+            siteData.contact.facebook = document.getElementById('editFacebook').value;
+
+            saveSiteDataLocally();
+            alert('تم حفظ وتحديث معلومات الموقع بنجاح! ستظهر التعديلات فوراً.');
+        }
+
+        // Action 2: Manage Services
+        function renderAdminServices() {
+            const container = document.getElementById('admin-services-list');
+            container.innerHTML = '';
+            
+            if (siteData.services.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%;">لا توجد خدمات حالياً بالموقع.</p>';
+                return;
+            }
+
+            siteData.services.forEach(service => {
+                const serviceImgUrl = service.img || 'https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800';
+                container.innerHTML += `
+                    <div class="admin-item-card">
+                        <img src="${serviceImgUrl}" class="image-preview" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
+                        <div class="admin-item-card-header" style="border-bottom:none; padding-bottom:0; margin-top:5px;">
+                            <strong style="color: var(--primary); font-size: 1.1rem;">${service.title}</strong>
+                            <div class="admin-item-actions">
+                                <button class="action-btn edit" onclick="editService('${service.id}')">تعديل</button>
+                                <button class="action-btn delete" onclick="deleteService('${service.id}')">حذف</button>
+                            </div>
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">${service.desc}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function saveService() {
+            const id = document.getElementById('editServiceId').value;
+            const title = document.getElementById('serviceTitle').value.trim();
+            const desc = document.getElementById('serviceDesc').value.trim();
+            const img = document.getElementById('serviceImg').value.trim();
+
+            if (!title || !desc) {
+                alert('الرجاء تعبئة اسم الخدمة ووصفها أولاً!');
+                return;
+            }
+
+            if (id) {
+                // Editing existing service
+                const index = siteData.services.findIndex(s => s.id === id);
+                if (index !== -1) {
+                    siteData.services[index].title = title;
+                    siteData.services[index].desc = desc;
+                    siteData.services[index].img = img;
+                }
+            } else {
+                // Adding new service
+                const newService = {
+                    id: 's_' + Date.now(),
+                    title: title,
+                    desc: desc,
+                    img: img
+                };
+                siteData.services.push(newService);
+            }
+
+            saveSiteDataLocally();
+            resetServiceForm();
+            renderAdminServices();
+            alert('تم حفظ الخدمة بنجاح!');
+        }
+
+        function editService(id) {
+            const service = siteData.services.find(s => s.id === id);
+            if (service) {
+                document.getElementById('editServiceId').value = service.id;
+                document.getElementById('serviceTitle').value = service.title;
+                document.getElementById('serviceDesc').value = service.desc;
+                document.getElementById('serviceImg').value = service.img || '';
+                
+                if (service.img) {
+                    document.getElementById('servicePreviewImg').src = service.img;
+                    document.getElementById('servicePreviewContainer').style.display = 'block';
+                    document.getElementById('serviceDropzone').style.display = 'none';
+                } else {
+                    document.getElementById('servicePreviewContainer').style.display = 'none';
+                    document.getElementById('serviceDropzone').style.display = 'block';
+                }
+                
+                document.getElementById('service-form-title').innerText = 'تعديل الخدمة الحالية';
+                document.getElementById('serviceSubmitBtn').innerHTML = 'تحديث وتأكيد التعديل <i class="fas fa-edit"></i>';
+                document.getElementById('serviceCancelBtn').style.display = 'inline-block';
+                document.getElementById('serviceTitle').focus();
+            }
+        }
+
+        function deleteService(id) {
+            if (confirm('هل أنت متأكد من رغبتك في حذف هذه الخدمة من الموقع نهائياً؟')) {
+                siteData.services = siteData.services.filter(s => s.id !== id);
+                saveSiteDataLocally();
+                renderAdminServices();
+            }
+        }
+
+        function resetServiceForm() {
+            document.getElementById('editServiceId').value = '';
+            document.getElementById('serviceTitle').value = '';
+            document.getElementById('serviceDesc').value = '';
+            document.getElementById('serviceImg').value = '';
+            document.getElementById('serviceFileInput').value = '';
+            document.getElementById('servicePreviewContainer').style.display = 'none';
+            document.getElementById('serviceDropzone').style.display = 'block';
+            
+            document.getElementById('service-form-title').innerText = 'إضافة خدمة جديدة';
+            document.getElementById('serviceSubmitBtn').innerHTML = 'إضافة الخدمة <i class="fas fa-plus"></i>';
+            document.getElementById('serviceCancelBtn').style.display = 'none';
+        }
+
+        // Action 3: Manage Portfolio Gallery
+        function renderAdminPortfolio() {
+            const container = document.getElementById('admin-portfolio-list');
+            container.innerHTML = '';
+            
+            if (siteData.portfolio.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%;">معرض الأعمال فارغ حالياً.</p>';
+                return;
+            }
+
+            siteData.portfolio.forEach(item => {
+                container.innerHTML += `
+                    <div class="admin-item-card">
+                        <img src="${item.img}" class="image-preview" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
+                        <div class="admin-item-card-header" style="border-bottom:none; padding-bottom:0; margin-top:5px;">
+                            <strong style="color: var(--text-primary); font-size: 1rem;">${item.title}</strong>
+                            <div class="admin-item-actions">
+                                <button class="action-btn edit" onclick="editPortfolio('${item.id}')">تعديل</button>
+                                <button class="action-btn delete" onclick="deletePortfolio('${item.id}')">حذف</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function savePortfolio() {
+            const id = document.getElementById('editPortfolioId').value;
+            const title = document.getElementById('portfolioTitle').value.trim();
+            const img = document.getElementById('portfolioImg').value.trim();
+
+            if (!title || !img) {
+                alert('الرجاء تعبئة عنوان العمل وصورة العمل أولاً!');
+                return;
+            }
+
+            if (id) {
+                // Editing existing project
+                const index = siteData.portfolio.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    siteData.portfolio[index].title = title;
+                    siteData.portfolio[index].img = img;
+                }
+            } else {
+                // Adding new project
+                const newProject = {
+                    id: 'p_' + Date.now(),
+                    title: title,
+                    img: img
+                };
+                siteData.portfolio.push(newProject);
+            }
+
+            saveSiteDataLocally();
+            resetPortfolioForm();
+            renderAdminPortfolio();
+            alert('تم حفظ المشروع الجديد في المعرض!');
+        }
+
+        function editPortfolio(id) {
+            const item = siteData.portfolio.find(p => p.id === id);
+            if (item) {
+                document.getElementById('editPortfolioId').value = item.id;
+                document.getElementById('portfolioTitle').value = item.title;
+                document.getElementById('portfolioImg').value = item.img;
+                
+                if (item.img) {
+                    document.getElementById('portfolioPreviewImg').src = item.img;
+                    document.getElementById('portfolioPreviewContainer').style.display = 'block';
+                    document.getElementById('portfolioDropzone').style.display = 'none';
+                } else {
+                    document.getElementById('portfolioPreviewContainer').style.display = 'none';
+                    document.getElementById('portfolioDropzone').style.display = 'block';
+                }
+                
+                document.getElementById('portfolio-form-title').innerText = 'تعديل مشروع من المعرض';
+                document.getElementById('portfolioSubmitBtn').innerHTML = 'تحديث مشروع المعرض <i class="fas fa-edit"></i>';
+                document.getElementById('portfolioCancelBtn').style.display = 'inline-block';
+                document.getElementById('portfolioTitle').focus();
+            }
+        }
+
+        function deletePortfolio(id) {
+            if (confirm('هل أنت متأكد من حذف هذا العمل من المعرض نهائياً؟')) {
+                siteData.portfolio = siteData.portfolio.filter(p => p.id !== id);
+                saveSiteDataLocally();
+                renderAdminPortfolio();
+            }
+        }
+
+        function resetPortfolioForm() {
+            document.getElementById('editPortfolioId').value = '';
+            document.getElementById('portfolioTitle').value = '';
+            document.getElementById('portfolioImg').value = '';
+            document.getElementById('portfolioFileInput').value = '';
+            document.getElementById('portfolioPreviewContainer').style.display = 'none';
+            document.getElementById('portfolioDropzone').style.display = 'block';
+            
+            document.getElementById('portfolio-form-title').innerText = 'إضافة عمل جديد لمعرض الأعمال';
+            document.getElementById('portfolioSubmitBtn').innerHTML = 'إضافة لمعرض الأعمال <i class="fas fa-images"></i>';
+            document.getElementById('portfolioCancelBtn').style.display = 'none';
+        }
+
+        // Action 4: Manage Received Inquiries
+        function renderAdminInquiries() {
+            const container = document.getElementById('admin-inquiries-container');
+            container.innerHTML = '';
+            
+            // Update the tab badge number as well
+            document.getElementById('inquiries-tab-btn').innerHTML = `<i class="fas fa-envelope" style="margin-left: 8px; width: 18px; text-align: center;"></i> طلبات العملاء (${siteData.inquiries.length})`;
+
+            if (siteData.inquiries.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                        <i class="fas fa-inbox" style="font-size: 3rem; color: var(--text-secondary); display: block; margin-bottom: 15px;"></i>
+                        <p style="margin-top: 15px; font-weight: bold; font-size: 1.1rem;">لا توجد أي استفسارات أو طلبات من العملاء حتى الآن.</p>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">عندما يقوم عميل بإرسال استفسار من نموذج الاتصال، سيظهر لك هنا فوراً.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            siteData.inquiries.forEach(inq => {
+                const whatsappText = `مرحباً أستاذ ${inq.name}، معك رامي النجار بخصوص استفسارك الذي أرسلته عبر موقعنا عن: "${inq.message}"`;
+                const whatsappDirectUrl = `https://wa.me/${inq.phone.startsWith('0') ? '2' + inq.phone : inq.phone}?text=${encodeURIComponent(whatsappText)}`;
+                
+                container.innerHTML += `
+                    <div class="admin-item-card inquiry-card" style="margin-bottom: 15px;">
+                        <div class="admin-item-card-header">
+                            <div>
+                                <strong style="color: var(--primary); font-size: 1.2rem;">العميل: ${inq.name}</strong>
+                                <div class="inquiry-meta" style="display: flex; gap: 12px; align-items: center; margin-top: 4px; font-size: 0.85rem; color: var(--text-secondary);">
+                                    <span><i class="fas fa-phone-alt"></i> هاتف: ${inq.phone}</span>
+                                    <span>|</span>
+                                    <span><i class="fas fa-calendar-alt"></i> تاريخ الإرسال: ${inq.timestamp}</span>
+                                </div>
+                            </div>
+                            <button class="action-btn delete" onclick="deleteInquiry('${inq.id}')" style="display: inline-flex; align-items: center; gap: 6px;">حذف الطلب <i class="fas fa-trash-alt"></i></button>
+                        </div>
+                        <div style="background-color: var(--bg-dark); padding: 12px; border-radius: 6px; border: 1px solid var(--border-dark); font-size: 1rem; color: var(--text-primary); margin: 8px 0;">
+                            ${inq.message.replace(/\n/g, '<br>')}
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 5px;">
+                            <a href="${whatsappDirectUrl}" target="_blank" class="action-btn whatsapp-direct" style="text-decoration: none; text-align: center; flex: 1; justify-content: center; display: inline-flex; align-items: center; gap: 6px;">تواصل عبر واتساب <i class="fab fa-whatsapp"></i></a>
+                            <a href="tel:${inq.phone}" class="action-btn call-direct" style="text-decoration: none; text-align: center; flex: 1; justify-content: center; display: inline-flex; align-items: center; gap: 6px;">اتصال هاتف مباشر <i class="fas fa-phone"></i></a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteInquiry(id) {
+            if (confirm('هل تريد حذف طلب هذا العميل نهائياً؟')) {
+                siteData.inquiries = siteData.inquiries.filter(i => i.id !== id);
+                saveSiteDataLocally();
+                renderAdminInquiries();
+            }
+        }
+
+        function clearAllInquiries() {
+            if (confirm('تحذير: هل أنت متأكد من حذف كافة طلبات واستفسارات العملاء المخزنة في جهازك نهائياً؟ لا يمكن استرجاعها.')) {
+                siteData.inquiries = [];
+                saveSiteDataLocally();
+                renderAdminInquiries();
+            }
+        }
+
+        // Action 5: Update Admin Password
+        function updateAdminPassword() {
+            const oldPass = document.getElementById('oldPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmNewPassword').value;
+            const statusDiv = document.getElementById('passwordStatus');
+
+            statusDiv.style.display = 'block';
+            statusDiv.style.backgroundColor = 'rgba(229, 115, 115, 0.1)';
+            statusDiv.style.color = 'var(--error)';
+
+            if (!oldPass || !newPass || !confirmPass) {
+                statusDiv.innerText = 'الرجاء تعبئة كافة حقول كلمة المرور أولاً!';
+                return;
+            }
+
+            if (oldPass !== siteData.password) {
+                statusDiv.innerText = 'كلمة المرور الحالية المدخلة غير صحيحة!';
+                return;
+            }
+
+            if (newPass.length < 3) {
+                statusDiv.innerText = 'يجب ألا تقل كلمة المرور الجديدة عن 3 خانات!';
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                statusDiv.innerText = 'كلمة المرور الجديدة غير متطابقة في خانة التأكيد!';
+                return;
+            }
+
+            // All correct! Update password
+            siteData.password = newPass;
+            saveSiteDataLocally();
+
+            statusDiv.style.backgroundColor = 'rgba(129, 199, 132, 0.1)';
+            statusDiv.style.color = 'var(--success)';
+            statusDiv.innerText = 'تم تحديث وتغيير كلمة المرور بنجاح! احتفظ بكلمة المرور الجديدة بعناية.';
+
+            // Clear password inputs
+            document.getElementById('oldPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmNewPassword').value = '';
+
+            setTimeout(() => { statusDiv.style.display = 'none'; }, 5000);
+        }
+    </script>
+</body>
+</html>
