@@ -1,0 +1,10 @@
+{
+  "name": "ramipro-web",
+  "version": "1.0.0",
+  "description": "Carpentry Portfolio Web Server for Rami Pro",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}
