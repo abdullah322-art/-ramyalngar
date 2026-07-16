@@ -643,6 +643,45 @@
             border: 1px solid var(--border-dark);
         }
 
+        /* Section Banner Styles */
+        .section-banner {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border: 1px solid var(--border-dark);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75));
+            z-index: 1;
+        }
+
+        .section-banner-title {
+            position: relative;
+            z-index: 2;
+            color: var(--primary);
+            font-size: 2.2rem;
+            font-weight: bold;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+            margin: 0;
+            text-align: center;
+        }
+
         /* Inquiries styles */
         .inquiry-card {
             border-right: 4px solid var(--primary);
@@ -685,32 +724,32 @@
     </header>
 
     <!-- About Section -->
-    <section id="about">
-        <h2 class="section-title">من أنا</h2>
-        <div class="about-content" id="about-text-container">
+    <section id="about" style="padding-top: 40px;">
+        <div id="about-header-container"></div>
+        <div class="about-content" id="about-text-container" style="margin-top: 25px;">
             <!-- Loaded Dynamically -->
         </div>
     </section>
 
     <!-- Services Section -->
-    <section id="services" style="background-color: var(--surface-variant);">
-        <h2 class="section-title">خدماتنا</h2>
-        <div class="services-grid" id="services-grid-container">
+    <section id="services" style="background-color: var(--surface-variant); padding-top: 40px;">
+        <div id="services-header-container"></div>
+        <div class="services-grid" id="services-grid-container" style="margin-top: 25px;">
             <!-- Loaded Dynamically -->
         </div>
     </section>
 
     <!-- Portfolio Section -->
-    <section id="portfolio">
-        <h2 class="section-title">معرض الأعمال</h2>
-        <div class="portfolio-grid" id="portfolio-grid-container">
+    <section id="portfolio" style="padding-top: 40px;">
+        <div id="portfolio-header-container"></div>
+        <div class="portfolio-grid" id="portfolio-grid-container" style="margin-top: 25px;">
             <!-- Loaded Dynamically -->
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" style="background-color: var(--surface-variant);">
-        <h2 class="section-title">تواصل معنا</h2>
+    <section id="contact" style="background-color: var(--surface-variant); padding-top: 40px;">
+        <div id="contact-header-container"></div>
         
         <!-- Contact Form Box -->
         <div style="max-width: 600px; margin: 0 auto 40px auto; padding: 25px; background-color: var(--surface-dark); border-radius: 10px; border: 1px solid var(--border-dark); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
@@ -784,6 +823,7 @@
                 <!-- Sidebar Tabs -->
                 <div class="dashboard-sidebar">
                     <button class="tab-btn active" onclick="switchTab(event, 'tab-general')"><i class="fas fa-info-circle" style="margin-left: 8px; width: 18px; text-align: center;"></i> معلومات الموقع</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-pages')"><i class="fas fa-layer-group" style="margin-left: 8px; width: 18px; text-align: center;"></i> الصفحات والبنرات</button>
                     <button class="tab-btn" onclick="switchTab(event, 'tab-services')"><i class="fas fa-tools" style="margin-left: 8px; width: 18px; text-align: center;"></i> إدارة الخدمات</button>
                     <button class="tab-btn" onclick="switchTab(event, 'tab-portfolio')"><i class="fas fa-images" style="margin-left: 8px; width: 18px; text-align: center;"></i> معرض الأعمال</button>
                     <button class="tab-btn" onclick="switchTab(event, 'tab-inquiries')" id="inquiries-tab-btn"><i class="fas fa-envelope" style="margin-left: 8px; width: 18px; text-align: center;"></i> طلبات العملاء (0)</button>
@@ -836,6 +876,164 @@
                         </div>
                         
                         <button class="btn" style="width: 100%; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="saveGeneralSettings()">حفظ وتطبيق المعلومات الجديدة <i class="fas fa-check-circle"></i></button>
+                    </div>
+                    
+                    <!-- PANE 1.5: Pages and Banners -->
+                    <div id="tab-pages" class="dashboard-pane">
+                        <h3 style="color: var(--primary); margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">إدارة صفحات الموقع والبنرات</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">يمكنك هنا تعديل عناوين الأقسام الرئيسية في الموقع ورفع بنر (صورة خلفية مميزة) مخصصة لكل قسم من أقسام الموقع.</p>
+                        
+                        <!-- Hero Section Banner Card -->
+                        <div class="admin-item-card" style="padding: 20px; margin-bottom: 25px; background-color: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 8px; border-right: 4px solid var(--primary); text-align: right;">
+                            <h4 style="color: var(--primary); margin: 0 0 15px 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;"><i class="fas fa-home"></i> قسم الرئيسية (الواجهة)</h4>
+                            
+                            <div class="form-group">
+                                <label>بنر خلفية الرئيسية</label>
+                                <div class="upload-container" id="heroBannerUploadContainer">
+                                    <div class="upload-dropzone" id="heroBannerDropzone" onclick="document.getElementById('heroBannerFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'heroBannerImg', 'heroBannerPreviewImg')">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p class="dropzone-text">اسحب وأسقط صورة بنر الرئيسية هنا، أو اضغط للاختيار</p>
+                                        <span class="dropzone-subtext">تدعم ملفات JPG, PNG, WebP</span>
+                                        <input type="file" id="heroBannerFileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(this, 'heroBannerImg', 'heroBannerPreviewImg')">
+                                    </div>
+                                    <div class="upload-preview" id="heroBannerPreviewContainer" style="display: none;">
+                                        <img id="heroBannerPreviewImg" src="" alt="معاينة بنر الرئيسية">
+                                        <br>
+                                        <button type="button" class="btn" onclick="clearUploadedImage('heroBannerImg', 'heroBannerPreviewContainer', 'heroBannerDropzone', 'heroBannerFileInput')" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: auto;"><i class="fas fa-trash-alt"></i> إزالة الصورة</button>
+                                    </div>
+                                    <div style="margin-top: 12px;">
+                                        <label for="heroBannerImg" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">أو أدخل رابطاً مباشراً للصورة:</label>
+                                        <input type="url" id="heroBannerImg" class="form-control" placeholder="https://example.com/hero-banner.jpg" oninput="handleUrlInput('heroBannerImg', 'heroBannerPreviewImg', 'heroBannerPreviewContainer', 'heroBannerDropzone')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- About Section Banner Card -->
+                        <div class="admin-item-card" style="padding: 20px; margin-bottom: 25px; background-color: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 8px; border-right: 4px solid var(--primary); text-align: right;">
+                            <h4 style="color: var(--primary); margin: 0 0 15px 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;"><i class="fas fa-info-circle"></i> قسم من نحن</h4>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label for="aboutTitleInput">عنوان قسم من نحن</label>
+                                <input type="text" id="aboutTitleInput" class="form-control" placeholder="مثال: من أنا / قصة كفاحنا">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>بنر خلفية قسم من نحن</label>
+                                <div class="upload-container" id="aboutBannerUploadContainer">
+                                    <div class="upload-dropzone" id="aboutBannerDropzone" onclick="document.getElementById('aboutBannerFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'aboutBannerImg', 'aboutBannerPreviewImg')">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p class="dropzone-text">اسحب وأسقط صورة بنر قسم من نحن هنا، أو اضغط للاختيار</p>
+                                        <span class="dropzone-subtext">تدعم ملفات JPG, PNG, WebP</span>
+                                        <input type="file" id="aboutBannerFileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(this, 'aboutBannerImg', 'aboutBannerPreviewImg')">
+                                    </div>
+                                    <div class="upload-preview" id="aboutBannerPreviewContainer" style="display: none;">
+                                        <img id="aboutBannerPreviewImg" src="" alt="معاينة بنر من نحن">
+                                        <br>
+                                        <button type="button" class="btn" onclick="clearUploadedImage('aboutBannerImg', 'aboutBannerPreviewContainer', 'aboutBannerDropzone', 'aboutBannerFileInput')" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: auto;"><i class="fas fa-trash-alt"></i> إزالة الصورة</button>
+                                    </div>
+                                    <div style="margin-top: 12px;">
+                                        <label for="aboutBannerImg" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">أو أدخل رابطاً مباشراً للصورة:</label>
+                                        <input type="url" id="aboutBannerImg" class="form-control" placeholder="https://example.com/about-banner.jpg" oninput="handleUrlInput('aboutBannerImg', 'aboutBannerPreviewImg', 'aboutBannerPreviewContainer', 'aboutBannerDropzone')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Services Section Banner Card -->
+                        <div class="admin-item-card" style="padding: 20px; margin-bottom: 25px; background-color: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 8px; border-right: 4px solid var(--primary); text-align: right;">
+                            <h4 style="color: var(--primary); margin: 0 0 15px 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;"><i class="fas fa-tools"></i> قسم خدماتنا</h4>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label for="servicesTitleInput">عنوان قسم خدماتنا</label>
+                                <input type="text" id="servicesTitleInput" class="form-control" placeholder="مثال: خدماتنا المتميزة">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>بنر خلفية قسم خدماتنا</label>
+                                <div class="upload-container" id="servicesBannerUploadContainer">
+                                    <div class="upload-dropzone" id="servicesBannerDropzone" onclick="document.getElementById('servicesBannerFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'servicesBannerImg', 'servicesBannerPreviewImg')">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p class="dropzone-text">اسحب وأسقط صورة بنر قسم خدماتنا هنا، أو اضغط للاختيار</p>
+                                        <span class="dropzone-subtext">تدعم ملفات JPG, PNG, WebP</span>
+                                        <input type="file" id="servicesBannerFileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(this, 'servicesBannerImg', 'servicesBannerPreviewImg')">
+                                    </div>
+                                    <div class="upload-preview" id="servicesBannerPreviewContainer" style="display: none;">
+                                        <img id="servicesBannerPreviewImg" src="" alt="معاينة بنر خدماتنا">
+                                        <br>
+                                        <button type="button" class="btn" onclick="clearUploadedImage('servicesBannerImg', 'servicesBannerPreviewContainer', 'servicesBannerDropzone', 'servicesBannerFileInput')" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: auto;"><i class="fas fa-trash-alt"></i> إزالة الصورة</button>
+                                    </div>
+                                    <div style="margin-top: 12px;">
+                                        <label for="servicesBannerImg" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">أو أدخل رابطاً مباشراً للصورة:</label>
+                                        <input type="url" id="servicesBannerImg" class="form-control" placeholder="https://example.com/services-banner.jpg" oninput="handleUrlInput('servicesBannerImg', 'servicesBannerPreviewImg', 'servicesBannerPreviewContainer', 'servicesBannerDropzone')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Portfolio Section Banner Card -->
+                        <div class="admin-item-card" style="padding: 20px; margin-bottom: 25px; background-color: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 8px; border-right: 4px solid var(--primary); text-align: right;">
+                            <h4 style="color: var(--primary); margin: 0 0 15px 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;"><i class="fas fa-images"></i> قسم معرض الأعمال</h4>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label for="portfolioTitleInput">عنوان قسم معرض الأعمال</label>
+                                <input type="text" id="portfolioTitleInput" class="form-control" placeholder="مثال: معرض أعمالنا الإبداعية">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>بنر خلفية قسم معرض الأعمال</label>
+                                <div class="upload-container" id="portfolioBannerUploadContainer">
+                                    <div class="upload-dropzone" id="portfolioBannerDropzone" onclick="document.getElementById('portfolioBannerFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'portfolioBannerImg', 'portfolioBannerPreviewImg')">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p class="dropzone-text">اسحب وأسقط صورة بنر قسم معرض الأعمال هنا، أو اضغط للاختيار</p>
+                                        <span class="dropzone-subtext">تدعم ملفات JPG, PNG, WebP</span>
+                                        <input type="file" id="portfolioBannerFileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(this, 'portfolioBannerImg', 'portfolioBannerPreviewImg')">
+                                    </div>
+                                    <div class="upload-preview" id="portfolioBannerPreviewContainer" style="display: none;">
+                                        <img id="portfolioBannerPreviewImg" src="" alt="معاينة بنر معرض الأعمال">
+                                        <br>
+                                        <button type="button" class="btn" onclick="clearUploadedImage('portfolioBannerImg', 'portfolioBannerPreviewContainer', 'portfolioBannerDropzone', 'portfolioBannerFileInput')" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: auto;"><i class="fas fa-trash-alt"></i> إزالة الصورة</button>
+                                    </div>
+                                    <div style="margin-top: 12px;">
+                                        <label for="portfolioBannerImg" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">أو أدخل رابطاً مباشراً للصورة:</label>
+                                        <input type="url" id="portfolioBannerImg" class="form-control" placeholder="https://example.com/portfolio-banner.jpg" oninput="handleUrlInput('portfolioBannerImg', 'portfolioBannerPreviewImg', 'portfolioBannerPreviewContainer', 'portfolioBannerDropzone')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Contact Section Banner Card -->
+                        <div class="admin-item-card" style="padding: 20px; margin-bottom: 25px; background-color: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 8px; border-right: 4px solid var(--primary); text-align: right;">
+                            <h4 style="color: var(--primary); margin: 0 0 15px 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;"><i class="fas fa-phone-alt"></i> قسم تواصل معنا</h4>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label for="contactTitleInput">عنوان قسم تواصل معنا</label>
+                                <input type="text" id="contactTitleInput" class="form-control" placeholder="مثال: اتصل بنا الآن">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>بنر خلفية قسم تواصل معنا</label>
+                                <div class="upload-container" id="contactBannerUploadContainer">
+                                    <div class="upload-dropzone" id="contactBannerDropzone" onclick="document.getElementById('contactBannerFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'contactBannerImg', 'contactBannerPreviewImg')">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p class="dropzone-text">اسحب وأسقط صورة بنر قسم تواصل معنا هنا، أو اضغط للاختيار</p>
+                                        <span class="dropzone-subtext">تدعم ملفات JPG, PNG, WebP</span>
+                                        <input type="file" id="contactBannerFileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(this, 'contactBannerImg', 'contactBannerPreviewImg')">
+                                    </div>
+                                    <div class="upload-preview" id="contactBannerPreviewContainer" style="display: none;">
+                                        <img id="contactBannerPreviewImg" src="" alt="معاينة بنر تواصل معنا">
+                                        <br>
+                                        <button type="button" class="btn" onclick="clearUploadedImage('contactBannerImg', 'contactBannerPreviewContainer', 'contactBannerDropzone', 'contactBannerFileInput')" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: auto;"><i class="fas fa-trash-alt"></i> إزالة الصورة</button>
+                                    </div>
+                                    <div style="margin-top: 12px;">
+                                        <label for="contactBannerImg" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">أو أدخل رابطاً مباشراً للصورة:</label>
+                                        <input type="url" id="contactBannerImg" class="form-control" placeholder="https://example.com/contact-banner.jpg" oninput="handleUrlInput('contactBannerImg', 'contactBannerPreviewImg', 'contactBannerPreviewContainer', 'contactBannerDropzone')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn" style="width: 100%; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="savePagesAndBanners()">حفظ وتطبيق إعدادات البنرات والصفحات الجديدة <i class="fas fa-check-circle"></i></button>
                     </div>
                     
                     <!-- PANE 2: Services -->
@@ -991,7 +1189,18 @@
                 facebook: "https://www.facebook.com/"
             },
             password: "ramy2026",
-            inquiries: []
+            inquiries: [],
+            
+            // Default Page Titles & Banners
+            aboutTitle: "من أنا",
+            servicesTitle: "خدماتنا",
+            portfolioTitle: "معرض الأعمال",
+            contactTitle: "تواصل معنا",
+            heroBanner: "",
+            aboutBanner: "",
+            servicesBanner: "",
+            portfolioBanner: "",
+            contactBanner: ""
         };
 
         let siteData = {};
@@ -1026,6 +1235,18 @@
                     if (!siteData.heroTitle) siteData.heroTitle = defaultSiteData.heroTitle;
                     if (!siteData.heroSubtitle) siteData.heroSubtitle = defaultSiteData.heroSubtitle;
                     
+                    // Retro-compatibility for custom page titles and banners
+                    if (!siteData.aboutTitle) siteData.aboutTitle = "من أنا";
+                    if (!siteData.servicesTitle) siteData.servicesTitle = "خدماتنا";
+                    if (!siteData.portfolioTitle) siteData.portfolioTitle = "معرض الأعمال";
+                    if (!siteData.contactTitle) siteData.contactTitle = "تواصل معنا";
+                    
+                    if (siteData.heroBanner === undefined) siteData.heroBanner = "";
+                    if (siteData.aboutBanner === undefined) siteData.aboutBanner = "";
+                    if (siteData.servicesBanner === undefined) siteData.servicesBanner = "";
+                    if (siteData.portfolioBanner === undefined) siteData.portfolioBanner = "";
+                    if (siteData.contactBanner === undefined) siteData.contactBanner = "";
+                    
                     // Backward compatibility: Populate images for existing saved services if they lack it
                     if (siteData.services) {
                         const defaultImgMap = {
@@ -1056,13 +1277,40 @@
 
         // Render Website dynamic content
         function renderWebsiteContent() {
+            const defaultBanners = {
+                hero: "https://images.unsplash.com/photo-1598305086036-7c975a538568?auto=format&fit=crop&q=80",
+                about: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=800",
+                services: "https://images.unsplash.com/photo-1426927308491-6380b6a9936f?auto=format&fit=crop&q=80&w=800",
+                portfolio: "https://images.unsplash.com/photo-1507312436339-df140ac34b35?auto=format&fit=crop&q=80&w=800",
+                contact: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800"
+            };
+
             // Hero
             document.getElementById('hero-title').innerText = siteData.heroTitle;
             document.getElementById('hero-subtitle').innerText = siteData.heroSubtitle;
             document.title = `${siteData.heroTitle} - نجار محترف`;
+            
+            const heroBanner = siteData.heroBanner || defaultBanners.hero;
+            document.getElementById('home').style.backgroundImage = `linear-gradient(rgba(23, 15, 11, 0.85), rgba(23, 15, 11, 0.85)), url('${heroBanner}')`;
 
-            // About
+            // About Header
+            const aboutTitle = siteData.aboutTitle || "من أنا";
+            const aboutBanner = siteData.aboutBanner || defaultBanners.about;
+            document.getElementById('about-header-container').innerHTML = `
+                <div class="section-banner" style="background-image: url('${aboutBanner}');">
+                    <h2 class="section-banner-title">${aboutTitle}</h2>
+                </div>
+            `;
             document.getElementById('about-text-container').innerHTML = `<p>${siteData.aboutText.replace(/\n/g, '<br>')}</p>`;
+
+            // Services Header
+            const servicesTitle = siteData.servicesTitle || "خدماتنا";
+            const servicesBanner = siteData.servicesBanner || defaultBanners.services;
+            document.getElementById('services-header-container').innerHTML = `
+                <div class="section-banner" style="background-image: url('${servicesBanner}');">
+                    <h2 class="section-banner-title">${servicesTitle}</h2>
+                </div>
+            `;
 
             // Services
             const servicesContainer = document.getElementById('services-grid-container');
@@ -1078,6 +1326,15 @@
                 `;
             });
 
+            // Portfolio Header
+            const portfolioTitle = siteData.portfolioTitle || "معرض الأعمال";
+            const portfolioBanner = siteData.portfolioBanner || defaultBanners.portfolio;
+            document.getElementById('portfolio-header-container').innerHTML = `
+                <div class="section-banner" style="background-image: url('${portfolioBanner}');">
+                    <h2 class="section-banner-title">${portfolioTitle}</h2>
+                </div>
+            `;
+
             // Portfolio
             const portfolioContainer = document.getElementById('portfolio-grid-container');
             portfolioContainer.innerHTML = '';
@@ -1091,6 +1348,15 @@
                     </div>
                 `;
             });
+
+            // Contact Header
+            const contactTitle = siteData.contactTitle || "تواصل معنا";
+            const contactBanner = siteData.contactBanner || defaultBanners.contact;
+            document.getElementById('contact-header-container').innerHTML = `
+                <div class="section-banner" style="background-image: url('${contactBanner}');">
+                    <h2 class="section-banner-title">${contactTitle}</h2>
+                </div>
+            `;
 
             // Contact Channels
             const buttonsContainer = document.getElementById('contact-buttons-container');
@@ -1295,10 +1561,59 @@
             document.getElementById('editTiktok').value = siteData.contact.tiktok;
             document.getElementById('editFacebook').value = siteData.contact.facebook;
 
+            // Populate Pages and Banners Inputs
+            document.getElementById('aboutTitleInput').value = siteData.aboutTitle || "من أنا";
+            document.getElementById('servicesTitleInput').value = siteData.servicesTitle || "خدماتنا";
+            document.getElementById('portfolioTitleInput').value = siteData.portfolioTitle || "معرض الأعمال";
+            document.getElementById('contactTitleInput').value = siteData.contactTitle || "تواصل معنا";
+
+            // Banners URLs
+            document.getElementById('heroBannerImg').value = siteData.heroBanner || "";
+            document.getElementById('aboutBannerImg').value = siteData.aboutBanner || "";
+            document.getElementById('servicesBannerImg').value = siteData.servicesBanner || "";
+            document.getElementById('portfolioBannerImg').value = siteData.portfolioBanner || "";
+            document.getElementById('contactBannerImg').value = siteData.contactBanner || "";
+
+            // Banners Previews
+            setupBannerPreview('heroBannerImg', 'heroBannerPreviewImg', 'heroBannerPreviewContainer', 'heroBannerDropzone');
+            setupBannerPreview('aboutBannerImg', 'aboutBannerPreviewImg', 'aboutBannerPreviewContainer', 'aboutBannerDropzone');
+            setupBannerPreview('servicesBannerImg', 'servicesBannerPreviewImg', 'servicesBannerPreviewContainer', 'servicesBannerDropzone');
+            setupBannerPreview('portfolioBannerImg', 'portfolioBannerPreviewImg', 'portfolioBannerPreviewContainer', 'portfolioBannerDropzone');
+            setupBannerPreview('contactBannerImg', 'contactBannerPreviewImg', 'contactBannerPreviewContainer', 'contactBannerDropzone');
+
             // Load Admin lists
             renderAdminServices();
             renderAdminPortfolio();
             renderAdminInquiries();
+        }
+
+        function setupBannerPreview(inputId, previewImgId, previewContainerId, dropzoneId) {
+            const val = document.getElementById(inputId).value.trim();
+            if (val) {
+                document.getElementById(previewImgId).src = val;
+                document.getElementById(previewContainerId).style.display = 'block';
+                document.getElementById(dropzoneId).style.display = 'none';
+            } else {
+                document.getElementById(previewContainerId).style.display = 'none';
+                document.getElementById(dropzoneId).style.display = 'block';
+            }
+        }
+
+        function savePagesAndBanners() {
+            siteData.aboutTitle = document.getElementById('aboutTitleInput').value.trim() || "من أنا";
+            siteData.servicesTitle = document.getElementById('servicesTitleInput').value.trim() || "خدماتنا";
+            siteData.portfolioTitle = document.getElementById('portfolioTitleInput').value.trim() || "معرض الأعمال";
+            siteData.contactTitle = document.getElementById('contactTitleInput').value.trim() || "تواصل معنا";
+
+            siteData.heroBanner = document.getElementById('heroBannerImg').value.trim();
+            siteData.aboutBanner = document.getElementById('aboutBannerImg').value.trim();
+            siteData.servicesBanner = document.getElementById('servicesBannerImg').value.trim();
+            siteData.portfolioBanner = document.getElementById('portfolioBannerImg').value.trim();
+            siteData.contactBanner = document.getElementById('contactBannerImg').value.trim();
+
+            saveSiteDataLocally();
+            renderWebsiteContent();
+            alert('تم حفظ إعدادات الصفحات والبنرات وتطبيقها بنجاح! 🎉');
         }
 
         function closeDashboard() {
