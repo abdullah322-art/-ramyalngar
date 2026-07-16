@@ -266,6 +266,69 @@
             background-color: rgba(0, 0, 0, 0.4);
         }
 
+        /* Reviews Styles */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .review-card {
+            background-color: var(--surface-dark);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-dark);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: right;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.1);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .review-author {
+            color: var(--text-primary);
+            font-size: 1.15rem;
+            font-weight: bold;
+        }
+
+        .review-rating {
+            color: var(--primary);
+            font-size: 1.1rem;
+            display: flex;
+            gap: 2px;
+        }
+
+        .review-project {
+            font-size: 0.85rem;
+            color: var(--primary);
+            background-color: rgba(212, 175, 55, 0.08);
+            padding: 4px 10px;
+            border-radius: 20px;
+            align-self: flex-start;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .review-comment {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
         /* Contact */
         .contact-container {
             display: flex;
@@ -711,6 +774,7 @@
             <li><a href="#about">من نحن</a></li>
             <li><a href="#services">الخدمات</a></li>
             <li><a href="#portfolio">أعمالنا</a></li>
+            <li><a href="#reviews">آراء العملاء</a></li>
             <li><a href="#contact">تواصل معنا</a></li>
             <li><a href="javascript:void(0)" onclick="openLoginModal()" style="color: var(--primary); font-weight: bold; border: 1px dashed var(--primary); padding: 5px 12px; border-radius: 5px; background-color: rgba(212,175,55,0.05); transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='rgba(212,175,55,0.15)'" onmouseout="this.style.backgroundColor='rgba(212,175,55,0.05)'">لوحة التحكم <i class="fas fa-cog" style="margin-right: 5px; margin-left: 5px;"></i></a></li>
         </ul>
@@ -743,6 +807,14 @@
     <section id="portfolio" style="padding-top: 40px;">
         <div id="portfolio-header-container"></div>
         <div class="portfolio-grid" id="portfolio-grid-container" style="margin-top: 25px;">
+            <!-- Loaded Dynamically -->
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" style="padding-top: 40px;">
+        <div id="reviews-header-container"></div>
+        <div class="reviews-grid" id="reviews-grid-container" style="max-width: 1100px; margin: 25px auto 0 auto; padding: 0 20px;">
             <!-- Loaded Dynamically -->
         </div>
     </section>
@@ -826,6 +898,7 @@
                     <button class="tab-btn" onclick="switchTab(event, 'tab-pages')"><i class="fas fa-layer-group" style="margin-left: 8px; width: 18px; text-align: center;"></i> الصفحات والبنرات</button>
                     <button class="tab-btn" onclick="switchTab(event, 'tab-services')"><i class="fas fa-tools" style="margin-left: 8px; width: 18px; text-align: center;"></i> إدارة الخدمات</button>
                     <button class="tab-btn" onclick="switchTab(event, 'tab-portfolio')"><i class="fas fa-images" style="margin-left: 8px; width: 18px; text-align: center;"></i> معرض الأعمال</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-reviews')"><i class="fas fa-star" style="margin-left: 8px; width: 18px; text-align: center;"></i> آراء العملاء</button>
                     <button class="tab-btn" onclick="switchTab(event, 'tab-inquiries')" id="inquiries-tab-btn"><i class="fas fa-envelope" style="margin-left: 8px; width: 18px; text-align: center;"></i> طلبات العملاء (0)</button>
                     <button class="tab-btn" onclick="switchTab(event, 'tab-security')"><i class="fas fa-key" style="margin-left: 8px; width: 18px; text-align: center;"></i> كلمة المرور</button>
                     <button class="tab-btn" onclick="closeDashboard()" style="margin-top: auto; border: 1px solid var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; gap: 8px;">عرض الموقع <i class="fas fa-desktop"></i></button>
@@ -1002,6 +1075,37 @@
                             </div>
                         </div>
                         
+                        <!-- Reviews Section Banner Card -->
+                        <div class="admin-item-card" style="padding: 20px; margin-bottom: 25px; background-color: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 8px; border-right: 4px solid var(--primary); text-align: right;">
+                            <h4 style="color: var(--primary); margin: 0 0 15px 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;"><i class="fas fa-star"></i> قسم آراء العملاء</h4>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label for="reviewsTitleInput">عنوان قسم آراء العملاء</label>
+                                <input type="text" id="reviewsTitleInput" class="form-control" placeholder="مثال: قالوا عن خدماتنا">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>بنر خلفية قسم آراء العملاء</label>
+                                <div class="upload-container" id="reviewsBannerUploadContainer">
+                                    <div class="upload-dropzone" id="reviewsBannerDropzone" onclick="document.getElementById('reviewsBannerFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'reviewsBannerImg', 'reviewsBannerPreviewImg')">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p class="dropzone-text">اسحب وأسقط صورة بنر قسم آراء العملاء هنا، أو اضغط للاختيار</p>
+                                        <span class="dropzone-subtext">تدعم ملفات JPG, PNG, WebP</span>
+                                        <input type="file" id="reviewsBannerFileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(this, 'reviewsBannerImg', 'reviewsBannerPreviewImg')">
+                                    </div>
+                                    <div class="upload-preview" id="reviewsBannerPreviewContainer" style="display: none;">
+                                        <img id="reviewsBannerPreviewImg" src="" alt="معاينة بنر آراء العملاء">
+                                        <br>
+                                        <button type="button" class="btn" onclick="clearUploadedImage('reviewsBannerImg', 'reviewsBannerPreviewContainer', 'reviewsBannerDropzone', 'reviewsBannerFileInput')" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: auto;"><i class="fas fa-trash-alt"></i> إزالة الصورة</button>
+                                    </div>
+                                    <div style="margin-top: 12px;">
+                                        <label for="reviewsBannerImg" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">أو أدخل رابطاً مباشراً للصورة:</label>
+                                        <input type="url" id="reviewsBannerImg" class="form-control" placeholder="https://example.com/reviews-banner.jpg" oninput="handleUrlInput('reviewsBannerImg', 'reviewsBannerPreviewImg', 'reviewsBannerPreviewContainer', 'reviewsBannerDropzone')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Contact Section Banner Card -->
                         <div class="admin-item-card" style="padding: 20px; margin-bottom: 25px; background-color: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 8px; border-right: 4px solid var(--primary); text-align: right;">
                             <h4 style="color: var(--primary); margin: 0 0 15px 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;"><i class="fas fa-phone-alt"></i> قسم تواصل معنا</h4>
@@ -1122,6 +1226,45 @@
                         </div>
                     </div>
                     
+                    <!-- PANE 3.5: Reviews -->
+                    <div id="tab-reviews" class="dashboard-pane">
+                        <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;" id="review-form-title">إضافة تقييم/رأي عميل جديد</h3>
+                        
+                        <input type="hidden" id="editReviewId">
+                        <div class="form-group">
+                            <label for="reviewAuthor">اسم العميل</label>
+                            <input type="text" id="reviewAuthor" class="form-control" placeholder="مثال: أحمد عبد الرحمن">
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewProjectName">العمل المنجز (اختياري)</label>
+                            <input type="text" id="reviewProjectName" class="form-control" placeholder="مثال: تفصيل مطبخ خشب زان">
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewRatingSelect">التقييم (عدد النجوم)</label>
+                            <select id="reviewRatingSelect" class="form-control" style="background-color: var(--bg-dark); color: var(--text-primary); border: 1px solid var(--border-dark); padding: 10px; border-radius: 5px;">
+                                <option value="5">⭐⭐⭐⭐⭐ (5 نجوم)</option>
+                                <option value="4">⭐⭐⭐⭐ (4 نجوم)</option>
+                                <option value="3">⭐⭐⭐ (3 نجوم)</option>
+                                <option value="2">⭐⭐ (نجمتان)</option>
+                                <option value="1">⭐ (نجمة واحدة)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewCommentText">رأي العميل وتفاصيل تقييمه</label>
+                            <textarea id="reviewCommentText" rows="3" class="form-control" placeholder="اكتب رأي العميل هنا..."></textarea>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 30px;">
+                            <button class="btn" onclick="saveReview()" style="flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px;" id="reviewSubmitBtn">إضافة التقييم <i class="fas fa-plus"></i></button>
+                            <button class="btn" onclick="resetReviewForm()" style="flex: 1; background-color: var(--surface-variant); color: var(--text-primary); display: none;" id="reviewCancelBtn">إلغاء التعديل</button>
+                        </div>
+                        
+                        <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">التقييمات وآراء العملاء الحالية</h3>
+                        <div class="admin-card-list" id="admin-reviews-list">
+                            <!-- Dynamic Admin Reviews List -->
+                        </div>
+                    </div>
+                    
                     <!-- PANE 4: Inquiries -->
                     <div id="tab-inquiries" class="dashboard-pane">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">
@@ -1190,16 +1333,23 @@
             },
             password: "ramy2026",
             inquiries: [],
+            reviews: [
+                { id: "r_1", name: "أحمد عبد الله", comment: "تعاملت مع رامي لتفصيل مطبخ خشب طبيعي، الخدمة كانت ممتازة والتسليم في الموعد والتشطيب فوق الوصف!", rating: 5, project: "تفصيل مطبخ زان" },
+                { id: "r_2", name: "محمد إبراهيم", comment: "شغل ناصع وجودة ممتازة في تصنيع أبواب الغرف الداخلية. أنصح بالتعامل معه بشدة وسأكرر التجربة.", rating: 5, project: "أبواب غرف داخلية" },
+                { id: "r_3", name: "سارة محمود", comment: "صمم لي مكتبة تلفزيون رائعة وبألوان متناسقة مع أثاث البيت. ذوق راقي جداً واحترافية في التعامل.", rating: 5, project: "مكتبة تلفزيون معاصرة" }
+            ],
             
             // Default Page Titles & Banners
             aboutTitle: "من أنا",
             servicesTitle: "خدماتنا",
             portfolioTitle: "معرض الأعمال",
+            reviewsTitle: "آراء العملاء",
             contactTitle: "تواصل معنا",
             heroBanner: "",
             aboutBanner: "",
             servicesBanner: "",
             portfolioBanner: "",
+            reviewsBanner: "",
             contactBanner: ""
         };
 
@@ -1239,13 +1389,23 @@
                     if (!siteData.aboutTitle) siteData.aboutTitle = "من أنا";
                     if (!siteData.servicesTitle) siteData.servicesTitle = "خدماتنا";
                     if (!siteData.portfolioTitle) siteData.portfolioTitle = "معرض الأعمال";
+                    if (!siteData.reviewsTitle) siteData.reviewsTitle = "آراء العملاء";
                     if (!siteData.contactTitle) siteData.contactTitle = "تواصل معنا";
                     
                     if (siteData.heroBanner === undefined) siteData.heroBanner = "";
                     if (siteData.aboutBanner === undefined) siteData.aboutBanner = "";
                     if (siteData.servicesBanner === undefined) siteData.servicesBanner = "";
                     if (siteData.portfolioBanner === undefined) siteData.portfolioBanner = "";
+                    if (siteData.reviewsBanner === undefined) siteData.reviewsBanner = "";
                     if (siteData.contactBanner === undefined) siteData.contactBanner = "";
+                    
+                    if (!siteData.reviews) {
+                        siteData.reviews = [
+                            { id: "r_1", name: "أحمد عبد الله", comment: "تعاملت مع رامي لتفصيل مطبخ خشب طبيعي، الخدمة كانت ممتازة والتسليم في الموعد والتشطيب فوق الوصف!", rating: 5, project: "تفصيل مطبخ زان" },
+                            { id: "r_2", name: "محمد إبراهيم", comment: "شغل ناصع وجودة ممتازة في تصنيع أبواب الغرف الداخلية. أنصح بالتعامل معه بشدة وسأكرر التجربة.", rating: 5, project: "أبواب غرف داخلية" },
+                            { id: "r_3", name: "سارة محمود", comment: "صمم لي مكتبة تلفزيون رائعة وبألوان متناسقة مع أثاث البيت. ذوق راقي جداً واحترافية في التعامل.", rating: 5, project: "مكتبة تلفزيون معاصرة" }
+                        ];
+                    }
                     
                     // Backward compatibility: Populate images for existing saved services if they lack it
                     if (siteData.services) {
@@ -1282,6 +1442,7 @@
                 about: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=800",
                 services: "https://images.unsplash.com/photo-1426927308491-6380b6a9936f?auto=format&fit=crop&q=80&w=800",
                 portfolio: "https://images.unsplash.com/photo-1507312436339-df140ac34b35?auto=format&fit=crop&q=80&w=800",
+                reviews: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=800",
                 contact: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800"
             };
 
@@ -1348,6 +1509,36 @@
                     </div>
                 `;
             });
+
+            // Reviews Header
+            const reviewsTitle = siteData.reviewsTitle || "آراء العملاء";
+            const reviewsBanner = siteData.reviewsBanner || defaultBanners.reviews;
+            document.getElementById('reviews-header-container').innerHTML = `
+                <div class="section-banner" style="background-image: url('${reviewsBanner}');">
+                    <h2 class="section-banner-title">${reviewsTitle}</h2>
+                </div>
+            `;
+
+            // Reviews
+            const reviewsContainer = document.getElementById('reviews-grid-container');
+            reviewsContainer.innerHTML = '';
+            if (!siteData.reviews || siteData.reviews.length === 0) {
+                reviewsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%;">لا توجد آراء عملاء حالياً بالموقع.</p>';
+            } else {
+                siteData.reviews.forEach(review => {
+                    const ratingStars = '★'.repeat(review.rating || 5) + '☆'.repeat(5 - (review.rating || 5));
+                    reviewsContainer.innerHTML += `
+                        <div class="review-card">
+                            <div class="review-header">
+                                <span class="review-author">${review.name}</span>
+                                <span class="review-rating" title="${review.rating} نجوم">${ratingStars}</span>
+                            </div>
+                            ${review.project ? `<span class="review-project">${review.project}</span>` : ''}
+                            <p class="review-comment">"${review.comment}"</p>
+                        </div>
+                    `;
+                });
+            }
 
             // Contact Header
             const contactTitle = siteData.contactTitle || "تواصل معنا";
@@ -1565,6 +1756,7 @@
             document.getElementById('aboutTitleInput').value = siteData.aboutTitle || "من أنا";
             document.getElementById('servicesTitleInput').value = siteData.servicesTitle || "خدماتنا";
             document.getElementById('portfolioTitleInput').value = siteData.portfolioTitle || "معرض الأعمال";
+            document.getElementById('reviewsTitleInput').value = siteData.reviewsTitle || "آراء العملاء";
             document.getElementById('contactTitleInput').value = siteData.contactTitle || "تواصل معنا";
 
             // Banners URLs
@@ -1572,6 +1764,7 @@
             document.getElementById('aboutBannerImg').value = siteData.aboutBanner || "";
             document.getElementById('servicesBannerImg').value = siteData.servicesBanner || "";
             document.getElementById('portfolioBannerImg').value = siteData.portfolioBanner || "";
+            document.getElementById('reviewsBannerImg').value = siteData.reviewsBanner || "";
             document.getElementById('contactBannerImg').value = siteData.contactBanner || "";
 
             // Banners Previews
@@ -1579,11 +1772,13 @@
             setupBannerPreview('aboutBannerImg', 'aboutBannerPreviewImg', 'aboutBannerPreviewContainer', 'aboutBannerDropzone');
             setupBannerPreview('servicesBannerImg', 'servicesBannerPreviewImg', 'servicesBannerPreviewContainer', 'servicesBannerDropzone');
             setupBannerPreview('portfolioBannerImg', 'portfolioBannerPreviewImg', 'portfolioBannerPreviewContainer', 'portfolioBannerDropzone');
+            setupBannerPreview('reviewsBannerImg', 'reviewsBannerPreviewImg', 'reviewsBannerPreviewContainer', 'reviewsBannerDropzone');
             setupBannerPreview('contactBannerImg', 'contactBannerPreviewImg', 'contactBannerPreviewContainer', 'contactBannerDropzone');
 
             // Load Admin lists
             renderAdminServices();
             renderAdminPortfolio();
+            renderAdminReviews();
             renderAdminInquiries();
         }
 
@@ -1603,12 +1798,14 @@
             siteData.aboutTitle = document.getElementById('aboutTitleInput').value.trim() || "من أنا";
             siteData.servicesTitle = document.getElementById('servicesTitleInput').value.trim() || "خدماتنا";
             siteData.portfolioTitle = document.getElementById('portfolioTitleInput').value.trim() || "معرض الأعمال";
+            siteData.reviewsTitle = document.getElementById('reviewsTitleInput').value.trim() || "آراء العملاء";
             siteData.contactTitle = document.getElementById('contactTitleInput').value.trim() || "تواصل معنا";
 
             siteData.heroBanner = document.getElementById('heroBannerImg').value.trim();
             siteData.aboutBanner = document.getElementById('aboutBannerImg').value.trim();
             siteData.servicesBanner = document.getElementById('servicesBannerImg').value.trim();
             siteData.portfolioBanner = document.getElementById('portfolioBannerImg').value.trim();
+            siteData.reviewsBanner = document.getElementById('reviewsBannerImg').value.trim();
             siteData.contactBanner = document.getElementById('contactBannerImg').value.trim();
 
             saveSiteDataLocally();
@@ -1862,6 +2059,116 @@
             document.getElementById('portfolio-form-title').innerText = 'إضافة عمل جديد لمعرض الأعمال';
             document.getElementById('portfolioSubmitBtn').innerHTML = 'إضافة لمعرض الأعمال <i class="fas fa-images"></i>';
             document.getElementById('portfolioCancelBtn').style.display = 'none';
+        }
+
+        // Action 3.7: Manage Reviews / Testimonials
+        function renderAdminReviews() {
+            const container = document.getElementById('admin-reviews-list');
+            container.innerHTML = '';
+            
+            if (!siteData.reviews || siteData.reviews.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%;">لا توجد آراء عملاء حالياً بالموقع.</p>';
+                return;
+            }
+
+            siteData.reviews.forEach(review => {
+                const stars = '⭐'.repeat(review.rating || 5);
+                container.innerHTML += `
+                    <div class="admin-item-card" style="text-align: right; gap: 8px;">
+                        <div class="admin-item-card-header" style="border-bottom:none; padding-bottom:0; margin-top:5px;">
+                            <strong style="color: var(--primary); font-size: 1.1rem;">${review.name}</strong>
+                            <div class="admin-item-actions">
+                                <button class="action-btn edit" onclick="editReview('${review.id}')">تعديل</button>
+                                <button class="action-btn delete" onclick="deleteReview('${review.id}')">حذف</button>
+                            </div>
+                        </div>
+                        <div style="color: var(--primary); font-size: 1rem;">${stars}</div>
+                        ${review.project ? `<p style="font-size: 0.85rem; color: var(--primary); background-color: rgba(212, 175, 55, 0.08); padding: 2px 8px; border-radius: 12px; display: inline-block; align-self: flex-start; border: 1px solid rgba(212,175,55,0.15); margin: 2px 0;">${review.project}</p>` : ''}
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 4px 0 0 0; line-height: 1.5; font-style: italic;">"${review.comment}"</p>
+                    </div>
+                `;
+            });
+        }
+
+        function saveReview() {
+            const id = document.getElementById('editReviewId').value;
+            const name = document.getElementById('reviewAuthor').value.trim();
+            const project = document.getElementById('reviewProjectName').value.trim();
+            const rating = parseInt(document.getElementById('reviewRatingSelect').value, 10) || 5;
+            const comment = document.getElementById('reviewCommentText').value.trim();
+
+            if (!name || !comment) {
+                alert('الرجاء تعبئة اسم العميل ورأيه أولاً!');
+                return;
+            }
+
+            if (!siteData.reviews) {
+                siteData.reviews = [];
+            }
+
+            if (id) {
+                // Editing existing review
+                const index = siteData.reviews.findIndex(r => r.id === id);
+                if (index !== -1) {
+                    siteData.reviews[index].name = name;
+                    siteData.reviews[index].project = project;
+                    siteData.reviews[index].rating = rating;
+                    siteData.reviews[index].comment = comment;
+                }
+            } else {
+                // Adding new review
+                const newReview = {
+                    id: 'r_' + Date.now(),
+                    name: name,
+                    project: project,
+                    rating: rating,
+                    comment: comment
+                };
+                siteData.reviews.push(newReview);
+            }
+
+            saveSiteDataLocally();
+            resetReviewForm();
+            renderAdminReviews();
+            renderWebsiteContent();
+            alert('تم حفظ تقييم العميل بنجاح!');
+        }
+
+        function editReview(id) {
+            const review = siteData.reviews.find(r => r.id === id);
+            if (review) {
+                document.getElementById('editReviewId').value = review.id;
+                document.getElementById('reviewAuthor').value = review.name;
+                document.getElementById('reviewProjectName').value = review.project || '';
+                document.getElementById('reviewRatingSelect').value = review.rating || 5;
+                document.getElementById('reviewCommentText').value = review.comment;
+                
+                document.getElementById('review-form-title').innerText = 'تعديل تقييم العميل الحالي';
+                document.getElementById('reviewSubmitBtn').innerHTML = 'تحديث وتأكيد التعديل <i class="fas fa-edit"></i>';
+                document.getElementById('reviewCancelBtn').style.display = 'inline-block';
+                document.getElementById('reviewAuthor').focus();
+            }
+        }
+
+        function deleteReview(id) {
+            if (confirm('هل أنت متأكد من رغبتك في حذف هذا التقييم نهائياً؟')) {
+                siteData.reviews = siteData.reviews.filter(r => r.id !== id);
+                saveSiteDataLocally();
+                renderAdminReviews();
+                renderWebsiteContent();
+            }
+        }
+
+        function resetReviewForm() {
+            document.getElementById('editReviewId').value = '';
+            document.getElementById('reviewAuthor').value = '';
+            document.getElementById('reviewProjectName').value = '';
+            document.getElementById('reviewRatingSelect').value = '5';
+            document.getElementById('reviewCommentText').value = '';
+            
+            document.getElementById('review-form-title').innerText = 'إضافة تقييم/رأي عميل جديد';
+            document.getElementById('reviewSubmitBtn').innerHTML = 'إضافة التقييم <i class="fas fa-plus"></i>';
+            document.getElementById('reviewCancelBtn').style.display = 'none';
         }
 
         // Action 4: Manage Received Inquiries
