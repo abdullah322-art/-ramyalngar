@@ -584,53 +584,63 @@
             border: 1px solid var(--border-dark);
         }
 
-        /* Grid selection for images */
-        .preset-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-            max-height: 150px;
-            overflow-y: auto;
+        /* Upload Component Styles */
+        .upload-container {
             border: 1px solid var(--border-dark);
-            padding: 10px;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: var(--surface);
+            margin-top: 5px;
+        }
+
+        .upload-dropzone {
+            border: 2px dashed var(--border-dark);
             border-radius: 6px;
-        }
-
-        .preset-option {
-            cursor: pointer;
-            border: 2px solid transparent;
-            border-radius: 4px;
-            overflow: hidden;
-            aspect-ratio: 1;
-            position: relative;
-            transition: border-color 0.2s;
-        }
-
-        .preset-option img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .preset-option:hover {
-            border-color: var(--primary-dark);
-        }
-
-        .preset-option.selected {
-            border-color: var(--primary);
-        }
-
-        .preset-option .badge {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: var(--primary);
-            font-size: 0.7rem;
+            padding: 20px;
             text-align: center;
-            padding: 2px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .upload-dropzone:hover, .upload-dropzone.dragover {
+            border-color: var(--primary);
+            background-color: rgba(212, 175, 55, 0.05);
+        }
+
+        .upload-dropzone i {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .upload-dropzone .dropzone-text {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin: 5px 0;
+        }
+
+        .upload-dropzone .dropzone-subtext {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .upload-preview {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px dashed var(--border-dark);
+            border-radius: 6px;
+            background-color: var(--bg-dark);
+        }
+
+        .upload-preview img {
+            max-width: 100%;
+            max-height: 180px;
+            object-fit: contain;
+            border-radius: 6px;
+            border: 1px solid var(--border-dark);
         }
 
         /* Inquiries styles */
@@ -650,7 +660,6 @@
             .subtitle { font-size: 1rem; }
             .section-title { font-size: 1.6rem; }
             .admin-dashboard { height: 95vh; }
-            .preset-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -843,8 +852,24 @@
                             <textarea id="serviceDesc" rows="3" class="form-control" placeholder="اكتب تفاصيل الخدمة وجودتها والأخشاب المستخدمة"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="serviceImg">رابط صورة الخدمة (يمكنك وضع رابط مباشر للصورة، أو ترك الحقل فارغاً لاستخدام صورة نجارة افتراضية)</label>
-                            <input type="url" id="serviceImg" class="form-control" placeholder="https://example.com/image.jpg">
+                            <label>صورة الخدمة</label>
+                            <div class="upload-container" id="serviceUploadContainer">
+                                <div class="upload-dropzone" id="serviceDropzone" onclick="document.getElementById('serviceFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'serviceImg', 'servicePreviewImg')">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p class="dropzone-text">اسحب وأسقط صورة الخدمة هنا، أو اضغط للاختيار من جهازك</p>
+                                    <span class="dropzone-subtext">تدعم ملفات الصور JPG, PNG, WebP</span>
+                                    <input type="file" id="serviceFileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(this, 'serviceImg', 'servicePreviewImg')">
+                                </div>
+                                <div class="upload-preview" id="servicePreviewContainer" style="display: none;">
+                                    <img id="servicePreviewImg" src="" alt="معاينة صورة الخدمة">
+                                    <br>
+                                    <button type="button" class="btn" onclick="clearUploadedImage('serviceImg', 'servicePreviewContainer', 'serviceDropzone', 'serviceFileInput')" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: auto;"><i class="fas fa-trash-alt"></i> إزالة الصورة</button>
+                                </div>
+                                <div style="margin-top: 12px;">
+                                    <label for="serviceImg" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">أو أدخل رابطاً مباشراً للصورة:</label>
+                                    <input type="url" id="serviceImg" class="form-control" placeholder="https://example.com/image.jpg" oninput="handleUrlInput('serviceImg', 'servicePreviewImg', 'servicePreviewContainer', 'serviceDropzone')">
+                                </div>
+                            </div>
                         </div>
                         
                         <div style="display: flex; gap: 10px; margin-bottom: 30px;">
@@ -868,15 +893,23 @@
                             <input type="text" id="portfolioTitle" class="form-control" placeholder="مثال: مطبخ خشب زان عصري">
                         </div>
                         <div class="form-group">
-                            <label for="portfolioImg">رابط صورة العمل (يمكنك لصق رابط أي صورة أو الاختيار من النماذج الجاهزة أدناه)</label>
-                            <input type="url" id="portfolioImg" class="form-control" placeholder="https://example.com/image.jpg">
-                        </div>
-                        
-                        <!-- Premium Preset Images -->
-                        <div class="form-group">
-                            <label>نماذج صور نجارة جاهزة وفاخرة للاستخدام السريع:</label>
-                            <div class="preset-grid" id="presets-container">
-                                <!-- Loaded Dynamically -->
+                            <label>صورة العمل المنجز</label>
+                            <div class="upload-container" id="portfolioUploadContainer">
+                                <div class="upload-dropzone" id="portfolioDropzone" onclick="document.getElementById('portfolioFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'portfolioImg', 'portfolioPreviewImg')">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p class="dropzone-text">اسحب وأسقط صورة العمل هنا، أو اضغط للاختيار من جهازك</p>
+                                    <span class="dropzone-subtext">تدعم ملفات الصور JPG, PNG, WebP</span>
+                                    <input type="file" id="portfolioFileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(this, 'portfolioImg', 'portfolioPreviewImg')">
+                                </div>
+                                <div class="upload-preview" id="portfolioPreviewContainer" style="display: none;">
+                                    <img id="portfolioPreviewImg" src="" alt="معاينة صورة العمل">
+                                    <br>
+                                    <button type="button" class="btn" onclick="clearUploadedImage('portfolioImg', 'portfolioPreviewContainer', 'portfolioDropzone', 'portfolioFileInput')" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: auto;"><i class="fas fa-trash-alt"></i> إزالة الصورة</button>
+                                </div>
+                                <div style="margin-top: 12px;">
+                                    <label for="portfolioImg" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">أو أدخل رابطاً مباشراً للصورة:</label>
+                                    <input type="url" id="portfolioImg" class="form-control" placeholder="https://example.com/image.jpg" oninput="handleUrlInput('portfolioImg', 'portfolioPreviewImg', 'portfolioPreviewContainer', 'portfolioDropzone')">
+                                </div>
                             </div>
                         </div>
                         
@@ -934,18 +967,6 @@
 
     <!-- JavaScript Engine -->
     <script>
-        // Preset wood carpentry images
-        const presetImages = [
-            { name: "مطبخ خشب زان", url: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800" },
-            { name: "طاولة طعام خشب طبيعي", url: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&q=80&w=800" },
-            { name: "باب شقة كلاسيك", url: "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=80&w=800" },
-            { name: "تجليد جدران مودرن", url: "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=80&w=800" },
-            { name: "غرفة نوم راقية", url: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=80&w=800" },
-            { name: "دولاب ملابس كبير", url: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=800" },
-            { name: "أرفف خشبية أنيقة", url: "https://images.unsplash.com/photo-1588854337236-6889d631faa8?auto=format&fit=crop&q=80&w=800" },
-            { name: "ورشة نجارة احترافية", url: "https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800" }
-        ];
-
         // Default content template
         const defaultSiteData = {
             heroTitle: "رامي النجار",
@@ -978,7 +999,6 @@
         // Initialization
         window.addEventListener('DOMContentLoaded', () => {
             loadSiteData();
-            renderPresetImages();
             
             // Smooth scroll setup
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1097,27 +1117,72 @@
             document.getElementById('inquiries-tab-btn').innerHTML = `<i class="fas fa-envelope" style="margin-left: 8px; width: 18px; text-align: center;"></i> طلبات العملاء (${siteData.inquiries.length})`;
         }
 
-        // Render presets inside portfolio dashboard panel
-        function renderPresetImages() {
-            const presetsContainer = document.getElementById('presets-container');
-            presetsContainer.innerHTML = '';
-            presetImages.forEach((img, index) => {
-                presetsContainer.innerHTML += `
-                    <div class="preset-option" onclick="selectPreset(${index})" id="preset_${index}">
-                        <img src="${img.url}" alt="${img.name}">
-                        <div class="badge">${img.name}</div>
-                    </div>
-                `;
-            });
+        // --- Drag-and-Drop and File Upload Handlers ---
+        function handleDragOver(e, element) {
+            e.preventDefault();
+            element.classList.add('dragover');
         }
 
-        function selectPreset(index) {
-            // Remove previous selections
-            document.querySelectorAll('.preset-option').forEach(el => el.classList.remove('selected'));
-            // Highlight current selection
-            document.getElementById(`preset_${index}`).classList.add('selected');
-            // Populate input URL
-            document.getElementById('portfolioImg').value = presetImages[index].url;
+        function handleDragLeave(e, element) {
+            e.preventDefault();
+            element.classList.remove('dragover');
+        }
+
+        function handleDrop(e, element, inputId, previewImgId) {
+            e.preventDefault();
+            element.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const fileInput = element.querySelector('input[type="file"]');
+                if (fileInput) {
+                    fileInput.files = files;
+                    handleFileSelect(fileInput, inputId, previewImgId);
+                }
+            }
+        }
+
+        function handleFileSelect(input, inputId, previewImgId) {
+            const file = input.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('الرجاء اختيار ملف صورة صحيح (JPG, PNG, WebP)!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                document.getElementById(inputId).value = base64Data;
+                
+                const previewImg = document.getElementById(previewImgId);
+                previewImg.src = base64Data;
+                
+                const prefix = inputId.replace('Img', '');
+                document.getElementById(`${prefix}PreviewContainer`).style.display = 'block';
+                document.getElementById(`${prefix}Dropzone`).style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearUploadedImage(inputId, previewContainerId, dropzoneId, fileInputId) {
+            document.getElementById(inputId).value = '';
+            document.getElementById(fileInputId).value = '';
+            document.getElementById(previewContainerId).style.display = 'none';
+            document.getElementById(dropzoneId).style.display = 'block';
+        }
+
+        function handleUrlInput(inputId, previewImgId, previewContainerId, dropzoneId) {
+            const urlVal = document.getElementById(inputId).value.trim();
+            if (urlVal) {
+                document.getElementById(previewImgId).src = urlVal;
+                document.getElementById(previewContainerId).style.display = 'block';
+                document.getElementById(dropzoneId).style.display = 'none';
+            } else {
+                document.getElementById(previewContainerId).style.display = 'none';
+                document.getElementById(dropzoneId).style.display = 'block';
+            }
         }
 
         // Contact Submission Handler
@@ -1343,6 +1408,15 @@
                 document.getElementById('serviceDesc').value = service.desc;
                 document.getElementById('serviceImg').value = service.img || '';
                 
+                if (service.img) {
+                    document.getElementById('servicePreviewImg').src = service.img;
+                    document.getElementById('servicePreviewContainer').style.display = 'block';
+                    document.getElementById('serviceDropzone').style.display = 'none';
+                } else {
+                    document.getElementById('servicePreviewContainer').style.display = 'none';
+                    document.getElementById('serviceDropzone').style.display = 'block';
+                }
+                
                 document.getElementById('service-form-title').innerText = 'تعديل الخدمة الحالية';
                 document.getElementById('serviceSubmitBtn').innerHTML = 'تحديث وتأكيد التعديل <i class="fas fa-edit"></i>';
                 document.getElementById('serviceCancelBtn').style.display = 'inline-block';
@@ -1363,6 +1437,9 @@
             document.getElementById('serviceTitle').value = '';
             document.getElementById('serviceDesc').value = '';
             document.getElementById('serviceImg').value = '';
+            document.getElementById('serviceFileInput').value = '';
+            document.getElementById('servicePreviewContainer').style.display = 'none';
+            document.getElementById('serviceDropzone').style.display = 'block';
             
             document.getElementById('service-form-title').innerText = 'إضافة خدمة جديدة';
             document.getElementById('serviceSubmitBtn').innerHTML = 'إضافة الخدمة <i class="fas fa-plus"></i>';
@@ -1435,6 +1512,15 @@
                 document.getElementById('portfolioTitle').value = item.title;
                 document.getElementById('portfolioImg').value = item.img;
                 
+                if (item.img) {
+                    document.getElementById('portfolioPreviewImg').src = item.img;
+                    document.getElementById('portfolioPreviewContainer').style.display = 'block';
+                    document.getElementById('portfolioDropzone').style.display = 'none';
+                } else {
+                    document.getElementById('portfolioPreviewContainer').style.display = 'none';
+                    document.getElementById('portfolioDropzone').style.display = 'block';
+                }
+                
                 document.getElementById('portfolio-form-title').innerText = 'تعديل مشروع من المعرض';
                 document.getElementById('portfolioSubmitBtn').innerHTML = 'تحديث مشروع المعرض <i class="fas fa-edit"></i>';
                 document.getElementById('portfolioCancelBtn').style.display = 'inline-block';
@@ -1454,7 +1540,9 @@
             document.getElementById('editPortfolioId').value = '';
             document.getElementById('portfolioTitle').value = '';
             document.getElementById('portfolioImg').value = '';
-            document.querySelectorAll('.preset-option').forEach(el => el.classList.remove('selected'));
+            document.getElementById('portfolioFileInput').value = '';
+            document.getElementById('portfolioPreviewContainer').style.display = 'none';
+            document.getElementById('portfolioDropzone').style.display = 'block';
             
             document.getElementById('portfolio-form-title').innerText = 'إضافة عمل جديد لمعرض الأعمال';
             document.getElementById('portfolioSubmitBtn').innerHTML = 'إضافة لمعرض الأعمال <i class="fas fa-images"></i>';
