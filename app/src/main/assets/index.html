@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>رامي النجار - نجار محترف</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #D4AF37;
@@ -662,7 +664,7 @@
             <li><a href="#services">الخدمات</a></li>
             <li><a href="#portfolio">أعمالنا</a></li>
             <li><a href="#contact">تواصل معنا</a></li>
-            <li><a href="javascript:void(0)" onclick="openLoginModal()" style="color: var(--primary); font-weight: bold; border: 1px dashed var(--primary); padding: 5px 12px; border-radius: 5px; background-color: rgba(212,175,55,0.05); transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='rgba(212,175,55,0.15)'" onmouseout="this.style.backgroundColor='rgba(212,175,55,0.05)'">لوحة التحكم ⚙️</a></li>
+            <li><a href="javascript:void(0)" onclick="openLoginModal()" style="color: var(--primary); font-weight: bold; border: 1px dashed var(--primary); padding: 5px 12px; border-radius: 5px; background-color: rgba(212,175,55,0.05); transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='rgba(212,175,55,0.15)'" onmouseout="this.style.backgroundColor='rgba(212,175,55,0.05)'">لوحة التحكم <i class="fas fa-cog" style="margin-right: 5px; margin-left: 5px;"></i></a></li>
         </ul>
     </nav>
 
@@ -740,13 +742,13 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">🔐 تسجيل الدخول للإدارة</div>
+                <div class="modal-title"><i class="fas fa-lock" style="color: var(--primary); margin-left: 8px;"></i> تسجيل الدخول للإدارة</div>
                 <button class="close-btn" onclick="closeLoginModal()">&times;</button>
             </div>
             <div class="form-group">
                 <label for="adminPassword">كلمة مرور لوحة التحكم</label>
                 <input type="password" id="adminPassword" class="form-control" placeholder="أدخل كلمة المرور" onkeydown="if(event.key === 'Enter') submitLogin()">
-                <div id="loginError" style="color: var(--error); margin-top: 8px; font-weight: bold; display: none;">❌ كلمة المرور غير صحيحة!</div>
+                <div id="loginError" style="color: var(--error); margin-top: 8px; font-weight: bold; display: none;"><i class="fas fa-exclamation-circle" style="margin-left: 5px;"></i> كلمة المرور غير صحيحة!</div>
             </div>
             <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
                 <button class="btn" style="padding: 10px 20px;" onclick="submitLogin()">دخول</button>
@@ -760,24 +762,24 @@
         <div class="admin-dashboard">
             <div class="dashboard-header">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 1.8rem;">⚙️</span>
+                    <i class="fas fa-cog" style="font-size: 1.8rem; color: var(--primary);"></i>
                     <div>
                         <h2 style="color: var(--primary); margin: 0; font-size: 1.6rem;">لوحة تحكم الموقع</h2>
                         <p style="color: var(--text-secondary); margin: 0; font-size: 0.9rem;">أهلاً بك يا أستاذ رامي، يمكنك التحكم بكافة أقسام الموقع والطلبات من هنا.</p>
                     </div>
                 </div>
-                <button class="btn" style="background-color: var(--error); color: #fff; padding: 8px 15px; font-size: 0.95rem;" onclick="logoutAdmin()">تسجيل الخروج 🚪</button>
+                <button class="btn" style="background-color: var(--error); color: #fff; padding: 8px 15px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;" onclick="logoutAdmin()">تسجيل الخروج <i class="fas fa-sign-out-alt"></i></button>
             </div>
             
             <div class="dashboard-container">
                 <!-- Sidebar Tabs -->
                 <div class="dashboard-sidebar">
-                    <button class="tab-btn active" onclick="switchTab(event, 'tab-general')">📝 معلومات الموقع</button>
-                    <button class="tab-btn" onclick="switchTab(event, 'tab-services')">🛠️ إدارة الخدمات</button>
-                    <button class="tab-btn" onclick="switchTab(event, 'tab-portfolio')">🖼️ معرض الأعمال</button>
-                    <button class="tab-btn" onclick="switchTab(event, 'tab-inquiries')" id="inquiries-tab-btn">✉️ طلبات العملاء (0)</button>
-                    <button class="tab-btn" onclick="switchTab(event, 'tab-security')">🔒 كلمة المرور</button>
-                    <button class="tab-btn" onclick="closeDashboard()" style="margin-top: auto; border: 1px solid var(--primary); color: var(--primary);">عرض الموقع 💻</button>
+                    <button class="tab-btn active" onclick="switchTab(event, 'tab-general')"><i class="fas fa-info-circle" style="margin-left: 8px; width: 18px; text-align: center;"></i> معلومات الموقع</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-services')"><i class="fas fa-tools" style="margin-left: 8px; width: 18px; text-align: center;"></i> إدارة الخدمات</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-portfolio')"><i class="fas fa-images" style="margin-left: 8px; width: 18px; text-align: center;"></i> معرض الأعمال</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-inquiries')" id="inquiries-tab-btn"><i class="fas fa-envelope" style="margin-left: 8px; width: 18px; text-align: center;"></i> طلبات العملاء (0)</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-security')"><i class="fas fa-key" style="margin-left: 8px; width: 18px; text-align: center;"></i> كلمة المرور</button>
+                    <button class="tab-btn" onclick="closeDashboard()" style="margin-top: auto; border: 1px solid var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; gap: 8px;">عرض الموقع <i class="fas fa-desktop"></i></button>
                 </div>
                 
                 <!-- Content Area -->
@@ -824,7 +826,7 @@
                             </div>
                         </div>
                         
-                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="saveGeneralSettings()">حفظ وتطبيق المعلومات الجديدة ✅</button>
+                        <button class="btn" style="width: 100%; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="saveGeneralSettings()">حفظ وتطبيق المعلومات الجديدة <i class="fas fa-check-circle"></i></button>
                     </div>
                     
                     <!-- PANE 2: Services -->
@@ -846,8 +848,8 @@
                         </div>
                         
                         <div style="display: flex; gap: 10px; margin-bottom: 30px;">
-                            <button class="btn" onclick="saveService()" style="flex: 2;" id="serviceSubmitBtn">إضافة الخدمة ➕</button>
-                            <button class="btn" onclick="resetServiceForm()" style="flex: 1; background-color: var(--surface-variant); color: var(--text-primary); display: none;" id="serviceCancelBtn">إلغاء التعديل</button>
+                            <button class="btn" onclick="saveService()" style="flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px;" id="serviceSubmitBtn">إضافة الخدمة <i class="fas fa-plus"></i></button>
+                            <button class="btn" onclick="resetServiceForm()" style="flex: 1; background-color: var(--surface-variant); color: var(--text-primary);" id="serviceCancelBtn">إلغاء التعديل</button>
                         </div>
                         
                         <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">الخدمات الحالية بالموقع</h3>
@@ -879,8 +881,8 @@
                         </div>
                         
                         <div style="display: flex; gap: 10px; margin-bottom: 30px;">
-                            <button class="btn" onclick="savePortfolio()" style="flex: 2;" id="portfolioSubmitBtn">إضافة لمعرض الأعمال 🖼️</button>
-                            <button class="btn" onclick="resetPortfolioForm()" style="flex: 1; background-color: var(--surface-variant); color: var(--text-primary); display: none;" id="portfolioCancelBtn">إلغاء التعديل</button>
+                            <button class="btn" onclick="savePortfolio()" style="flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px;" id="portfolioSubmitBtn">إضافة لمعرض الأعمال <i class="fas fa-images"></i></button>
+                            <button class="btn" onclick="resetPortfolioForm()" style="flex: 1; background-color: var(--surface-variant); color: var(--text-primary);" id="portfolioCancelBtn">إلغاء التعديل</button>
                         </div>
                         
                         <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">معرض الأعمال الحالي</h3>
@@ -893,7 +895,7 @@
                     <div id="tab-inquiries" class="dashboard-pane">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">
                             <h3 style="color: var(--primary); margin: 0;">طلبات العملاء الواردة</h3>
-                            <button class="btn" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem;" onclick="clearAllInquiries()">حذف جميع الطلبات 🗑️</button>
+                            <button class="btn" style="background-color: var(--error); color: #fff; padding: 6px 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;" onclick="clearAllInquiries()">حذف جميع الطلبات <i class="fas fa-trash-alt"></i></button>
                         </div>
                         
                         <div id="admin-inquiries-container">
@@ -922,7 +924,7 @@
                         
                         <div id="passwordStatus" style="margin-bottom: 15px; font-weight: bold; text-align: center; display: none; padding: 10px; border-radius: 5px;"></div>
                         
-                        <button class="btn" style="width: 100%;" onclick="updateAdminPassword()">تحديث كلمة المرور 🔒</button>
+                        <button class="btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="updateAdminPassword()">تحديث كلمة المرور <i class="fas fa-key"></i></button>
                     </div>
                     
                 </div>
@@ -1092,7 +1094,7 @@
             `;
 
             // Update badge in inquiries tab
-            document.getElementById('inquiries-tab-btn').innerText = `✉️ طلبات العملاء (${siteData.inquiries.length})`;
+            document.getElementById('inquiries-tab-btn').innerHTML = `<i class="fas fa-envelope" style="margin-left: 8px; width: 18px; text-align: center;"></i> طلبات العملاء (${siteData.inquiries.length})`;
         }
 
         // Render presets inside portfolio dashboard panel
@@ -1342,7 +1344,7 @@
                 document.getElementById('serviceImg').value = service.img || '';
                 
                 document.getElementById('service-form-title').innerText = 'تعديل الخدمة الحالية';
-                document.getElementById('serviceSubmitBtn').innerText = 'تحديث وتأكيد التعديل ✏️';
+                document.getElementById('serviceSubmitBtn').innerHTML = 'تحديث وتأكيد التعديل <i class="fas fa-edit"></i>';
                 document.getElementById('serviceCancelBtn').style.display = 'inline-block';
                 document.getElementById('serviceTitle').focus();
             }
@@ -1363,7 +1365,7 @@
             document.getElementById('serviceImg').value = '';
             
             document.getElementById('service-form-title').innerText = 'إضافة خدمة جديدة';
-            document.getElementById('serviceSubmitBtn').innerText = 'إضافة الخدمة ➕';
+            document.getElementById('serviceSubmitBtn').innerHTML = 'إضافة الخدمة <i class="fas fa-plus"></i>';
             document.getElementById('serviceCancelBtn').style.display = 'none';
         }
 
@@ -1434,7 +1436,7 @@
                 document.getElementById('portfolioImg').value = item.img;
                 
                 document.getElementById('portfolio-form-title').innerText = 'تعديل مشروع من المعرض';
-                document.getElementById('portfolioSubmitBtn').innerText = 'تحديث مشروع المعرض ✏️';
+                document.getElementById('portfolioSubmitBtn').innerHTML = 'تحديث مشروع المعرض <i class="fas fa-edit"></i>';
                 document.getElementById('portfolioCancelBtn').style.display = 'inline-block';
                 document.getElementById('portfolioTitle').focus();
             }
@@ -1455,7 +1457,7 @@
             document.querySelectorAll('.preset-option').forEach(el => el.classList.remove('selected'));
             
             document.getElementById('portfolio-form-title').innerText = 'إضافة عمل جديد لمعرض الأعمال';
-            document.getElementById('portfolioSubmitBtn').innerText = 'إضافة لمعرض الأعمال 🖼️';
+            document.getElementById('portfolioSubmitBtn').innerHTML = 'إضافة لمعرض الأعمال <i class="fas fa-images"></i>';
             document.getElementById('portfolioCancelBtn').style.display = 'none';
         }
 
@@ -1465,12 +1467,12 @@
             container.innerHTML = '';
             
             // Update the tab badge number as well
-            document.getElementById('inquiries-tab-btn').innerText = `✉️ طلبات العملاء (${siteData.inquiries.length})`;
+            document.getElementById('inquiries-tab-btn').innerHTML = `<i class="fas fa-envelope" style="margin-left: 8px; width: 18px; text-align: center;"></i> طلبات العملاء (${siteData.inquiries.length})`;
 
             if (siteData.inquiries.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                        <span style="font-size: 3rem;">📭</span>
+                        <i class="fas fa-inbox" style="font-size: 3rem; color: var(--text-secondary); display: block; margin-bottom: 15px;"></i>
                         <p style="margin-top: 15px; font-weight: bold; font-size: 1.1rem;">لا توجد أي استفسارات أو طلبات من العملاء حتى الآن.</p>
                         <p style="font-size: 0.9rem; color: var(--text-secondary);">عندما يقوم عميل بإرسال استفسار من نموذج الاتصال، سيظهر لك هنا فوراً.</p>
                     </div>
@@ -1487,16 +1489,20 @@
                         <div class="admin-item-card-header">
                             <div>
                                 <strong style="color: var(--primary); font-size: 1.2rem;">العميل: ${inq.name}</strong>
-                                <div class="inquiry-meta">📱 هاتف: ${inq.phone} | 📅 تاريخ الإرسال: ${inq.timestamp}</div>
+                                <div class="inquiry-meta" style="display: flex; gap: 12px; align-items: center; margin-top: 4px; font-size: 0.85rem; color: var(--text-secondary);">
+                                    <span><i class="fas fa-phone-alt"></i> هاتف: ${inq.phone}</span>
+                                    <span>|</span>
+                                    <span><i class="fas fa-calendar-alt"></i> تاريخ الإرسال: ${inq.timestamp}</span>
+                                </div>
                             </div>
-                            <button class="action-btn delete" onclick="deleteInquiry('${inq.id}')">حذف الطلب 🗑️</button>
+                            <button class="action-btn delete" onclick="deleteInquiry('${inq.id}')" style="display: inline-flex; align-items: center; gap: 6px;">حذف الطلب <i class="fas fa-trash-alt"></i></button>
                         </div>
                         <div style="background-color: var(--bg-dark); padding: 12px; border-radius: 6px; border: 1px solid var(--border-dark); font-size: 1rem; color: var(--text-primary); margin: 8px 0;">
                             ${inq.message.replace(/\n/g, '<br>')}
                         </div>
                         <div style="display: flex; gap: 10px; margin-top: 5px;">
-                            <a href="${whatsappDirectUrl}" target="_blank" class="action-btn whatsapp-direct" style="text-decoration: none; text-align: center; flex: 1; justify-content: center;">تواصل عبر واتساب 💬</a>
-                            <a href="tel:${inq.phone}" class="action-btn call-direct" style="text-decoration: none; text-align: center; flex: 1; justify-content: center;">اتصال هاتف مباشر 📞</a>
+                            <a href="${whatsappDirectUrl}" target="_blank" class="action-btn whatsapp-direct" style="text-decoration: none; text-align: center; flex: 1; justify-content: center; display: inline-flex; align-items: center; gap: 6px;">تواصل عبر واتساب <i class="fab fa-whatsapp"></i></a>
+                            <a href="tel:${inq.phone}" class="action-btn call-direct" style="text-decoration: none; text-align: center; flex: 1; justify-content: center; display: inline-flex; align-items: center; gap: 6px;">اتصال هاتف مباشر <i class="fas fa-phone"></i></a>
                         </div>
                     </div>
                 `;
