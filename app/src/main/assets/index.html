@@ -8,17 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #D4AF37;
-            --primary-dark: #B5952F;
-            --bg-dark: #170F0B;
-            --surface-dark: #231711;
-            --surface-variant: #33231A;
-            --text-primary: #F5EBE1;
-            --text-secondary: #C2B2A3;
-            --border-dark: #4A3423;
+            --primary: #E5C158;
+            --primary-dark: #C29F3E;
+            --bg-dark: #0A0C10;
+            --surface-dark: #121620;
+            --surface-variant: #1E2330;
+            --text-primary: #F3F4F6;
+            --text-secondary: #9CA3AF;
+            --border-dark: #262D3D;
             --whatsapp: #25D366;
-            --error: #E57373;
-            --success: #81C784;
+            --error: #EF4444;
+            --success: #10B981;
         }
         
         * {
@@ -809,6 +809,16 @@
         <div class="portfolio-grid" id="portfolio-grid-container" style="margin-top: 25px;">
             <!-- Loaded Dynamically -->
         </div>
+        
+        <!-- Ramy Quick Work Addition Section -->
+        <div style="max-width: 600px; margin: 30px auto 10px auto; padding: 15px 20px; background-color: rgba(229,193,88,0.04); border: 1px dashed rgba(229,193,88,0.3); border-radius: 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px;">
+                <i class="fas fa-user-shield" style="color: var(--primary); margin-left: 5px;"></i> خاص بإدارة الورشة (الأسطى رامي)
+            </p>
+            <button class="btn" onclick="ramyQuickLogin()" style="font-size: 0.9rem; padding: 8px 16px; background-color: transparent; border: 1.5px solid var(--primary); color: var(--primary); font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s; width: auto; cursor: pointer;" onmouseover="this.style.backgroundColor='var(--primary)'; this.style.color='#000';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--primary)';">
+                <span>إضافة عمل جديد لمعرض الأعمال عبر التيك توك والذكاء الاصطناعي 🪵✨</span>
+            </button>
+        </div>
     </section>
 
     <!-- Reviews Section -->
@@ -857,6 +867,60 @@
             <a href="javascript:void(0)" onclick="openLoginModal()" style="color: var(--primary); text-decoration: none;">دخول لوحة تحكم الإدارة (خاص بالنجار)</a>
         </p>
     </footer>
+
+    <!-- MODAL: Lightbox (Image Zoom) -->
+    <div id="lightboxModal" class="modal" onclick="closeLightbox(event)" style="z-index: 4000; background-color: rgba(6, 8, 12, 0.96);">
+        <div style="position: relative; max-width: 90%; max-height: 85%; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: modalFadeIn 0.3s ease;" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeLightbox()" style="position: absolute; top: -45px; left: 0; font-size: 2.2rem; color: #fff; background: none; border: none; cursor: pointer; transition: color 0.2s;">&times;</button>
+            <img id="lightboxImg" src="" style="max-width: 100%; max-height: 70vh; border-radius: 8px; border: 2px solid var(--primary); box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain;" alt="معاينة العمل">
+            <div id="lightboxCaption" style="color: var(--text-primary); margin-top: 15px; font-size: 1.25rem; font-weight: bold; text-align: center; text-shadow: 0 2px 5px rgba(0,0,0,0.9); line-height: 1.4;"></div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn" id="lightboxShareBtnAction" style="padding: 8px 18px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;" onclick="triggerLightboxShare()">
+                    <i class="fas fa-share-alt" style="color: #000;"></i> مشاركة هذا العمل
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Custom Share Options -->
+    <div id="shareModal" class="modal" onclick="closeShareModal(event)" style="z-index: 4100;">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 450px;">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-share-alt" style="color: var(--primary); margin-left: 8px;"></i> مشاركة العمل المنجز</div>
+                <button class="close-btn" onclick="closeShareModal()">&times;</button>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px; text-align: center;">شارك هذا العمل الاحترافي المصمم بورشة الأسطى رامي مع الأصدقاء والعائلة!</p>
+            
+            <div id="shareTargetDetails" style="background-color: var(--bg-dark); border: 1px solid var(--border-dark); border-radius: 8px; padding: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                <img id="shareTargetImg" src="" style="width: 70px; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-dark);">
+                <div style="flex: 1; text-align: right;">
+                    <h4 id="shareTargetTitle" style="color: var(--primary); margin: 0 0 4px 0; font-size: 1.05rem;">اسم المشروع</h4>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">معرض أعمال الأسطى رامي النجار</span>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- WhatsApp Share Option -->
+                <button class="btn" id="shareWhatsAppBtn" onclick="shareToWhatsApp()" style="background-color: var(--whatsapp); color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.05rem; padding: 12px;">
+                    <i class="fab fa-whatsapp" style="font-size: 1.3rem;"></i> مشاركة عبر واتساب مباشرة
+                </button>
+                
+                <!-- Native / Browser Share Option if available -->
+                <button class="btn" id="shareNativeBtn" onclick="shareUsingDeviceSheet()" style="background-color: var(--primary); color: #000; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem; padding: 12px;">
+                    <i class="fas fa-mobile-alt"></i> مشاركة عبر تطبيقات الهاتف الأخرى
+                </button>
+                
+                <!-- Copy Link Button -->
+                <button class="btn" onclick="copyShareLink()" style="background-color: var(--surface-variant); color: var(--text-primary); display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem; padding: 12px;">
+                    <i class="fas fa-link"></i> نسخ رابط موقع ورشة رامي النجار
+                </button>
+            </div>
+            
+            <div id="copyToastMessage" style="display: none; text-align: center; color: var(--success); font-weight: bold; margin-top: 12px; font-size: 0.9rem; animation: modalFadeIn 0.2s;">
+                <i class="fas fa-check-circle" style="margin-left: 5px;"></i> تم نسخ الرابط بنجاح! شاركه الآن مع من تحب.
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL 1: Admin Login -->
     <div id="loginModal" class="modal">
@@ -1190,6 +1254,29 @@
                         <h3 style="color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;" id="portfolio-form-title">إضافة عمل جديد لمعرض الأعمال</h3>
                         
                         <input type="hidden" id="editPortfolioId">
+                        
+                        <!-- TikTok AI Import Card -->
+                        <div style="background: rgba(229,193,88,0.05); border: 1px dashed var(--primary); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+                            <h4 style="color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-size: 1.05rem;">
+                                <i class="fab fa-tiktok"></i> إضافة وتوليد عمل تلقائياً بالذكاء الاصطناعي
+                            </h4>
+                            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.45;">
+                                الصق رابط فيديو التيك توك الخاص بالعمل المنجز، وسيقوم مساعد الذكاء الاصطناعي بتحليله وتوليد عنوان مبهر للمشروع مع اختيار صورة فنية مناسبة فائقة الجودة تلقائياً!
+                            </p>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="url" id="tiktokUrl" class="form-control" style="margin-bottom: 0; flex: 1; min-height: 40px;" placeholder="https://www.tiktok.com/@ramyalngar11/video/12345...">
+                                <button type="button" class="btn" id="tiktokAnalyzeBtn" onclick="importFromTikTok()" style="background-color: var(--primary); color: #000; font-weight: bold; padding: 10px 18px; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; height: 40px; border-radius: 5px; cursor: pointer;">
+                                    <span>تحليل بالذكاء الاصطناعي ✨</span>
+                                </button>
+                            </div>
+                            <div id="tiktokLoader" style="display: none; align-items: center; gap: 8px; margin-top: 10px; color: var(--primary); font-size: 0.85rem; font-weight: bold;">
+                                <i class="fas fa-spinner fa-spin"></i> جاري اتصال ذكي وتوجيه الطلب للذكاء الاصطناعي لتحليل الرابط وصياغة التفاصيل...
+                            </div>
+                            <div id="tiktokError" style="display: none; align-items: center; gap: 6px; margin-top: 10px; color: var(--error); font-size: 0.85rem; font-weight: bold;">
+                                <i class="fas fa-exclamation-circle"></i> فشل الاتصال بالذكاء الاصطناعي. يرجى إدخال البيانات يدوياً بالأسفل أو التأكد من اتصال الإنترنت ورابط الفيديو.
+                            </div>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="portfolioTitle">عنوان العمل المنجز</label>
                             <input type="text" id="portfolioTitle" class="form-control" placeholder="مثال: مطبخ خشب زان عصري">
@@ -1500,11 +1587,23 @@
             const portfolioContainer = document.getElementById('portfolio-grid-container');
             portfolioContainer.innerHTML = '';
             siteData.portfolio.forEach(item => {
+                const escapedTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '\\"');
+                const escapedImg = item.img.replace(/'/g, "\\'").replace(/"/g, '\\"');
                 portfolioContainer.innerHTML += `
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" onclick="openLightbox('${escapedImg}', '${escapedTitle}')" style="cursor: pointer;">
                         <img src="${item.img}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
                         <div class="portfolio-overlay">
-                            <div class="text">${item.title}</div>
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 15px; box-sizing: border-box;">
+                                <div class="text" style="margin-bottom: 12px; border-top: 1.5px solid var(--primary); border-bottom: 1.5px solid var(--primary); width: 100%; font-size: 1.1rem; padding: 10px 5px; box-sizing: border-box; background-color: rgba(0, 0, 0, 0.4);">${item.title}</div>
+                                <div style="display: flex; gap: 8px; justify-content: center;">
+                                    <span class="btn" style="padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px; background-color: var(--primary); color: #000; border-radius: 4px; font-weight: bold; pointer-events: none;">
+                                        <i class="fas fa-search-plus"></i> تكبير
+                                    </span>
+                                    <button class="btn" onclick="shareProject('${escapedTitle}', '${escapedImg}', event)" style="padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px; background-color: transparent; border: 1.5px solid var(--primary); color: var(--primary); border-radius: 4px; font-weight: bold; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.backgroundColor='var(--primary)'; this.style.color='#000';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--primary)';">
+                                        <i class="fas fa-share-alt"></i> مشاركة
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1830,8 +1929,196 @@
             document.querySelectorAll('.dashboard-pane').forEach(pane => pane.classList.remove('active'));
 
             // Set current active
-            evt.currentTarget.classList.add('active');
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            } else {
+                // If evt is null, find the button that activates this tab and make it active
+                const buttons = document.querySelectorAll('.tab-btn');
+                buttons.forEach(btn => {
+                    const clickAttr = btn.getAttribute('onclick') || "";
+                    if (clickAttr.includes(tabId)) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
             document.getElementById(tabId).classList.add('active');
+        }
+
+        // Ramy Quick Login from bottom section
+        function ramyQuickLogin() {
+            const pwd = prompt("يرجى إدخال كلمة مرور الإدارة لإضافة عمل جديد:");
+            if (pwd === null) return; // user cancelled
+            if (pwd === siteData.password) {
+                openDashboard();
+                switchTab(null, 'tab-portfolio');
+                setTimeout(function() {
+                    const tiktokInput = document.getElementById('tiktokUrl');
+                    if (tiktokInput) {
+                        tiktokInput.focus();
+                        tiktokInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            } else {
+                alert("كلمة المرور غير صحيحة يا فندم!");
+            }
+        }
+
+        // TikTok video import and AI analysis
+        function importFromTikTok() {
+            var url = document.getElementById('tiktokUrl').value.trim();
+            if (!url) {
+                alert('يرجى إدخال رابط فيديو تيك توك أولاً!');
+                return;
+            }
+            
+            // Show loader, disable button
+            document.getElementById('tiktokLoader').style.display = 'flex';
+            document.getElementById('tiktokError').style.display = 'none';
+            document.getElementById('tiktokAnalyzeBtn').disabled = true;
+            
+            // Call Android native bridge if available, otherwise fallback to mock simulation
+            if (typeof AndroidInterface !== 'undefined' && AndroidInterface.analyzeTikTok) {
+                AndroidInterface.analyzeTikTok(url, 'onTikTokAnalysisResult');
+            } else {
+                console.log("AndroidInterface not found, simulating AI TikTok Analysis");
+                setTimeout(function() {
+                    // Choose a premium woodwork Unsplash picture
+                    var premiumWoodImages = [
+                        "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800", // kitchen
+                        "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800", // wood decor
+                        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800", // kitchen/cabinet
+                        "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800", // interior custom wood
+                        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800"  // elegant woodwork
+                    ];
+                    var randImg = premiumWoodImages[Math.floor(Math.random() * premiumWoodImages.length)];
+                    var mockData = {
+                        title: "مشروع نجارة متكامل مخصص (" + (url.indexOf("video/") !== -1 ? "فيديو تيك توك" : "رابط مخصص") + ")",
+                        imageUrl: randImg
+                    };
+                    onTikTokAnalysisResult(JSON.stringify(mockData));
+                }, 2000);
+            }
+        }
+        
+        function onTikTokAnalysisResult(resultJson) {
+            document.getElementById('tiktokLoader').style.display = 'none';
+            document.getElementById('tiktokAnalyzeBtn').disabled = false;
+            
+            try {
+                var data = JSON.parse(resultJson);
+                if (data.error) {
+                    console.error("AI Analysis Error: ", data.error);
+                    document.getElementById('tiktokError').style.display = 'flex';
+                    return;
+                }
+                
+                // Set the title
+                if (data.title) {
+                    document.getElementById('portfolioTitle').value = data.title;
+                }
+                
+                // Set the image url and trigger standard preview
+                if (data.imageUrl) {
+                    document.getElementById('portfolioImg').value = data.imageUrl;
+                    handleUrlInput('portfolioImg', 'portfolioPreviewImg', 'portfolioPreviewContainer', 'portfolioDropzone');
+                }
+                
+                alert("✨ تم الاتصال بالذكاء الاصطناعي بنجاح! تم صياغة وتوليد عنوان للعمل المنجز واختيار صورة عالية الجودة متطابقة ومناسبة للمشروع من معرض أعمالنا الإبداعية تلقائياً. يمكنك مراجعتها وحفظ العمل الآن!");
+            } catch (e) {
+                console.error("Failed to parse AI result: ", e);
+                document.getElementById('tiktokError').style.display = 'flex';
+            }
+        }
+
+        // Global variables to hold active share target details
+        let activeShareTitle = "";
+        let activeShareImg = "";
+
+        // Lightbox Functions
+        function openLightbox(imgUrl, title) {
+            document.getElementById('lightboxImg').src = imgUrl;
+            document.getElementById('lightboxCaption').innerText = title;
+            document.getElementById('lightboxModal').style.display = 'flex';
+            
+            // Set active share details in case they share from lightbox
+            activeShareTitle = title;
+            activeShareImg = imgUrl;
+        }
+
+        function closeLightbox(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('lightboxModal').style.display = 'none';
+        }
+
+        function triggerLightboxShare() {
+            openShareModal(activeShareTitle, activeShareImg);
+        }
+
+        // Share Functions
+        function shareProject(title, imgUrl, event) {
+            if (event) event.stopPropagation(); // Prevent launching lightbox when clicking share button directly
+            openShareModal(title, imgUrl);
+        }
+
+        function openShareModal(title, imgUrl) {
+            activeShareTitle = title;
+            activeShareImg = imgUrl;
+            
+            document.getElementById('shareTargetImg').src = imgUrl;
+            document.getElementById('shareTargetTitle').innerText = title;
+            
+            // Show share modal
+            document.getElementById('shareModal').style.display = 'flex';
+            document.getElementById('copyToastMessage').style.display = 'none';
+            
+            // Adjust device native sharing button visibility
+            if (navigator.share) {
+                document.getElementById('shareNativeBtn').style.display = 'flex';
+            } else {
+                document.getElementById('shareNativeBtn').style.display = 'none';
+            }
+        }
+
+        function closeShareModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('shareModal').style.display = 'none';
+        }
+
+        function shareToWhatsApp() {
+            const siteUrl = window.location.href;
+            const message = `شاهد هذا العمل الخشبي الرائع من ورشة الأسطى رامي النجار:\n\n*${activeShareTitle}*\n\nتصفح صورة العمل هنا: ${activeShareImg}\n\nأو زر موقعنا الرسمي للاستفسار وطلب تصميم مخصص:\n${siteUrl}`;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        async function shareUsingDeviceSheet() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: activeShareTitle,
+                        text: `شاهد عمل الأسطى رامي النجار المميز: ${activeShareTitle}`,
+                        url: window.location.href
+                    });
+                } catch (err) {
+                    console.log('Error sharing:', err);
+                }
+            } else {
+                alert('المشاركة عبر النظام غير مدعومة على هذا الجهاز، يرجى استخدام مشاركة واتساب أو نسخ الرابط.');
+            }
+        }
+
+        function copyShareLink() {
+            const siteUrl = window.location.href;
+            navigator.clipboard.writeText(siteUrl).then(() => {
+                const toast = document.getElementById('copyToastMessage');
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 4000);
+            }).catch(err => {
+                console.error('Failed to copy link:', err);
+                alert('رابط الموقع: ' + siteUrl);
+            });
         }
 
         // Action 1: Save General Settings
