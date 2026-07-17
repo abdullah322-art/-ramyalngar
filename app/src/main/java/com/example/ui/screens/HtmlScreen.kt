@@ -51,6 +51,27 @@ class WebAppInterface(private val context: Context, private val webView: WebView
     }
 
     @JavascriptInterface
+    fun saveSiteData(dataJson: String) {
+        try {
+            val sharedPrefs = context.getSharedPreferences("ramy_carpentry_prefs", Context.MODE_PRIVATE)
+            sharedPrefs.edit().putString("site_data", dataJson).apply()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    @JavascriptInterface
+    fun loadSiteData(): String {
+        return try {
+            val sharedPrefs = context.getSharedPreferences("ramy_carpentry_prefs", Context.MODE_PRIVATE)
+            sharedPrefs.getString("site_data", "") ?: ""
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
+    @JavascriptInterface
     fun analyzeTikTok(url: String, callbackJs: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -99,22 +120,12 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                     contents = listOf(Content(parts = listOf(Part(prompt)))),
                     systemInstruction = sysInst,
                     generationConfig = GenerationConfig(
-                        temperature = null,
-                        thinkingConfig = ThinkingConfig(thinkingLevel = ThinkingLevel.HIGH.name)
+                        temperature = 0.7f,
+                        responseMimeType = "application/json"
                     )
                 )
 
-                val response = try {
-                    RetrofitClient.service.generateContent("gemini-3.1-pro-preview", apiKey, request)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    val fallbackRequest = GenerateContentRequest(
-                        contents = listOf(Content(parts = listOf(Part(prompt)))),
-                        systemInstruction = sysInst,
-                        generationConfig = GenerationConfig(temperature = 0.7f)
-                    )
-                    RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, fallbackRequest)
-                }
+                val response = RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, request)
                 val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text ?: ""
                 
                 var cleanJson = responseText.trim()

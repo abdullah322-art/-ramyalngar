@@ -1780,7 +1780,13 @@
 
         // Local Storage / Data management
         function loadSiteData() {
-            const savedData = localStorage.getItem('ramy_carpentry_data');
+            let savedData = null;
+            if (window.AndroidInterface && window.AndroidInterface.loadSiteData) {
+                savedData = window.AndroidInterface.loadSiteData();
+            }
+            if (!savedData) {
+                savedData = localStorage.getItem('ramy_carpentry_data');
+            }
             if (savedData) {
                 try {
                     siteData = JSON.parse(savedData);
@@ -1876,6 +1882,9 @@
 
         function saveSiteDataLocally() {
             localStorage.setItem('ramy_carpentry_data', JSON.stringify(siteData));
+            if (window.AndroidInterface && window.AndroidInterface.saveSiteData) {
+                window.AndroidInterface.saveSiteData(JSON.stringify(siteData));
+            }
         }
 
         // Render Website dynamic content
@@ -2614,6 +2623,7 @@
             siteData.contact.facebook = document.getElementById('editFacebook').value;
 
             saveSiteDataLocally();
+            renderWebsiteContent();
             alert('تم حفظ وتحديث معلومات الموقع بنجاح! ستظهر التعديلات فوراً.');
         }
 
@@ -2677,6 +2687,7 @@
             }
 
             saveSiteDataLocally();
+            renderWebsiteContent();
             resetServiceForm();
             renderAdminServices();
             alert('تم حفظ الخدمة بنجاح!');
@@ -2710,6 +2721,7 @@
             if (confirm('هل أنت متأكد من رغبتك في حذف هذه الخدمة من الموقع نهائياً؟')) {
                 siteData.services = siteData.services.filter(s => s.id !== id);
                 saveSiteDataLocally();
+                renderWebsiteContent();
                 renderAdminServices();
             }
         }
@@ -2793,6 +2805,7 @@
             }
 
             saveSiteDataLocally();
+            renderWebsiteContent();
             resetPortfolioForm();
             renderAdminPortfolio();
             alert('تم حفظ المشروع الجديد في المعرض!');
@@ -2826,6 +2839,7 @@
             if (confirm('هل أنت متأكد من حذف هذا العمل من المعرض نهائياً؟')) {
                 siteData.portfolio = siteData.portfolio.filter(p => p.id !== id);
                 saveSiteDataLocally();
+                renderWebsiteContent();
                 renderAdminPortfolio();
             }
         }

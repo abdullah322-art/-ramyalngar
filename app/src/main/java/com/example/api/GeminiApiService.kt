@@ -49,7 +49,8 @@ data class ThinkingConfig(
 @JsonClass(generateAdapter = true)
 data class GenerationConfig(
     val temperature: Float? = null,
-    val thinkingConfig: ThinkingConfig? = null
+    val thinkingConfig: ThinkingConfig? = null,
+    val responseMimeType: String? = null
 )
 
 @JsonClass(generateAdapter = true)
