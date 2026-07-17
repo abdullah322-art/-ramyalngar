@@ -21,6 +21,11 @@
             --success: #10B981;
         }
         
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 85px;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -843,6 +848,32 @@
             .section-title { font-size: 1.6rem; }
             .admin-dashboard { height: 95vh; }
         }
+
+        /* Chatbot Typing Indicator and Custom Styles */
+        @keyframes typingBlink {
+            0% { opacity: .2; }
+            20% { opacity: 1; }
+            100% { opacity: .2; }
+        }
+        .typing-dot {
+            animation: typingBlink 1.4s infinite both;
+        }
+        .typing-dot:nth-child(2) {
+            animation-delay: .2s;
+        }
+        .typing-dot:nth-child(3) {
+            animation-delay: .4s;
+        }
+        
+        /* Pulse Animation for Chat Toggle Button */
+        @keyframes chatPulse {
+            0% { box-shadow: 0 4px 20px rgba(229,193,88,0.4); }
+            50% { box-shadow: 0 4px 25px rgba(229,193,88,0.8), 0 0 10px rgba(229,193,88,0.4); }
+            100% { box-shadow: 0 4px 20px rgba(229,193,88,0.4); }
+        }
+        .chat-pulse-btn {
+            animation: chatPulse 2.5s infinite;
+        }
     </style>
 </head>
 <body>
@@ -913,14 +944,9 @@
             <!-- Loaded Dynamically -->
         </div>
         
-        <!-- Ramy Quick Work Addition Section -->
-        <div style="max-width: 600px; margin: 30px auto 10px auto; padding: 15px 20px; background-color: rgba(229,193,88,0.04); border: 1px dashed rgba(229,193,88,0.3); border-radius: 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px;">
-                <i class="fas fa-user-shield" style="color: var(--primary); margin-left: 5px;"></i> خاص بإدارة الورشة (الأسطى رامي)
-            </p>
-            <button class="btn" onclick="ramyQuickLogin()" style="font-size: 0.9rem; padding: 8px 16px; background-color: transparent; border: 1.5px solid var(--primary); color: var(--primary); font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s; width: auto; cursor: pointer;" onmouseover="this.style.backgroundColor='var(--primary)'; this.style.color='#000';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--primary)';">
-                <span>إضافة عمل جديد لمعرض الأعمال عبر التيك توك والذكاء الاصطناعي 🪵✨</span>
-            </button>
+        <!-- Admin Entry Section (Inline, no floating popup) -->
+        <div id="admin-login-section" style="max-width: 600px; margin: 35px auto 15px auto; padding: 25px 20px; background-color: var(--surface-dark); border: 2px solid var(--border-dark); border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative; transition: all 0.3s ease-in-out;">
+            <!-- Rendered Dynamically in JS via renderAdminInlineSection() -->
         </div>
     </section>
 
@@ -1025,24 +1051,7 @@
         </div>
     </div>
 
-    <!-- MODAL 1: Admin Login -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-lock" style="color: var(--primary); margin-left: 8px;"></i> تسجيل الدخول للإدارة</div>
-                <button class="close-btn" onclick="closeLoginModal()">&times;</button>
-            </div>
-            <div class="form-group">
-                <label for="adminPassword">كلمة مرور لوحة التحكم</label>
-                <input type="password" id="adminPassword" class="form-control" placeholder="أدخل كلمة المرور" onkeydown="if(event.key === 'Enter') submitLogin()">
-                <div id="loginError" style="color: var(--error); margin-top: 8px; font-weight: bold; display: none;"><i class="fas fa-exclamation-circle" style="margin-left: 5px;"></i> كلمة المرور غير صحيحة!</div>
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-                <button class="btn" style="padding: 10px 20px;" onclick="submitLogin()">دخول</button>
-                <button class="btn" style="padding: 10px 20px; background-color: var(--surface-variant); color: var(--text-primary);" onclick="closeLoginModal()">إلغاء</button>
-            </div>
-        </div>
-    </div>
+
 
     <!-- MODAL 2: Fullscreen Admin Dashboard -->
     <div id="dashboardModal" class="modal" style="align-items: flex-start; padding: 40px 20px;">
@@ -1568,12 +1577,13 @@
         };
 
         let siteData = {};
+        let isAdminLoggedIn = false;
 
         // Initialization
         window.addEventListener('DOMContentLoaded', () => {
             loadSiteData();
             
-            // Smooth scroll setup
+            // Smooth scroll setup with sticky navbar offset
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     const targetId = this.getAttribute('href');
@@ -1581,7 +1591,14 @@
                     e.preventDefault();
                     const target = document.querySelector(targetId);
                     if (target) {
-                        target.scrollIntoView({ behavior: 'smooth' });
+                        const navHeight = document.querySelector('nav')?.offsetHeight || 70;
+                        const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - navHeight - 15; // 15px margin space
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
                     }
                 });
             });
@@ -1866,6 +1883,9 @@
 
             // Update badge in inquiries tab
             document.getElementById('inquiries-tab-btn').innerHTML = `<i class="fas fa-envelope" style="margin-left: 8px; width: 18px; text-align: center;"></i> طلبات العملاء (${siteData.inquiries.length})`;
+
+            // Render inline admin section status
+            renderAdminInlineSection();
         }
 
         // --- Drag-and-Drop and File Upload Handlers ---
@@ -2011,30 +2031,128 @@
             });
         }
 
-        // Login Modal Controls
+        // Login Redirect and Inline Controls
         function openLoginModal() {
-            document.getElementById('loginModal').style.display = 'flex';
-            document.getElementById('adminPassword').focus();
+            // Smoothly scroll to the inline admin section instead of showing a floating modal popup
+            const loginSection = document.getElementById('admin-login-section');
+            if (loginSection) {
+                loginSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Trigger a beautiful glowing pulse animation to capture the user's attention
+                loginSection.style.boxShadow = '0 0 25px rgba(229, 193, 88, 0.9)';
+                loginSection.style.borderColor = 'var(--primary)';
+                
+                setTimeout(() => {
+                    loginSection.style.boxShadow = '';
+                    loginSection.style.borderColor = 'var(--border-dark)';
+                }, 2000);
+
+                const passwordInput = document.getElementById('inlineAdminPassword');
+                if (passwordInput) {
+                    setTimeout(() => {
+                        passwordInput.focus();
+                    }, 600);
+                }
+            }
         }
 
         function closeLoginModal() {
-            document.getElementById('loginModal').style.display = 'none';
-            document.getElementById('adminPassword').value = '';
-            document.getElementById('loginError').style.display = 'none';
+            // No-op since we use inline password entries now
         }
 
         function submitLogin() {
-            const passwordEntered = document.getElementById('adminPassword').value;
+            // No-op since we use inline login
+        }
+
+        function renderAdminInlineSection() {
+            const container = document.getElementById('admin-login-section');
+            if (!container) return;
+
+            if (isAdminLoggedIn) {
+                container.innerHTML = `
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; animation: modalFadeIn 0.3s ease-in-out;">
+                        <p style="color: var(--primary); font-weight: bold; font-size: 1.15rem; display: flex; align-items: center; gap: 10px; margin: 0;">
+                            <i class="fas fa-user-check" style="font-size: 1.4rem;"></i> الأسطى رامي النجار (أنت مسجل الدخول الآن) 🛠️
+                        </p>
+                        <p style="color: var(--text-secondary); font-size: 0.92rem; margin: 0 0 10px 0;">أهلاً بك يا فندم! لوحة التحكم مفتوحة بالكامل وجاهزة لتعديل وإضافة المشروعات والخدمات والمراجعات.</p>
+                        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; width: 100%;">
+                            <button class="btn" onclick="openDashboard()" style="padding: 10px 24px; font-weight: bold; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <i class="fas fa-cog"></i> فتح لوحة التحكم الكاملة
+                            </button>
+                            <button class="btn" onclick="logoutAdmin()" style="padding: 10px 24px; background-color: var(--error); color: #fff; border: none; font-weight: bold; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="fas fa-user-shield" style="color: var(--primary);"></i> خاص بإدارة الورشة (الأسطى رامي النجار)
+                    </p>
+                    <h4 style="color: var(--primary); margin: 0 0 15px 0; font-size: 1.3rem; font-weight: bold;">بوابة تسجيل الدخول إلى لوحة التحكم</h4>
+                    <div style="margin-bottom: 15px; position: relative; text-align: right;">
+                        <label for="inlineAdminPassword" style="display: block; margin-bottom: 6px; color: var(--text-secondary); font-size: 0.9rem; font-weight: bold;">أدخل كلمة المرور الحقيقية لتفعيل لوحة التحكم:</label>
+                        <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                            <input type="password" id="inlineAdminPassword" placeholder="أدخل كلمة مرور الإدارة هنا..." style="width: 100%; padding: 12px 15px 12px 45px; border-radius: 8px; border: 1.5px solid var(--border-dark); background-color: var(--bg-dark); color: var(--text-primary); font-size: 1rem; outline: none; transition: all 0.3s; text-align: right; direction: rtl;" onkeydown="if(event.key === 'Enter') submitInlineLogin()">
+                            <i id="toggleInlinePassword" class="fas fa-eye" onclick="toggleInlinePasswordVisibility()" style="position: absolute; left: 15px; color: var(--text-secondary); cursor: pointer; font-size: 1.1rem; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-secondary)'"></i>
+                        </div>
+                        <div id="inlineLoginError" style="color: var(--error); margin-top: 8px; font-weight: bold; display: none; font-size: 0.9rem; text-align: right; animation: modalFadeIn 0.2s;">
+                            <i class="fas fa-exclamation-circle" style="margin-left: 5px;"></i> كلمة المرور غير صحيحة! يرجى إعادة المحاولة والتحقق من كلمة المرور.
+                        </div>
+                    </div>
+                    <button class="btn" onclick="submitInlineLogin()" style="font-size: 1rem; padding: 12px 24px; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; width: 100%; justify-content: center; cursor: pointer;">
+                        <i class="fas fa-sign-in-alt"></i> دخول لوحة التحكم والتحقق من كلمة المرور
+                    </button>
+                `;
+            }
+        }
+
+        function toggleInlinePasswordVisibility() {
+            const pwdInput = document.getElementById('inlineAdminPassword');
+            const toggleIcon = document.getElementById('toggleInlinePassword');
+            if (pwdInput && toggleIcon) {
+                if (pwdInput.type === 'password') {
+                    pwdInput.type = 'text';
+                    toggleIcon.classList.remove('fa-eye');
+                    toggleIcon.classList.add('fa-eye-slash');
+                } else {
+                    pwdInput.type = 'password';
+                    toggleIcon.classList.remove('fa-eye-slash');
+                    toggleIcon.classList.add('fa-eye');
+                }
+            }
+        }
+
+        function submitInlineLogin() {
+            const pwdInput = document.getElementById('inlineAdminPassword');
+            if (!pwdInput) return;
+            const passwordEntered = pwdInput.value.trim();
             if (passwordEntered === siteData.password) {
-                closeLoginModal();
+                isAdminLoggedIn = true;
+                renderAdminInlineSection();
                 openDashboard();
             } else {
-                document.getElementById('loginError').style.display = 'block';
+                const errorDiv = document.getElementById('inlineLoginError');
+                if (errorDiv) {
+                    errorDiv.style.display = 'block';
+                    // Beautiful CSS shake feedback on the container
+                    const container = document.getElementById('admin-login-section');
+                    container.style.borderColor = 'var(--error)';
+                    container.style.transform = 'translateX(8px)';
+                    setTimeout(() => { container.style.transform = 'translateX(-8px)'; }, 50);
+                    setTimeout(() => { container.style.transform = 'translateX(4px)'; }, 100);
+                    setTimeout(() => { container.style.transform = 'translateX(-4px)'; }, 150);
+                    setTimeout(() => { container.style.transform = 'translateX(0)'; }, 200);
+                    setTimeout(() => { container.style.borderColor = 'var(--border-dark)'; }, 2000);
+                }
             }
         }
 
         // Dashboard Modal Controls
         function openDashboard() {
+            isAdminLoggedIn = true;
+            renderAdminInlineSection();
             document.getElementById('dashboardModal').style.display = 'flex';
             
             // Populate General Settings Inputs
@@ -2113,7 +2231,9 @@
         }
 
         function logoutAdmin() {
+            isAdminLoggedIn = false;
             closeDashboard();
+            renderAdminInlineSection();
             alert('تم تسجيل الخروج بنجاح.');
         }
 
@@ -2139,23 +2259,9 @@
             document.getElementById(tabId).classList.add('active');
         }
 
-        // Ramy Quick Login from bottom section
+        // Redirect Ramy Quick Login to inline login
         function ramyQuickLogin() {
-            const pwd = prompt("يرجى إدخال كلمة مرور الإدارة لإضافة عمل جديد:");
-            if (pwd === null) return; // user cancelled
-            if (pwd === siteData.password) {
-                openDashboard();
-                switchTab(null, 'tab-portfolio');
-                setTimeout(function() {
-                    const tiktokInput = document.getElementById('tiktokUrl');
-                    if (tiktokInput) {
-                        tiktokInput.focus();
-                        tiktokInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                }, 300);
-            } else {
-                alert("كلمة المرور غير صحيحة يا فندم!");
-            }
+            openLoginModal();
         }
 
         // TikTok video import and AI analysis
@@ -2791,11 +2897,248 @@
 
             setTimeout(() => { statusDiv.style.display = 'none'; }, 5000);
         }
+
+        // --- Gemini Chatbot Logic ---
+        let chatbotHistory = [];
+        const ramySystemInstruction = "أنت 'مساعد ورشة الأسطى رامي النجار الذكي'؛ نجّار مصري خبير، دافئ، بشوش ومتحدث فصيح بلهجة مصرية نجارية ودية ترحيبية للغاية. ورشة الأسطى رامي متخصصة في أرقى الديكورات وأعمال النجارة المودرن والكلاسيك (مطابخ، غرف نوم، أبواب، خزائن، مكتبات تلفزيون وتجليد حوائط). أجب بدقة واحترافية وبشكل مبهج، واستخدم مصطلحات حقيقية وصحيحة في مهنة النجارة (مثل خشب الزان الأحمر، الأرو الطبيعي، المفصلات الهيدروليك الصامتة، دهانات البولي يوريثان المقاومة للرطوبة والخدش، قشرة الأرو الممتازة، والكونتر المعالج). إذا سأل العميل عن الأسعار، وضح له أن السعر يعتمد على الأبعاد ونوع الخشب والتشطيب المطلوب، واعرض عليه تقديم تقدير تقريبي أو حثه على ملء استمارة طلب التواصل أو التواصل المباشر مع الأسطى رامي عبر واتساب لتحديد موعد معاينة مجانية ورفع المقاسات بدقة.";
+
+        function toggleChatWindow() {
+            const chatWin = document.getElementById('chatbot-window');
+            const chatBtn = document.getElementById('chatbot-toggle-btn');
+            const badge = document.getElementById('chatbot-notification-badge');
+            
+            if (chatWin.style.display === 'none' || chatWin.style.display === '') {
+                chatWin.style.display = 'flex';
+                chatBtn.classList.remove('chat-pulse-btn');
+                if (badge) badge.style.display = 'none';
+                setTimeout(() => {
+                    chatWin.style.transform = 'scale(1)';
+                    chatWin.style.opacity = '1';
+                }, 10);
+                
+                // Focus on input
+                const input = document.getElementById('chatbot-input');
+                if (input) input.focus();
+            } else {
+                chatWin.style.transform = 'scale(0.9)';
+                chatWin.style.opacity = '0';
+                setTimeout(() => {
+                    chatWin.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        // Show a welcoming badge pulse after 3 seconds on first load
+        setTimeout(() => {
+            const chatBtn = document.getElementById('chatbot-toggle-btn');
+            const tooltip = document.getElementById('chatbot-tooltip');
+            if (chatBtn && tooltip) {
+                chatBtn.classList.add('chat-pulse-btn');
+                tooltip.style.opacity = '1';
+                setTimeout(() => {
+                    tooltip.style.opacity = '0';
+                }, 5000);
+            }
+        }, 3000);
+
+        function appendChatMessage(sender, text) {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            if (!messagesContainer) return;
+
+            const wrapper = document.createElement('div');
+            if (sender === 'user') {
+                wrapper.className = 'user-msg-wrapper';
+                wrapper.style.cssText = 'align-self: flex-end; max-width: 85%; display: flex; flex-direction: column; align-items: flex-end; animation: modalFadeIn 0.2s; margin-bottom: 5px;';
+                wrapper.innerHTML = `
+                    <div style="background-color: var(--primary); color: #000; padding: 10px 14px; border-radius: 14px 14px 2px 14px; font-size: 0.9rem; line-height: 1.5; text-align: right; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                        ${text}
+                    </div>
+                `;
+            } else {
+                wrapper.className = 'bot-msg-wrapper';
+                wrapper.style.cssText = 'align-self: flex-start; display: flex; gap: 8px; max-width: 85%; animation: modalFadeIn 0.2s; margin-bottom: 5px;';
+                wrapper.innerHTML = `
+                    <div style="width: 28px; height: 28px; border-radius: 50%; background-color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #000; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div style="background-color: var(--surface-variant); color: var(--text-primary); padding: 10px 14px; border-radius: 2px 14px 14px 14px; font-size: 0.9rem; line-height: 1.5; text-align: right; border: 1px solid var(--border-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                        ${text}
+                    </div>
+                `;
+            }
+
+            messagesContainer.appendChild(wrapper);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function sendChatbotMessage() {
+            const input = document.getElementById('chatbot-input');
+            if (!input) return;
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Clear input
+            input.value = '';
+
+            // Append user message
+            appendChatMessage('user', text);
+
+            // Add to history
+            chatbotHistory.push({
+                role: "user",
+                parts: [{ text: text }]
+            });
+
+            // Show typing indicator
+            const indicator = document.getElementById('chatbot-typing-indicator');
+            const messagesContainer = document.getElementById('chatbot-messages');
+            if (indicator) {
+                messagesContainer.appendChild(indicator); // move indicator to end
+                indicator.style.display = 'flex';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            // Call Android Gemini interface
+            if (window.AndroidInterface && window.AndroidInterface.chatWithGemini) {
+                window.AndroidInterface.chatWithGemini(
+                    JSON.stringify(chatbotHistory),
+                    ramySystemInstruction,
+                    "onGeminiChatResponse"
+                );
+            } else {
+                // Mock response as fallback if not in Android app
+                setTimeout(() => {
+                    onGeminiChatResponse(true, "أهلاً بك يا فندم! أنا أعمل حالياً داخل بيئة تجريبية، ولكن عند تشغيل التطبيق على الهاتف سأتصل فوراً بخوادم Gemini لتوفير إجابات حقيقية وذكية!");
+                }, 1000);
+            }
+        }
+
+        function sendSuggestedQuestion(questionText) {
+            appendChatMessage('user', questionText);
+            chatbotHistory.push({
+                role: "user",
+                parts: [{ text: questionText }]
+            });
+
+            // Show typing indicator
+            const indicator = document.getElementById('chatbot-typing-indicator');
+            const messagesContainer = document.getElementById('chatbot-messages');
+            if (indicator) {
+                messagesContainer.appendChild(indicator);
+                indicator.style.display = 'flex';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            // Call Android Gemini interface
+            if (window.AndroidInterface && window.AndroidInterface.chatWithGemini) {
+                window.AndroidInterface.chatWithGemini(
+                    JSON.stringify(chatbotHistory),
+                    ramySystemInstruction,
+                    "onGeminiChatResponse"
+                );
+            } else {
+                setTimeout(() => {
+                    onGeminiChatResponse(true, "أهلاً بك يا فندم! أنا أعمل حالياً داخل بيئة تجريبية، ولكن عند تشغيل التطبيق على الهاتف سأتصل فوراً بخوادم Gemini لتوفير إجابات حقيقية وذكية!");
+                }, 1000);
+            }
+        }
+
+        // Global Callback for Gemini Chat Response
+        window.onGeminiChatResponse = function(success, reply) {
+            // Hide typing indicator
+            const indicator = document.getElementById('chatbot-typing-indicator');
+            if (indicator) indicator.style.display = 'none';
+
+            if (success) {
+                // Add to history
+                chatbotHistory.push({
+                    role: "model",
+                    parts: [{ text: reply }]
+                });
+                appendChatMessage('model', reply);
+            } else {
+                appendChatMessage('model', "عذراً يا فندم، واجهت مشكلة في الاتصال بالشبكة حالياً. يرجى التأكد من اتصال الإنترنت وإعادة المحاولة.");
+            }
+        };
+    </script>
+
+    <!-- Gemini AI Chatbot Widget -->
+    <div id="gemini-chatbot-container" style="position: fixed; bottom: 30px; right: 30px; z-index: 3000; direction: rtl; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <!-- Chat Bubble Button -->
+        <button id="chatbot-toggle-btn" onclick="toggleChatWindow()" style="width: 55px; height: 55px; border-radius: 50%; background-color: var(--primary); color: #000; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.4); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; outline: none;">
+            <i class="fas fa-comments" id="chatbot-icon"></i>
+            <span id="chatbot-notification-badge" style="position: absolute; top: 0px; right: 0px; background-color: var(--error); width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 2px solid var(--surface-dark);"></span>
+            <!-- Tooltip -->
+            <div id="chatbot-tooltip" style="position: absolute; right: 70px; background-color: var(--surface-dark); color: var(--text-primary); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1.5px solid var(--primary); opacity: 0; pointer-events: none; transition: opacity 0.3s; display: flex; align-items: center; gap: 6px;">
+                <span>تحدث مع مساعد الأسطى رامي الذكي! 🪵✨</span>
+            </div>
+        </button>
+
+        <!-- Chat Window -->
+        <div id="chatbot-window" style="display: none; flex-direction: column; width: 350px; height: 480px; background-color: var(--surface-dark); border: 2px solid var(--border-dark); border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); overflow: hidden; position: absolute; bottom: 70px; right: 0; transition: all 0.3s ease; transform-origin: bottom right; max-width: calc(100vw - 60px);">
+            <!-- Chat Header -->
+            <div style="background-color: var(--bg-dark); padding: 12px 15px; border-bottom: 2px solid var(--border-dark); display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 34px; height: 34px; border-radius: 50%; background-color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #000; box-shadow: 0 0 10px rgba(229,193,88,0.3);">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <div style="text-align: right;">
+                        <h5 style="color: var(--text-primary); margin: 0; font-size: 0.9rem; font-weight: bold;">مساعد الأسطى رامي الذكي</h5>
+                        <span style="color: var(--success); font-size: 0.72rem; display: flex; align-items: center; gap: 4px; margin-top: 1px;">
+                            <span style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--success); display: inline-block;"></span> متصل بالذكاء الاصطناعي
+                        </span>
+                    </div>
+                </div>
+                <button onclick="toggleChatWindow()" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem; transition: color 0.2s; outline: none;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-secondary)'">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="chatbot-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-color: var(--bg-dark);">
+                <!-- Welcome Message -->
+                <div class="bot-msg-wrapper" style="align-self: flex-start; display: flex; gap: 8px; max-width: 85%; margin-bottom: 5px;">
+                    <div style="width: 28px; height: 28px; border-radius: 50%; background-color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #000; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div style="background-color: var(--surface-variant); color: var(--text-primary); padding: 10px 14px; border-radius: 2px 14px 14px 14px; font-size: 0.9rem; line-height: 1.5; text-align: right; border: 1px solid var(--border-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                        يا أهلاً بك يا فندم في ورشة الأسطى رامي! 🪵✨ أنا مساعده الذكي، جاهز أساعدك في اختيار التصميم ونوع الخشب المناسب (زان، أرو، كونتر)، وتجيب تقدير مبدئي للأسعار لأي مطبخ، باب، أو دولاب تفصيل. تفضل اسألني أي سؤال!
+                    </div>
+                </div>
+
+                <!-- Live Typing Indicator -->
+                <div id="chatbot-typing-indicator" style="display: none; align-self: flex-start; gap: 8px; max-width: 85%;">
+                    <div style="width: 28px; height: 28px; border-radius: 50%; background-color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #000; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div style="background-color: var(--surface-variant); color: var(--text-secondary); padding: 12px 16px; border-radius: 2px 14px 14px 14px; font-size: 0.9rem; display: flex; align-items: center; gap: 4px; border: 1px solid var(--border-dark);">
+                        <span class="typing-dot" style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--text-secondary); display: inline-block;"></span>
+                        <span class="typing-dot" style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--text-secondary); display: inline-block;"></span>
+                        <span class="typing-dot" style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--text-secondary); display: inline-block;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suggested Questions Bar -->
+            <div id="chatbot-suggestions" style="padding: 8px 12px; background-color: var(--bg-dark); border-top: 1px solid var(--border-dark); display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; white-space: nowrap; -webkit-overflow-scrolling: touch;">
+                <button onclick="sendSuggestedQuestion('ما هي أسعار تفصيل المطابخ لديكم؟')" style="background-color: rgba(229,193,88,0.08); border: 1.5px solid rgba(229,193,88,0.3); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; white-space: nowrap;">أسعار المطابخ 📐</button>
+                <button onclick="sendSuggestedQuestion('ما الفرق بين خشب الزان الأحمر والأرو؟')" style="background-color: rgba(229,193,88,0.08); border: 1.5px solid rgba(229,193,88,0.3); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; white-space: nowrap;">الفرق بين الزان والأرو 🪵</button>
+                <button onclick="sendSuggestedQuestion('أريد حجز موعد لرفع المقاسات والمعاينة')" style="background-color: rgba(229,193,88,0.08); border: 1.5px solid rgba(229,193,88,0.3); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; white-space: nowrap;">حجز موعد معاينة 🤝</button>
+            </div>
+
+            <!-- Input Area -->
+            <div style="padding: 10px 12px; background-color: var(--surface-dark); border-top: 2px solid var(--border-dark); display: flex; gap: 8px; align-items: center;">
+                <input type="text" id="chatbot-input" placeholder="اكتب سؤالك للأستاذ رامي هنا..." style="flex: 1; padding: 10px 12px; border-radius: 8px; border: 1.5px solid var(--border-dark); background-color: var(--bg-dark); color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.2s; text-align: right; direction: rtl;" onkeydown="if(event.key === 'Enter') sendChatbotMessage()">
+                <button onclick="sendChatbotMessage()" style="width: 38px; height: 38px; border-radius: 8px; background-color: var(--primary); color: #000; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: transform 0.2s; outline: none;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
+                    <i class="fas fa-paper-plane" style="transform: rotate(180deg);"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Back to Top Button -->
     <button id="backToTopBtn" class="back-to-top" onclick="scrollToTop()" title="العودة للأعلى">
         <i class="fas fa-chevron-up"></i>
     </button>
-
-    </script>
 </body>
 </html>

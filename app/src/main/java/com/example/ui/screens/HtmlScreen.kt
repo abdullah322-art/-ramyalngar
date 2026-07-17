@@ -56,17 +56,24 @@ class WebAppInterface(private val context: Context, private val webView: WebView
             try {
                 val apiKey = BuildConfig.GEMINI_API_KEY
                 
-                // Formulate a premium woodwork description prompt
+                // Formulate an extremely professional, authentic, and realistic woodwork description prompt
                 val prompt = """
-                    This is a TikTok video URL showing carpentry/woodwork by Alngar: $url.
-                    Since you cannot directly watch the video, analyze the link or assume a highly creative and realistic carpentry project. 
-                    Generate an extremely professional, attractive, and luxury-oriented Arabic title, a rich description focusing on custom craftsmanship, red beech/oak woods, excellent paint/polish finishes, choose one suitable category from ("مطابخ", "أبواب", "خزائن", "ديكورات", "أثاث"), and select a highly matching real premium Unsplash image URL (like modern custom kitchen, luxury wooden doors, elegant wardrobe, wooden TV unit, or carpentry workshop).
+                    This is a TikTok video URL showing premium carpentry/woodwork by the master carpenter Ramy Alngar (الأسطى رامي النجار): $url.
+                    Since you cannot watch the video directly, analyze the URL details or generate a highly realistic and detailed masterpiece carpentry project.
+                    
+                    Your analysis must be technical, authentic, and luxurious (مش أي كلام، تحليل دقيق وحقيقي). It should specify:
+                    1. Wood Type (نوع الخشب المستخدم): (e.g., خشب زان أحمر روماني مبخر، خشب أرو أمريكي طبيعي، خشب موسكي فنلندي نخب أول، أو خشب كونتر اندونيسي معالج).
+                    2. Joinery & Hardware (الإكسسوارات والمفصلات): (e.g., مفصلات هيدروليك باكم إيطالية صامتة، سحابات أدراج رمان بلي مخفية، مقابض نحاسية معالجة).
+                    3. Finish & Varnish (نوع الدهان والتشطيب): (e.g., دهان بولي يوريثان مقاوم للرطوبة والخدش، قشرة أرو طبيعية مع دهان شفاف يبرز جمال ثمرة الخشب، أو دوكو مغسول فرن).
+                    4. Style & Design (النمط الهندسي): (Modern, Classic, Neo-Classic, Minimalist).
+                    
+                    Generate an extremely professional, luxury-oriented Arabic title, and a rich marketing description (2-3 sentences) detailing the craftsmanship and premium materials used. Choose exactly one suitable category from ("مطابخ", "أبواب", "خزائن", "ديكورات", "أثاث"). Also, select a highly relevant, real premium Unsplash image URL representing luxury custom woodwork for that category.
                     
                     You must return ONLY a raw JSON object string with the following fields:
-                    - "title": Premium Arabic title (e.g., "مطبخ خشب أرو بتصميم مودرن راقي").
-                    - "description": High-end marketing description in Arabic (2-3 sentences) detailing the premium quality, materials, and finish.
+                    - "title": Premium Arabic title (e.g., "مطبخ مودرن أرو أمريكي بمفصلات هيدروليك صامتة").
+                    - "description": High-end authentic marketing description in Arabic detailing the Romanian beech/oak materials, Italian soft-close hardware, and pristine polyurethane scratch-resistant finish.
                     - "category": The exact category string from ("مطابخ", "أبواب", "خزائن", "ديكورات", "أثاث").
-                    - "imageUrl": A high-resolution free Unsplash photo URL relevant to the chosen woodwork category.
+                    - "imageUrl": A high-resolution free Unsplash photo URL that perfectly matches the chosen woodwork category.
                     
                     Do NOT wrap the JSON in markdown formatting (no ```json). Output raw valid JSON.
                 """.trimIndent()
@@ -106,6 +113,55 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                     val errorMsg = "{\"error\": \"${e.localizedMessage ?: "Unknown error"}\"}"
                     val escapedError = errorMsg.replace("'", "\\'")
                     webView.evaluateJavascript("javascript:$callbackJs('$escapedError')", null)
+                }
+            }
+        }
+    }
+
+    @JavascriptInterface
+    fun chatWithGemini(historyJson: String, systemInstructionText: String, callbackJs: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val apiKey = BuildConfig.GEMINI_API_KEY
+                
+                // Parse the chat history JSON array
+                val moshi = com.squareup.moshi.Moshi.Builder().build()
+                val type = com.squareup.moshi.Types.newParameterizedType(List::class.java, Content::class.java)
+                val adapter = moshi.adapter<List<Content>>(type)
+                val contentsList = adapter.fromJson(historyJson) ?: emptyList()
+                
+                // System Instruction
+                val systemInstruction = if (systemInstructionText.isNotEmpty()) {
+                    Content(parts = listOf(Part(text = systemInstructionText)))
+                } else null
+                
+                val request = GenerateContentRequest(
+                    contents = contentsList,
+                    systemInstruction = systemInstruction,
+                    generationConfig = GenerationConfig(temperature = 0.7f)
+                )
+                
+                val response = RetrofitClient.service.generateContent(apiKey, request)
+                val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text 
+                    ?: "عذراً يا فندم، حدث أمر غير متوقع. هل يمكنك المحاولة مرة أخرى؟"
+                
+                // Execute callback on Main WebView Thread
+                webView.post {
+                    val escapedText = responseText.replace("\\", "\\\\")
+                                                .replace("'", "\\'")
+                                                .replace("\n", "\\n")
+                                                .replace("\r", "")
+                    webView.evaluateJavascript("javascript:$callbackJs(true, '$escapedText')", null)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                webView.post {
+                    val errorMsg = e.localizedMessage ?: "حدث خطأ غير متوقع في معالجة طلبك."
+                    val escapedError = errorMsg.replace("\\", "\\\\")
+                                                .replace("'", "\\'")
+                                                .replace("\n", "\\n")
+                                                .replace("\r", "")
+                    webView.evaluateJavascript("javascript:$callbackJs(false, '$escapedError')", null)
                 }
             }
         }
