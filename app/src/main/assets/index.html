@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #E5C158;
-            --primary-dark: #C29F3E;
-            --bg-dark: #0A0C10;
-            --surface-dark: #121620;
-            --surface-variant: #1E2330;
-            --text-primary: #F3F4F6;
-            --text-secondary: #9CA3AF;
-            --border-dark: #262D3D;
+            --primary: #FFB830;
+            --primary-dark: #D97706;
+            --bg-dark: #0F0A06;
+            --surface-dark: #1A120B;
+            --surface-variant: #281D13;
+            --text-primary: #F5EFEB;
+            --text-secondary: #A89B90;
+            --border-dark: #3D2E20;
             --whatsapp: #25D366;
             --error: #EF4444;
             --success: #10B981;
@@ -889,9 +889,9 @@
         <a href="#" class="logo">رامي للنجارة</a>
         <ul class="nav-links">
             <li><a href="#about">من نحن</a></li>
+            <li><a href="#ai-workshop" style="color: var(--primary); font-weight: bold;"><i class="fas fa-magic" style="margin-left: 3px;"></i> الورشة الذكية</a></li>
             <li><a href="#services">الخدمات</a></li>
             <li><a href="#portfolio">أعمالنا</a></li>
-            <li><a href="#ai-workshop" style="color: var(--primary); font-weight: bold;"><i class="fas fa-magic" style="margin-left: 3px;"></i> الورشة الذكية</a></li>
             <li><a href="#reviews">آراء العملاء</a></li>
             <li><a href="#contact">تواصل معنا</a></li>
             <li><a href="javascript:void(0)" onclick="openLoginModal()" style="color: var(--primary); font-weight: bold; border: 1px dashed var(--primary); padding: 5px 12px; border-radius: 5px; background-color: rgba(212,175,55,0.05); transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='rgba(212,175,55,0.15)'" onmouseout="this.style.backgroundColor='rgba(212,175,55,0.05)'">لوحة التحكم <i class="fas fa-cog" style="margin-right: 5px; margin-left: 5px;"></i></a></li>
@@ -910,50 +910,6 @@
         <div id="about-header-container"></div>
         <div class="about-content" id="about-text-container" style="margin-top: 25px;">
             <!-- Loaded Dynamically -->
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" style="background-color: var(--surface-variant); padding-top: 40px;">
-        <div id="services-header-container"></div>
-        <div class="services-grid" id="services-grid-container" style="margin-top: 25px;">
-            <!-- Loaded Dynamically -->
-        </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section id="portfolio" style="padding-top: 40px;">
-        <div id="portfolio-header-container"></div>
-        
-        <!-- Filter Bar -->
-        <div class="portfolio-filters" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 25px auto 15px auto; max-width: 1100px; padding: 0 20px;">
-            <button class="filter-btn active" onclick="filterPortfolio('all', this)">
-                <i class="fas fa-th-large"></i> الكل
-            </button>
-            <button class="filter-btn" onclick="filterPortfolio('kitchen', this)">
-                <i class="fas fa-utensils"></i> مطابخ خشبية
-            </button>
-            <button class="filter-btn" onclick="filterPortfolio('bedroom', this)">
-                <i class="fas fa-bed"></i> غرف نوم وأثاث
-            </button>
-            <button class="filter-btn" onclick="filterPortfolio('doors', this)">
-                <i class="fas fa-door-open"></i> أبواب ونوافذ
-            </button>
-            <button class="filter-btn" onclick="filterPortfolio('decor', this)">
-                <i class="fas fa-hammer"></i> ديكورات خشبية
-            </button>
-            <button class="filter-btn" onclick="filterPortfolio('other', this)">
-                <i class="fas fa-ellipsis-h"></i> أخرى
-            </button>
-        </div>
-
-        <div class="portfolio-grid" id="portfolio-grid-container" style="margin-top: 25px;">
-            <!-- Loaded Dynamically -->
-        </div>
-        
-        <!-- Admin Entry Section (Inline, no floating popup) -->
-        <div id="admin-login-section" style="max-width: 600px; margin: 35px auto 15px auto; padding: 25px 20px; background-color: var(--surface-dark); border: 2px solid var(--border-dark); border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative; transition: all 0.3s ease-in-out;">
-            <!-- Rendered Dynamically in JS via renderAdminInlineSection() -->
         </div>
     </section>
 
@@ -1097,6 +1053,61 @@
 
                     <!-- Video Analysis Output Display -->
                     <div id="ai-video-result-wrapper" style="margin-top: 25px; border-top: 1.5px dashed var(--border-dark); padding-top: 25px; display: none;">
+                        <h5 style="color: var(--primary); margin-bottom: 15px; font-size: 1.1rem; text-align: right; display: flex; align-items: center; gap: 8px;"><i class="fas fa-tv"></i> التقرير الهندسي والفني لتفاصيل الفيديو:</h5>
+                        <div id="ai-video-loading" style="display: none; padding: 25px; text-align: center; color: var(--text-secondary);">
+                            <div style="font-size: 2.2rem; animation: chatPulse 1.5s infinite; color: var(--primary); margin-bottom: 12px;">
+                                <i class="fas fa-compact-disc"></i> 🪵 🎬
+                            </div>
+                            <p style="font-weight: bold;">جاري معالجة الفيديو واستخلاص فنيات النجارة والمفصلات ونوع التشطيبة بالكامل...</p>
+                        </div>
+                        <div id="ai-video-report" style="display: none; background-color: var(--bg-dark); border: 1px solid var(--border-dark); padding: 20px; border-radius: 8px; line-height: 1.7; color: var(--text-primary); text-align: right; font-size: 0.95rem; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);">
+                            <!-- Inserted dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" style="padding-top: 40px;">
+        <div id="services-header-container"></div>
+        <div class="services-grid" id="services-grid-container" style="margin-top: 25px;">
+            <!-- Loaded Dynamically -->
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" style="background-color: var(--surface-variant); padding-top: 40px;">
+        <div id="portfolio-header-container"></div>
+        
+        <!-- Filter Bar -->
+        <div class="portfolio-filters" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 25px auto 15px auto; max-width: 1100px; padding: 0 20px;">
+            <button class="filter-btn active" onclick="filterPortfolio('all', this)">
+                <i class="fas fa-th-large"></i> الكل
+            </button>
+            <button class="filter-btn" onclick="filterPortfolio('kitchen', this)">
+                <i class="fas fa-utensils"></i> مطابخ خشبية
+            </button>
+            <button class="filter-btn" onclick="filterPortfolio('bedroom', this)">
+                <i class="fas fa-bed"></i> غرف نوم وأثاث
+            </button>
+            <button class="filter-btn" onclick="filterPortfolio('doors', this)">
+                <i class="fas fa-door-open"></i> أبواب ونوافذ
+            </button>
+            <button class="filter-btn" onclick="filterPortfolio('decor', this)">
+                <i class="fas fa-hammer"></i> ديكورات خشبية
+            </button>
+            <button class="filter-btn" onclick="filterPortfolio('other', this)">
+                <i class="fas fa-ellipsis-h"></i> أخ�        <!-- Admin Entry Section (Inline, no floating popup) -->
+        <div id="admin-login-section" style="max-width: 600px; margin: 35px auto 15px auto; padding: 25px 20px; background-color: var(--surface-dark); border: 2px solid var(--border-dark); border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative; transition: all 0.3s ease-in-out;">
+            <!-- Rendered Dynamically in JS via renderAdminInlineSection() -->
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" style="padding-top: 40px;">op: 1.5px dashed var(--border-dark); padding-top: 25px; display: none;">
                         <h5 style="color: var(--primary); margin-bottom: 15px; font-size: 1.1rem; text-align: right; display: flex; align-items: center; gap: 8px;"><i class="fas fa-tv"></i> التقرير الهندسي والفني لتفاصيل الفيديو:</h5>
                         <div id="ai-video-loading" style="display: none; padding: 25px; text-align: center; color: var(--text-secondary);">
                             <div style="font-size: 2.2rem; animation: chatPulse 1.5s infinite; color: var(--primary); margin-bottom: 12px;">
