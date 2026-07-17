@@ -16,6 +16,9 @@ class ChatViewModel : ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _isThinkingMode = MutableStateFlow(false)
+    val isThinkingMode: StateFlow<Boolean> = _isThinkingMode
     
     // Conversation history for context
     private val history = mutableListOf<Content>()
@@ -25,6 +28,10 @@ class ChatViewModel : ViewModel() {
         _messages.value = listOf(
             ChatMessage("أهلاً بك! أنا المساعد الذكي الخاص بالنجار رامي. تفضل، كيف يمكنني مساعدتك في أعمال الخشب والديكور؟", false)
         )
+    }
+
+    fun toggleThinkingMode(enabled: Boolean) {
+        _isThinkingMode.value = enabled
     }
 
     fun sendMessage(userText: String) {
@@ -48,13 +55,24 @@ class ChatViewModel : ViewModel() {
                     )
                 )
                 
+                val isHighThinking = _isThinkingMode.value
+                val model = if (isHighThinking) "gemini-3.1-pro-preview" else "gemini-3.5-flash"
+                val genConfig = if (isHighThinking) {
+                    GenerationConfig(
+                        temperature = null, // Temperature can be null for thinking mode to let the model explore reasoning path better
+                        thinkingConfig = ThinkingConfig(thinkingLevel = ThinkingLevel.HIGH.name)
+                    )
+                } else {
+                    GenerationConfig(temperature = 0.7f)
+                }
+
                 val request = GenerateContentRequest(
                     contents = history.toList(),
                     systemInstruction = sysInst,
-                    generationConfig = GenerationConfig(temperature = 0.7f)
+                    generationConfig = genConfig
                 )
                 
-                val response = RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, request)
+                val response = RetrofitClient.service.generateContent(model, apiKey, request)
                 
                 val assistantText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text ?: "عفواً، لم أتمكن من الرد. حاول مرة أخرى يا فندم."
                 

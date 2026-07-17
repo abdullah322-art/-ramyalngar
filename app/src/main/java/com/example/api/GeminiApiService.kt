@@ -35,9 +35,21 @@ data class Blob(
     val data: String // base64 encoded string
 )
 
+enum class ThinkingLevel {
+    OFF,
+    LOW,
+    HIGH
+}
+
+@JsonClass(generateAdapter = true)
+data class ThinkingConfig(
+    val thinkingLevel: String
+)
+
 @JsonClass(generateAdapter = true)
 data class GenerationConfig(
-    val temperature: Float? = null
+    val temperature: Float? = null,
+    val thinkingConfig: ThinkingConfig? = null
 )
 
 @JsonClass(generateAdapter = true)

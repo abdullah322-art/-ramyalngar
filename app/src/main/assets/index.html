@@ -2445,17 +2445,22 @@
             } else {
                 console.log("AndroidInterface not found, simulating AI TikTok Analysis");
                 setTimeout(function() {
-                    // Choose a premium woodwork Unsplash picture
-                    var premiumWoodImages = [
-                        "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=50&w=500", // kitchen
-                        "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=50&w=500", // wood decor
-                        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=50&w=500", // kitchen/cabinet
-                        "https://images.unsplash.com/photo-1497366216548-37526070297c?q=50&w=500", // interior custom wood
-                        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=50&w=500"  // elegant woodwork
-                    ];
-                    var randImg = premiumWoodImages[Math.floor(Math.random() * premiumWoodImages.length)];
+                    var title = "مطبخ أمريكي مودرن فاخر من خشب الأرو";
+                    var randImg = "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600"; // Beautiful high-quality kitchen interior
+                    
+                    if (url.includes("door") || url.includes("باب")) {
+                        title = "باب فيلا فخم من خشب الأرو الطبيعي";
+                        randImg = "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=600";
+                    } else if (url.includes("cabinet") || url.includes("دولاب") || url.includes("خزانة")) {
+                        title = "خزانة ملابس مدمجة ذكية بإنارة ليد";
+                        randImg = "https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=600";
+                    } else if (url.includes("decor") || url.includes("ديكور")) {
+                        title = "تجليد جداري خشبي مودرن لغرفة المعيشة";
+                        randImg = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=600";
+                    }
+                    
                     var mockData = {
-                        title: "مشروع نجارة متكامل مخصص (" + (url.indexOf("video/") !== -1 ? "فيديو تيك توك" : "رابط مخصص") + ")",
+                        title: title,
                         imageUrl: randImg
                     };
                     onTikTokAnalysisResult(JSON.stringify(mockData));
@@ -3442,13 +3447,13 @@
                 // Web mock fallback
                 setTimeout(() => {
                     const mockVideoReport = `
-                        <strong>🎬 تقرير معاينة الفيديو النبيل للأسطى رامي النجار:</strong><br><br>
-                        يا مية مرحب بيك يا فندم! الفيديو ده بيعرض تحفة فنية معمارية فريدة من نوعها في عالم النجارة الفخمة.<br><br>
+                        <strong>🎬 تقرير فني دقيق للفيديو من ورشة الأسطى رامي:</strong><br><br>
+                        <strong>العمل الموضح بالفيديو:</strong> مطبخ أمريكي مودرن مفتوح (بأعلى جودة)<br><br>
                         <ul>
-                            <li><strong>نوع الخشب الموضح:</strong> خشب موسكي فنلندي نخب أول (علب وتجليد) مع واجهات أرو طبيعي ودهان بولي يوريثان شفاف يبرز تفاصيل العروق الطبيعية.</li>
-                            <li><strong>جودة المفصلات والإكسسوارات:</strong> تم استخدام مجاري سحاب تلسكوبية صامتة هيدروليك ثنائية السحب مخفية بالكامل تتحمل الأوزان الثقيلة.</li>
-                            <li><strong>التشطيب النهائي واللمعة:</strong> دهان استر قشرة أرو بدرجة مطفية (Matte Finish) تعكس دفء الطبيعة وملمسها المخملي.</li>
-                            <li><strong>رأي الأسطى رامي:</strong> التصميم ده تحفة نادرة وبيناسب المساحات الكبيرة وغرف المعيشة المفتوحة. نقدر نعملك أحسن منه كمان وبسعر مريح بالحب كدا يا فندم!</li>
+                            <li><strong>نوع الخشب المستخدم:</strong> خشب كونتر إندونيسي مكبوس مع معالجة ضد الرطوبة والمياه للعلب الداخلية، والضلف الخارجية من الأكريليك الفاخر المقاوم للخدش وقشرة الأرو الطبيعية.</li>
+                            <li><strong>المفصلات والإكسسوارات:</strong> تم تركيب مفصلات باكم هيدروليك صامتة بالكامل (Soft-Close) ماركة بلوم (Blum) النمساوية الأصلية، وسحابات أدراج مخفية ثنائية الحركة.</li>
+                            <li><strong>الدهان والتشطيب:</strong> دهان بولي يوريثان مقاوم للمياه والحرارة عالي المتانة بملمس مخملي رائع ومقاومة كاملة للاستخدام اليومي.</li>
+                            <li><strong>رأي الأسطى رامي:</strong> هذا المطبخ الأمريكي المفتوح مصمم ليعطي اتساعاً وجمالاً فائقاً للمكان ويسهل الحركة. يمكننا تنفيذه لك بالملي وبالمقاسات المناسبة لمنزلك مع ضمان معتمد!</li>
                         </ul>
                     `;
                     onAnalyzeVideoResponse(mockVideoReport);

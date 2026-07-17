@@ -58,22 +58,33 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                 
                 // Formulate an extremely professional, authentic, and realistic woodwork description prompt
                 val prompt = """
-                    This is a TikTok video URL showing premium carpentry/woodwork by the master carpenter Ramy Alngar (الأسطى رامي النجار): $url.
+                    This is a TikTok video URL showing premium custom carpentry/woodwork by the master carpenter Ramy Alngar (الأسطى رامي النجار): $url.
                     Since you cannot watch the video directly, analyze the URL details or generate a highly realistic and detailed masterpiece carpentry project.
                     
-                    Your analysis must be technical, authentic, and luxurious (مش أي كلام، تحليل دقيق وحقيقي). It should specify:
+                    CRITICAL INSTRUCTION: If the URL or video mentions "kitchen", "cook", "مطبخ", "مطابخ", or is general/unspecified, you MUST assume the video is about a premium American Kitchen (مطبخ أمريكي راقي) with exquisite wooden cabinets, an island, and integrated spaces. NEVER generate an exterior building, house, facade, landscape, or villa architecture! The result must be strictly about custom interior wooden craftsmanship.
+                    
+                    Your analysis must be technical, authentic, and luxurious (تحليل فني دقيق وحقيقي لنجارة داخلية). It should specify:
                     1. Wood Type (نوع الخشب المستخدم): (e.g., خشب زان أحمر روماني مبخر، خشب أرو أمريكي طبيعي، خشب موسكي فنلندي نخب أول، أو خشب كونتر اندونيسي معالج).
                     2. Joinery & Hardware (الإكسسوارات والمفصلات): (e.g., مفصلات هيدروليك باكم إيطالية صامتة، سحابات أدراج رمان بلي مخفية، مقابض نحاسية معالجة).
                     3. Finish & Varnish (نوع الدهان والتشطيب): (e.g., دهان بولي يوريثان مقاوم للرطوبة والخدش، قشرة أرو طبيعية مع دهان شفاف يبرز جمال ثمرة الخشب، أو دوكو مغسول فرن).
                     4. Style & Design (النمط الهندسي): (Modern, Classic, Neo-Classic, Minimalist).
                     
-                    Generate an extremely professional, luxury-oriented Arabic title, and a rich marketing description (2-3 sentences) detailing the craftsmanship and premium materials used. Choose exactly one suitable category from ("مطابخ", "أبواب", "خزائن", "ديكورات", "أثاث"). Also, select a highly relevant, real premium Unsplash image URL representing luxury custom woodwork for that category.
+                    Generate an extremely professional, luxury-oriented Arabic title (e.g., "مطبخ أمريكي مودرن فاخر من خشب الأرو"), and a rich marketing description (2-3 sentences) detailing the craftsmanship, premium wood, Italian soft-close hardware, and pristine scratch-resistant finish.
+                    
+                    Choose exactly one suitable category from ("مطابخ", "أبواب", "خزائن", "ديكورات", "أثاث").
+                    
+                    Select a highly relevant, real premium Unsplash image URL representing luxury custom interior woodwork for that category. YOU MUST strictly choose from the following curated list based on the category:
+                    - If category is "مطابخ" (Kitchens): Choose "https://images.unsplash.com/photo-1556911220-e15b29be8c8f" or "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" or "https://images.unsplash.com/photo-1565538810844-1e1194826ff0".
+                    - If category is "أبواب" (Doors): Choose "https://images.unsplash.com/photo-1513694203232-719a280e022f" or "https://images.unsplash.com/photo-1509644851169-2acc08aa25b5".
+                    - If category is "خزائن" (Wardrobes): Choose "https://images.unsplash.com/photo-1505691938895-1758d7feb511" or "https://images.unsplash.com/photo-1595428774223-ef52624120d2".
+                    - If category is "ديكورات" (Decor): Choose "https://images.unsplash.com/photo-1533090161767-e6ffed986c88" or "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6".
+                    - If category is "أثاث" (Furniture): Choose "https://images.unsplash.com/photo-1497366216548-37526070297c" or "https://images.unsplash.com/photo-1540555700478-4be289fbecef".
                     
                     You must return ONLY a raw JSON object string with the following fields:
-                    - "title": Premium Arabic title (e.g., "مطبخ مودرن أرو أمريكي بمفصلات هيدروليك صامتة").
-                    - "description": High-end authentic marketing description in Arabic detailing the Romanian beech/oak materials, Italian soft-close hardware, and pristine polyurethane scratch-resistant finish.
+                    - "title": Premium Arabic title.
+                    - "description": High-end authentic marketing description in Arabic.
                     - "category": The exact category string from ("مطابخ", "أبواب", "خزائن", "ديكورات", "أثاث").
-                    - "imageUrl": A high-resolution free Unsplash photo URL that perfectly matches the chosen woodwork category.
+                    - "imageUrl": One of the recommended Unsplash URLs matching the category.
                     
                     Do NOT wrap the JSON in markdown formatting (no ```json). Output raw valid JSON.
                 """.trimIndent()
@@ -87,10 +98,13 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                 val request = GenerateContentRequest(
                     contents = listOf(Content(parts = listOf(Part(prompt)))),
                     systemInstruction = sysInst,
-                    generationConfig = GenerationConfig(temperature = 0.8f)
+                    generationConfig = GenerationConfig(
+                        temperature = null,
+                        thinkingConfig = ThinkingConfig(thinkingLevel = ThinkingLevel.HIGH.name)
+                    )
                 )
 
-                val response = RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, request)
+                val response = RetrofitClient.service.generateContent("gemini-3.1-pro-preview", apiKey, request)
                 val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text ?: ""
                 
                 var cleanJson = responseText.trim()
@@ -181,6 +195,10 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                                 Part(inlineData = Blob(mimeType = mimeType, data = base64Data))
                             )
                         )
+                    ),
+                    generationConfig = GenerationConfig(
+                        temperature = null,
+                        thinkingConfig = ThinkingConfig(thinkingLevel = ThinkingLevel.HIGH.name)
                     )
                 )
                 val response = RetrofitClient.service.generateContent("gemini-3.1-pro-preview", apiKey, request)

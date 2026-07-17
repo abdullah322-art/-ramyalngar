@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.filled.Settings
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.viewmodel.ChatViewModel
@@ -26,6 +27,7 @@ fun ChatScreen(innerPadding: PaddingValues, onNavigateBack: () -> Unit) {
     val viewModel: ChatViewModel = viewModel()
     val messages by viewModel.messages.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val isThinkingMode by viewModel.isThinkingMode.collectAsStateWithLifecycle()
     var inputText by remember { mutableStateOf("") }
 
     Scaffold(
@@ -68,11 +70,45 @@ fun ChatScreen(innerPadding: PaddingValues, onNavigateBack: () -> Unit) {
                 }
             }
 
+            // High Thinking Mode Toggle Row
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surface)
-                    .padding(16.dp),
+                    .padding(horizontal = 16.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = null,
+                        tint = if (isThinkingMode) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "وضع التفكير الفائق (Gemini 3.1 Pro) 🧠",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = if (isThinkingMode) FontWeight.Bold else FontWeight.Normal,
+                        color = if (isThinkingMode) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Switch(
+                    checked = isThinkingMode,
+                    onCheckedChange = { viewModel.toggleThinkingMode(it) },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.primary,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                    )
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 OutlinedTextField(
