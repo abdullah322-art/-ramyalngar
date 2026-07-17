@@ -90,7 +90,7 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                     generationConfig = GenerationConfig(temperature = 0.8f)
                 )
 
-                val response = RetrofitClient.service.generateContent(apiKey, request)
+                val response = RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, request)
                 val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text ?: ""
                 
                 var cleanJson = responseText.trim()
@@ -141,7 +141,7 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                     generationConfig = GenerationConfig(temperature = 0.7f)
                 )
                 
-                val response = RetrofitClient.service.generateContent(apiKey, request)
+                val response = RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, request)
                 val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text 
                     ?: "عذراً يا فندم، حدث أمر غير متوقع. هل يمكنك المحاولة مرة أخرى؟"
                 
@@ -157,6 +157,86 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                 e.printStackTrace()
                 webView.post {
                     val errorMsg = e.localizedMessage ?: "حدث خطأ غير متوقع في معالجة طلبك."
+                    val escapedError = errorMsg.replace("\\", "\\\\")
+                                                .replace("'", "\\'")
+                                                .replace("\n", "\\n")
+                                                .replace("\r", "")
+                    webView.evaluateJavascript("javascript:$callbackJs(false, '$escapedError')", null)
+                }
+            }
+        }
+    }
+
+    @JavascriptInterface
+    fun analyzeImageWithGemini(base64Data: String, mimeType: String, callbackJs: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val apiKey = BuildConfig.GEMINI_API_KEY
+                val textPrompt = "أنت الأسطى رامي النجار؛ حلل هذه الصورة التي أرسلها العميل لقطع الأثاث أو الديكورات الخشبية. حدد نوع الخشب المتوقع (زان أحمر روماني، أرو أمريكي طبيعي، كونتر ممتاز، إلخ)، واشرح الأسلوب الفني (مودرن، كلاسيك)، وقدم نصائح صنايعي قديم خبير بلهجتك المصرية النجارية الودية الجميلة عن مميزاتها والتشطيب الأفضل ليها وتكلفتها التقديرية بالحب كدا."
+                val request = GenerateContentRequest(
+                    contents = listOf(
+                        Content(
+                            parts = listOf(
+                                Part(text = textPrompt),
+                                Part(inlineData = Blob(mimeType = mimeType, data = base64Data))
+                            )
+                        )
+                    )
+                )
+                val response = RetrofitClient.service.generateContent("gemini-3.1-pro-preview", apiKey, request)
+                val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text
+                    ?: "يا فندم الصورة جميلة خالص بس حصلت مشكلة في قرائتها.. ارفعها تاني عيني ليك يا باشا!"
+                
+                webView.post {
+                    val escapedText = responseText.replace("\\", "\\\\")
+                                                .replace("'", "\\'")
+                                                .replace("\n", "\\n")
+                                                .replace("\r", "")
+                    webView.evaluateJavascript("javascript:$callbackJs(true, '$escapedText')", null)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                webView.post {
+                    val errorMsg = e.localizedMessage ?: "حدث خطأ أثناء تحليل الصورة."
+                    val escapedError = errorMsg.replace("\\", "\\\\")
+                                                .replace("'", "\\'")
+                                                .replace("\n", "\\n")
+                                                .replace("\r", "")
+                    webView.evaluateJavascript("javascript:$callbackJs(false, '$escapedError')", null)
+                }
+            }
+        }
+    }
+
+    @JavascriptInterface
+    fun generateImageWithGemini(prompt: String, resolution: String, callbackJs: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val apiKey = BuildConfig.GEMINI_API_KEY
+                
+                // Append resolution modifier to prompt
+                val enhancedPrompt = "Luxury premium high-quality woodwork carpentry by Ramy Alngar, highly detailed $resolution resolution: $prompt. Photorealistic studio interior render, natural wood grain details, master carpenter finish, 8k masterpiece."
+                
+                val request = GenerateImagesRequest(
+                    prompt = enhancedPrompt,
+                    numberOfImages = 1,
+                    aspectRatio = "1:1"
+                )
+                
+                val response = RetrofitClient.service.generateImages(apiKey, request)
+                val base64Image = response.generatedImages?.firstOrNull()?.image?.imageBytes
+                
+                webView.post {
+                    if (base64Image != null) {
+                        webView.evaluateJavascript("javascript:$callbackJs(true, '$base64Image')", null)
+                    } else {
+                        webView.evaluateJavascript("javascript:$callbackJs(false, 'لم نتمكن من ابتكار التصميم حالياً، جرب تكتب تفاصيل تانية يا باشا!')", null)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                webView.post {
+                    val errorMsg = e.localizedMessage ?: "حدث خطأ أثناء ابتكار التصميم."
                     val escapedError = errorMsg.replace("\\", "\\\\")
                                                 .replace("'", "\\'")
                                                 .replace("\n", "\\n")

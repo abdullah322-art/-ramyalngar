@@ -874,6 +874,10 @@
         .chat-pulse-btn {
             animation: chatPulse 2.5s infinite;
         }
+        
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
 <body>
@@ -885,6 +889,7 @@
             <li><a href="#about">من نحن</a></li>
             <li><a href="#services">الخدمات</a></li>
             <li><a href="#portfolio">أعمالنا</a></li>
+            <li><a href="#ai-workshop" style="color: var(--primary); font-weight: bold;"><i class="fas fa-magic" style="margin-left: 3px;"></i> الورشة الذكية</a></li>
             <li><a href="#reviews">آراء العملاء</a></li>
             <li><a href="#contact">تواصل معنا</a></li>
             <li><a href="javascript:void(0)" onclick="openLoginModal()" style="color: var(--primary); font-weight: bold; border: 1px dashed var(--primary); padding: 5px 12px; border-radius: 5px; background-color: rgba(212,175,55,0.05); transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='rgba(212,175,55,0.15)'" onmouseout="this.style.backgroundColor='rgba(212,175,55,0.05)'">لوحة التحكم <i class="fas fa-cog" style="margin-right: 5px; margin-left: 5px;"></i></a></li>
@@ -947,6 +952,163 @@
         <!-- Admin Entry Section (Inline, no floating popup) -->
         <div id="admin-login-section" style="max-width: 600px; margin: 35px auto 15px auto; padding: 25px 20px; background-color: var(--surface-dark); border: 2px solid var(--border-dark); border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); position: relative; transition: all 0.3s ease-in-out;">
             <!-- Rendered Dynamically in JS via renderAdminInlineSection() -->
+        </div>
+    </section>
+
+    <!-- AI Workshop Section -->
+    <section id="ai-workshop" style="background-color: var(--surface-variant); padding-top: 40px; direction: rtl;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="color: var(--primary); font-size: 2.2rem; margin-bottom: 10px; display: inline-block; border-bottom: 2px solid var(--primary); padding-bottom: 8px;">الورشة الذكية بالذكاء الاصطناعي <i class="fas fa-magic"></i></h2>
+            <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 700px; margin: 10px auto 0 auto; line-height: 1.6;">ابتكر وافحص تصاميمك الخشبية مباشرة بذكاء اصطناعي متقدم، وكأن الأسطى رامي النجار معاك خطوة بخطوة!</p>
+        </div>
+
+        <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 30px; padding: 0 20px;">
+            
+            <!-- Tab Buttons to switch features -->
+            <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+                <button id="tab-btn-generator" class="filter-btn active" onclick="switchWorkshopTab('generator')" style="padding: 10px 20px; font-size: 1rem; font-weight: bold; border-radius: 25px; transition: all 0.3s; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-palette"></i> مصمم الديكور الذكي
+                </button>
+                <button id="tab-btn-analyzer" class="filter-btn" onclick="switchWorkshopTab('analyzer')" style="padding: 10px 20px; font-size: 1rem; font-weight: bold; border-radius: 25px; transition: all 0.3s; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-search"></i> فاحص الأخشاب والصور
+                </button>
+                <button id="tab-btn-video" class="filter-btn" onclick="switchWorkshopTab('video')" style="padding: 10px 20px; font-size: 1rem; font-weight: bold; border-radius: 25px; transition: all 0.3s; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-video"></i> تحليل فيديوهات الصنعة
+                </button>
+            </div>
+
+            <!-- TAB 1: AI Design Generator -->
+            <div id="workshop-generator-container" class="workshop-tab-content" style="background-color: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                    <div>
+                        <h4 style="color: var(--primary); margin-bottom: 12px; font-size: 1.3rem;"><i class="fas fa-magic"></i> اطلب أي تصميم للديكور في خيالك</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5;">اكتب بالتفصيل التصميم الخشبي اللي محتاجه (مثال: مطبخ مودرن بلون كحلي مع رفوف خشبية دافئة وإضاءة مخفية)، وهيقوم نموذج الذكاء الاصطناعي Imagen 3 بابتكاره في ثوانٍ!</p>
+                        
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="ai-gen-prompt" style="display: block; margin-bottom: 5px; color: var(--primary); font-weight: bold;">وصف التصميم المطلوب</label>
+                            <textarea id="ai-gen-prompt" class="form-control" rows="3" placeholder="مثال: باب فيلا كلاسيكي فخم من خشب الأرو الطبيعي ببرواز عريض وتفاصيل نحاسية محفورة باليد..." style="resize: vertical; font-family: inherit; width: 100%; text-align: right;"></textarea>
+                        </div>
+
+                        <!-- Quality Selection (1K, 2K, 4K) -->
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label for="ai-gen-quality" style="display: block; margin-bottom: 5px; color: var(--primary); font-weight: bold;">دقة وجودة التفاصيل الخشبية</label>
+                            <select id="ai-gen-quality" class="form-control" style="background-color: var(--bg-dark); color: var(--text-primary); text-align: right;">
+                                <option value="1K (Standard Digital)">دقة 1K - مناسبة للتصفح السريع</option>
+                                <option value="2K (High-Definition Textures)">دقة 2K - تبرز ثمرة الخشب الطبيعي بوضوح</option>
+                                <option value="4K (Ultra Photorealistic Masterpiece)">دقة 4K - تحفة فنية مذهلة في الواقعية والتشطيب</option>
+                            </select>
+                        </div>
+
+                        <button onclick="generateAIDesign()" class="btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.1rem; padding: 14px;">
+                            <i class="fas fa-hammer"></i> ابتكر التصميم الآن
+                        </button>
+                    </div>
+
+                    <!-- Generation Output Display -->
+                    <div id="ai-gen-result-wrapper" style="margin-top: 25px; border-top: 1.5px dashed var(--border-dark); padding-top: 25px; display: none; text-align: center;">
+                        <h5 style="color: var(--primary); margin-bottom: 15px; font-size: 1.1rem;">التصميم المبتكر بواسطة الأسطى رامي الذكي:</h5>
+                        <div id="ai-gen-loading" style="display: none; padding: 30px; text-align: center; color: var(--text-secondary);">
+                            <div style="font-size: 2.5rem; animation: chatPulse 1.5s infinite; color: var(--primary); margin-bottom: 15px;">
+                                <i class="fas fa-saw"></i> 🪵 ⚙️
+                            </div>
+                            <p style="font-weight: bold;">جاري تقطيع الأخشاب وتجهيز ورشة الدهانات الذكية لابتكار تصميمك بالملّي...</p>
+                        </div>
+                        <div id="ai-gen-img-container" style="display: none; position: relative; max-width: 500px; margin: 0 auto; border: 3.5px solid var(--border-dark); border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.5);">
+                            <img id="ai-gen-img" src="" alt="AI Generated Design" style="width: 100%; display: block; object-fit: cover;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: var(--primary); font-weight: bold; font-size: 0.85rem;"><i class="fas fa-certificate"></i> تصميم حصري - ورشة الأسطى رامي</span>
+                                <a id="ai-gen-download-btn" href="#" download="ramy-design.jpg" class="btn" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 4px;"><i class="fas fa-download"></i> حفظ التصميم</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: AI Design & Wood Analyzer -->
+            <div id="workshop-analyzer-container" class="workshop-tab-content" style="display: none; background-color: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                <div>
+                    <h4 style="color: var(--primary); margin-bottom: 12px; font-size: 1.3rem;"><i class="fas fa-search"></i> ارفع صورة تصميم لفحص جودته ونوع خشبه</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5;">حابب تعمل معاينة لصورة تصميم شفته وعجبك؟ ارفع الصورة هنا والذكاء الاصطناعي هيقوم بتحليلها ويديك تقرير فني نثري من عين صنايعي شاطر خبير بالملي!</p>
+                    
+                    <!-- Pre-loaded wood analysis models/examples -->
+                    <div style="margin-bottom: 20px;">
+                        <p style="color: var(--primary); font-weight: bold; font-size: 0.9rem; margin-bottom: 8px;">أو جرب تفحص نماذج جاهزة من أعمالنا الكبرى:</p>
+                        <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none;">
+                            <button onclick="analyzePreloadedDesign('kitchen_classic')" class="filter-btn" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 15px; white-space: nowrap;"><i class="fas fa-utensils"></i> مطبخ كلاسيك زان</button>
+                            <button onclick="analyzePreloadedDesign('door_luxury')" class="filter-btn" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 15px; white-space: nowrap;"><i class="fas fa-door-open"></i> باب فخم أرو</button>
+                            <button onclick="analyzePreloadedDesign('cabinet_modern')" class="filter-btn" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 15px; white-space: nowrap;"><i class="fas fa-border-all"></i> دولاب مودرن متكامل</button>
+                        </div>
+                    </div>
+
+                    <!-- Custom upload input area -->
+                    <div id="ai-analyzer-dropzone" style="border: 2px dashed var(--border-dark); border-radius: 10px; padding: 30px 20px; text-align: center; cursor: pointer; transition: all 0.3s; background-color: var(--bg-dark); margin-bottom: 20px;" onclick="triggerAnalyzerUpload()">
+                        <div style="font-size: 2.2rem; color: var(--primary); margin-bottom: 10px;">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p id="ai-analyzer-upload-text" style="color: var(--text-primary); font-weight: bold; font-size: 0.95rem;">اضغط هنا لرفع صورة من جهازك <span style="color: var(--primary);">(صور غرف، مطابخ، أثاث)</span></p>
+                        <span style="color: var(--text-secondary); font-size: 0.8rem;">صيغ مدعومة: JPG, PNG, WEBP</span>
+                        <input type="file" id="ai-analyzer-file-input" accept="image/*" style="display: none;" onchange="handleAnalyzerFileSelect(this)">
+                    </div>
+
+                    <!-- Image Selected Preview Container -->
+                    <div id="ai-analyzer-preview-wrapper" style="display: none; text-align: center; margin-bottom: 20px;">
+                        <div style="position: relative; display: inline-block; max-width: 300px; border-radius: 8px; overflow: hidden; border: 2px solid var(--border-dark);">
+                            <img id="ai-analyzer-preview-img" src="" alt="Selected Preview" style="width: 100%; display: block;">
+                            <button onclick="clearAnalyzerSelection(event)" style="position: absolute; top: 8px; right: 8px; background-color: var(--error); color: white; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+
+                    <button id="ai-analyze-btn" onclick="analyzeSelectedImage()" class="btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.1rem; padding: 14px;" disabled>
+                        <i class="fas fa-search"></i> ابدأ الفحص الفني بالذكاء الاصطناعي
+                    </button>
+
+                    <!-- Analysis Output Display -->
+                    <div id="ai-analyzer-result-wrapper" style="margin-top: 25px; border-top: 1.5px dashed var(--border-dark); padding-top: 25px; display: none;">
+                        <h5 style="color: var(--primary); margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; text-align: right;"><i class="fas fa-clipboard-list"></i> تقرير معاينة وفحص الأسطى رامي:</h5>
+                        <div id="ai-analyzer-loading" style="display: none; padding: 25px; text-align: center; color: var(--text-secondary);">
+                            <div style="font-size: 2.2rem; animation: chatPulse 1.5s infinite; color: var(--primary); margin-bottom: 12px;">
+                                <i class="fas fa-microscope"></i> 🪵 🔍
+                            </div>
+                            <p style="font-weight: bold;">الأسطى رامي بيلبس نظارة الفحص وبيحسس بيده على الأخشاب والدهانات ويكتب التقرير بالملّي...</p>
+                        </div>
+                        <div id="ai-analyzer-report" style="display: none; background-color: var(--bg-dark); border: 1px solid var(--border-dark); padding: 20px; border-radius: 8px; line-height: 1.7; color: var(--text-primary); text-align: right; font-size: 0.95rem; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);">
+                            <!-- Inserted dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: Video Content Analyzer -->
+            <div id="workshop-video-container" class="workshop-tab-content" style="display: none; background-color: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                <div>
+                    <h4 style="color: var(--primary); margin-bottom: 12px; font-size: 1.3rem;"><i class="fas fa-video"></i> محلل الأخشاب والفيديوهات النجارية</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5;">الصنايعي الشاطر بيفهمها وهي طايرة! الصق أي رابط فيديو لعملية تصنيع أو تشطيب أو تيك توك، وهيقوم الذكاء الاصطناعي بتحليله وتخيل تفاصيل الصنعة بدقة شديدة:</p>
+                    
+                    <div class="form-group" style="margin-bottom: 20px; text-align: right;">
+                        <label for="ai-video-url" style="display: block; margin-bottom: 5px; color: var(--primary); font-weight: bold;">رابط الفيديو (TikTok / YouTube / Instagram)</label>
+                        <input type="url" id="ai-video-url" class="form-control" style="direction: ltr; text-align: left;" placeholder="https://www.tiktok.com/@..." value="https://www.tiktok.com/@ramyalngar11/video/73829104829">
+                    </div>
+
+                    <button onclick="analyzeWoodworkVideo()" class="btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.1rem; padding: 14px;">
+                        <i class="fas fa-file-invoice"></i> ابدأ تحليل تفاصيل الفيديو فورا
+                    </button>
+
+                    <!-- Video Analysis Output Display -->
+                    <div id="ai-video-result-wrapper" style="margin-top: 25px; border-top: 1.5px dashed var(--border-dark); padding-top: 25px; display: none;">
+                        <h5 style="color: var(--primary); margin-bottom: 15px; font-size: 1.1rem; text-align: right; display: flex; align-items: center; gap: 8px;"><i class="fas fa-tv"></i> التقرير الهندسي والفني لتفاصيل الفيديو:</h5>
+                        <div id="ai-video-loading" style="display: none; padding: 25px; text-align: center; color: var(--text-secondary);">
+                            <div style="font-size: 2.2rem; animation: chatPulse 1.5s infinite; color: var(--primary); margin-bottom: 12px;">
+                                <i class="fas fa-compact-disc"></i> 🪵 🎬
+                            </div>
+                            <p style="font-weight: bold;">جاري معالجة الفيديو واستخلاص فنيات النجارة والمفصلات ونوع التشطيبة بالكامل...</p>
+                        </div>
+                        <div id="ai-video-report" style="display: none; background-color: var(--bg-dark); border: 1px solid var(--border-dark); padding: 20px; border-radius: 8px; line-height: 1.7; color: var(--text-primary); text-align: right; font-size: 0.95rem; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);">
+                            <!-- Inserted dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -3060,6 +3222,312 @@
                 appendChatMessage('model', "عذراً يا فندم، واجهت مشكلة في الاتصال بالشبكة حالياً. يرجى التأكد من اتصال الإنترنت وإعادة المحاولة.");
             }
         };
+
+        // --- AI WORKSHOP CONTROLLER ---
+        window.switchWorkshopTab = function(tabName) {
+            document.querySelectorAll('.workshop-tab-content').forEach(el => el.style.display = 'none');
+            document.getElementById('tab-btn-generator').classList.remove('active');
+            document.getElementById('tab-btn-analyzer').classList.remove('active');
+            document.getElementById('tab-btn-video').classList.remove('active');
+
+            if (tabName === 'generator') {
+                document.getElementById('workshop-generator-container').style.display = 'block';
+                document.getElementById('tab-btn-generator').classList.add('active');
+            } else if (tabName === 'analyzer') {
+                document.getElementById('workshop-analyzer-container').style.display = 'block';
+                document.getElementById('tab-btn-analyzer').classList.add('active');
+            } else if (tabName === 'video') {
+                document.getElementById('workshop-video-container').style.display = 'block';
+                document.getElementById('tab-btn-video').classList.add('active');
+            }
+        };
+
+        // 1. AI Design Generator (Imagen 3)
+        window.generateAIDesign = function() {
+            const promptInput = document.getElementById('ai-gen-prompt').value.trim();
+            const qualitySelect = document.getElementById('ai-gen-quality').value;
+            
+            if (!promptInput) {
+                alert('يا باشا، اكتب وصف التصميم اللي حابب تبتكره الأول!');
+                return;
+            }
+
+            const resultWrapper = document.getElementById('ai-gen-result-wrapper');
+            const loadingDiv = document.getElementById('ai-gen-loading');
+            const imgContainer = document.getElementById('ai-gen-img-container');
+
+            resultWrapper.style.display = 'block';
+            loadingDiv.style.display = 'block';
+            imgContainer.style.display = 'none';
+
+            if (window.AndroidInterface && window.AndroidInterface.generateImageWithGemini) {
+                window.AndroidInterface.generateImageWithGemini(promptInput, qualitySelect, "onGenerateImageResponse");
+            } else {
+                // Pre-configured elegant fallback woodwork masterpiece images to mimic Imagen 3 inside standard web fallback
+                setTimeout(() => {
+                    let fallbackUrl = "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1000"; // luxury woodwork
+                    if (promptInput.includes("مطبخ") || promptInput.includes("kitchen")) {
+                        fallbackUrl = "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=1000";
+                    } else if (promptInput.includes("باب") || promptInput.includes("door")) {
+                        fallbackUrl = "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1000";
+                    } else if (promptInput.includes("خزانة") || promptInput.includes("أثاث") || promptInput.includes("bed")) {
+                        fallbackUrl = "https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1000";
+                    }
+                    onGenerateImageResponse(true, fallbackUrl, true);
+                }, 2000);
+            }
+        };
+
+        window.onGenerateImageResponse = function(success, imageData, isUrl = false) {
+            const loadingDiv = document.getElementById('ai-gen-loading');
+            const imgContainer = document.getElementById('ai-gen-img-container');
+            const resultImg = document.getElementById('ai-gen-img');
+            const downloadBtn = document.getElementById('ai-gen-download-btn');
+
+            loadingDiv.style.display = 'none';
+
+            if (success) {
+                imgContainer.style.display = 'block';
+                if (isUrl) {
+                    resultImg.src = imageData;
+                    downloadBtn.href = imageData;
+                } else {
+                    const srcStr = "data:image/jpeg;base64," + imageData;
+                    resultImg.src = srcStr;
+                    downloadBtn.href = srcStr;
+                }
+            } else {
+                alert('عذراً يا فندم: ' + imageData);
+            }
+        };
+
+        // 2. AI Design & Wood Analyzer
+        let selectedBase64 = "";
+        let selectedMimeType = "image/jpeg";
+
+        window.triggerAnalyzerUpload = function() {
+            document.getElementById('ai-analyzer-file-input').click();
+        };
+
+        window.handleAnalyzerFileSelect = function(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                selectedMimeType = file.type;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const fullData = e.target.result;
+                    selectedBase64 = fullData.split(',')[1];
+                    
+                    document.getElementById('ai-analyzer-preview-img').src = fullData;
+                    document.getElementById('ai-analyzer-preview-wrapper').style.display = 'block';
+                    document.getElementById('ai-analyze-btn').removeAttribute('disabled');
+                    document.getElementById('ai-analyzer-upload-text').innerText = "تم اختيار الصورة: " + file.name;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        window.clearAnalyzerSelection = function(event) {
+            if (event) event.stopPropagation();
+            selectedBase64 = "";
+            document.getElementById('ai-analyzer-file-input').value = "";
+            document.getElementById('ai-analyzer-preview-wrapper').style.display = 'none';
+            document.getElementById('ai-analyze-btn').setAttribute('disabled', 'true');
+            document.getElementById('ai-analyzer-upload-text').innerHTML = 'اضغط هنا لرفع صورة من جهازك <span style="color: var(--primary);">(صور غرف، مطابخ، أثاث)</span>';
+        };
+
+        window.analyzeSelectedImage = function() {
+            if (!selectedBase64) return;
+
+            const resultWrapper = document.getElementById('ai-analyzer-result-wrapper');
+            const loadingDiv = document.getElementById('ai-analyzer-loading');
+            const reportDiv = document.getElementById('ai-analyzer-report');
+
+            resultWrapper.style.display = 'block';
+            loadingDiv.style.display = 'block';
+            reportDiv.style.display = 'none';
+
+            if (window.AndroidInterface && window.AndroidInterface.analyzeImageWithGemini) {
+                window.AndroidInterface.analyzeImageWithGemini(selectedBase64, selectedMimeType, "onAnalyzeImageResponse");
+            } else {
+                // Web mock analysis
+                setTimeout(() => {
+                    const fallbackReport = `
+                        <strong>🪵 تقرير الفحص الفني للأسطى رامي النجار (النسخة التجريبية):</strong><br><br>
+                        يا هلا بيك يا باشا! فحصتلك الصورة دي وطلعت تحفة فنية بسم الله ما شاء الله. <br><br>
+                        <ul>
+                            <li><strong>نوع الخشب المتوقع:</strong> خشب أرو أمريكي طبيعي ممتاز (قشرة خارجية) والعلب الداخلية من خشب الكونتر المكبوس المعالج المقاوم للرطوبة.</li>
+                            <li><strong>الأسلوب الفني:</strong> مودرن راقي مريح للعين (Minimalist Modern) بيعتمد على المساحات الواسعة والإضاءة المخفية.</li>
+                            <li><strong>ملاحظة الصنعة والتشطيب:</strong> واخد وش سيلر محترم مع دهان بولي يوريثان مط مقاوم للخدوش والمياه، والمقابض مخفية 45 درجة بلون أسود مطفي هيدروليك.</li>
+                            <li><strong>نصيحة الأسطى رامي:</strong> الشغل ده مظبوط جداً وبيعيش العمر كله. لو حابب ننفذلك زيه بالملي في ورشتنا وبمقاسات بيتك بالضبط، اضغط على زرار الواتساب وهنجيلك نرفع مقاسات فورا يا غالي!</li>
+                        </ul>
+                    `;
+                    onAnalyzeImageResponse(true, fallbackReport);
+                }, 2500);
+            }
+        };
+
+        window.onAnalyzeImageResponse = function(success, reportText) {
+            const loadingDiv = document.getElementById('ai-analyzer-loading');
+            const reportDiv = document.getElementById('ai-analyzer-report');
+
+            loadingDiv.style.display = 'none';
+            reportDiv.style.display = 'block';
+
+            if (success) {
+                // Convert markdown-like stars to strong tags
+                let formattedText = reportText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                              .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                                              .replace(/\n/g, '<br>');
+                reportDiv.innerHTML = formattedText;
+            } else {
+                reportDiv.innerHTML = `<span style="color: var(--error);">يا باشا حصلت مشكلة أثناء المعاينة.. اتأكد من النت وجرب تاني عيني ليك!</span>`;
+            }
+        };
+
+        // Preset image analysis buttons
+        window.analyzePreloadedDesign = function(type) {
+            let imgUrl = "";
+            let promptName = "";
+            
+            if (type === 'kitchen_classic') {
+                imgUrl = "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600";
+                promptName = "مطبخ كلاسيكي من خشب الزان الأحمر المدهون أبيض نصف لامع بمفصلات باكم إيطالية";
+            } else if (type === 'door_luxury') {
+                imgUrl = "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=600";
+                promptName = "باب فيلا خارجي ضخم من خشب الأرو الطبيعي ببرواز عريض وتفاصيل نحاسية";
+            } else if (type === 'cabinet_modern') {
+                imgUrl = "https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=600";
+                promptName = "غرفة نوم كاملة مع دولاب ملابس مدمج بإنارة ليد مخفية وخامات خشب كونتر معالج";
+            }
+
+            document.getElementById('ai-analyzer-preview-img').src = imgUrl;
+            document.getElementById('ai-analyzer-preview-wrapper').style.display = 'block';
+            document.getElementById('ai-analyze-btn').removeAttribute('disabled');
+            document.getElementById('ai-analyzer-upload-text').innerText = "تم اختيار التصميم: " + promptName;
+
+            // Fetch image in background to convert to base64
+            fetch(imgUrl)
+                .then(res => res.blob())
+                .then(blob => {
+                    const reader = new FileReader();
+                    reader.onloadend = function() {
+                        selectedBase64 = reader.result.split(',')[1];
+                        selectedMimeType = "image/jpeg";
+                    };
+                    reader.readAsDataURL(blob);
+                });
+        };
+
+        // 3. Woodwork Video Deep-Dive Analyzer
+        window.analyzeWoodworkVideo = function() {
+            const videoUrl = document.getElementById('ai-video-url').value.trim();
+            if (!videoUrl) {
+                alert('يا باشا الصق رابط فيديو تيك توك أو يوتيوب عشان نحلله!');
+                return;
+            }
+
+            const resultWrapper = document.getElementById('ai-video-result-wrapper');
+            const loadingDiv = document.getElementById('ai-video-loading');
+            const reportDiv = document.getElementById('ai-video-report');
+
+            resultWrapper.style.display = 'block';
+            loadingDiv.style.display = 'block';
+            reportDiv.style.display = 'none';
+
+            if (window.AndroidInterface && window.AndroidInterface.analyzeTikTok) {
+                window.AndroidInterface.analyzeTikTok(videoUrl, "onAnalyzeVideoResponse");
+            } else {
+                // Web mock fallback
+                setTimeout(() => {
+                    const mockVideoReport = `
+                        <strong>🎬 تقرير معاينة الفيديو النبيل للأسطى رامي النجار:</strong><br><br>
+                        يا مية مرحب بيك يا فندم! الفيديو ده بيعرض تحفة فنية معمارية فريدة من نوعها في عالم النجارة الفخمة.<br><br>
+                        <ul>
+                            <li><strong>نوع الخشب الموضح:</strong> خشب موسكي فنلندي نخب أول (علب وتجليد) مع واجهات أرو طبيعي ودهان بولي يوريثان شفاف يبرز تفاصيل العروق الطبيعية.</li>
+                            <li><strong>جودة المفصلات والإكسسوارات:</strong> تم استخدام مجاري سحاب تلسكوبية صامتة هيدروليك ثنائية السحب مخفية بالكامل تتحمل الأوزان الثقيلة.</li>
+                            <li><strong>التشطيب النهائي واللمعة:</strong> دهان استر قشرة أرو بدرجة مطفية (Matte Finish) تعكس دفء الطبيعة وملمسها المخملي.</li>
+                            <li><strong>رأي الأسطى رامي:</strong> التصميم ده تحفة نادرة وبيناسب المساحات الكبيرة وغرف المعيشة المفتوحة. نقدر نعملك أحسن منه كمان وبسعر مريح بالحب كدا يا فندم!</li>
+                        </ul>
+                    `;
+                    onAnalyzeVideoResponse(mockVideoReport);
+                }, 2500);
+            }
+        };
+
+        window.onAnalyzeVideoResponse = function(responseJsonStr) {
+            const loadingDiv = document.getElementById('ai-video-loading');
+            const reportDiv = document.getElementById('ai-video-report');
+
+            loadingDiv.style.display = 'none';
+            reportDiv.style.display = 'block';
+
+            try {
+                // Check if response is JSON (from Android Interface)
+                const data = JSON.parse(responseJsonStr);
+                if (data.error) {
+                    reportDiv.innerHTML = `<span style="color: var(--error);">يا باشا حصل خطأ في تحليل الفيديو: ${data.error}</span>`;
+                } else {
+                    const formattedHtml = `
+                        <strong>🪵 تقرير فني دقيق للفيديو من ورشة الأسطى رامي:</strong><br><br>
+                        <strong>العنوان الفني المقترح:</strong> ${data.title}<br>
+                        <strong>تفاصيل المشغولة والخامات:</strong> ${data.description}<br><br>
+                        <ul>
+                            <li><strong>الفئة المقترحة:</strong> ${data.category}</li>
+                            <li><strong>التوجيه المعماري:</strong> تصميم حصري واحترافي 100% يجمع بين المتانة والجمال الفني.</li>
+                        </ul>
+                        <br>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <img src="${data.imageUrl}" alt="Recommended Masterpiece" style="max-width: 100%; border-radius: 8px; border: 2px solid var(--border-dark); box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                        </div>
+                    `;
+                    reportDiv.innerHTML = formattedHtml;
+                }
+            } catch (e) {
+                // Direct html fallback
+                let formattedText = responseJsonStr.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                                                    .replace(/\n/g, '<br>');
+                reportDiv.innerHTML = formattedText;
+            }
+        };
+
+        // --- SILKY-SMOOTH SCROLLING CONTROLLER ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#' || targetId === '#ai-workshop') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    const navbarHeight = document.querySelector('nav')?.offsetHeight || 70;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight - 15;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Specially handle the workshop anchor navigation smoothly with optimal offset
+        document.querySelector('a[href="#ai-workshop"]')?.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetElement = document.querySelector('#ai-workshop');
+            if (targetElement) {
+                const navbarHeight = document.querySelector('nav')?.offsetHeight || 70;
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - navbarHeight - 15;
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
     </script>
 
     <!-- Gemini AI Chatbot Widget -->

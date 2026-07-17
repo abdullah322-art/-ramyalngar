@@ -54,7 +54,7 @@ class ChatViewModel : ViewModel() {
                     generationConfig = GenerationConfig(temperature = 0.7f)
                 )
                 
-                val response = RetrofitClient.service.generateContent(apiKey, request)
+                val response = RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, request)
                 
                 val assistantText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text ?: "عفواً، لم أتمكن من الرد. حاول مرة أخرى يا فندم."
                 

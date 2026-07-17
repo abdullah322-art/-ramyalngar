@@ -6,6 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
@@ -24,7 +25,14 @@ data class Content(
 
 @JsonClass(generateAdapter = true)
 data class Part(
-    val text: String
+    val text: String? = null,
+    val inlineData: Blob? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class Blob(
+    val mimeType: String,
+    val data: String // base64 encoded string
 )
 
 @JsonClass(generateAdapter = true)
@@ -42,12 +50,43 @@ data class Candidate(
     val content: Content? = null
 )
 
+// --- Imagen 3 Request & Response ---
+@JsonClass(generateAdapter = true)
+data class GenerateImagesRequest(
+    val prompt: String,
+    val numberOfImages: Int = 1,
+    val outputMimeType: String = "image/jpeg",
+    val aspectRatio: String = "1:1"
+)
+
+@JsonClass(generateAdapter = true)
+data class GenerateImagesResponse(
+    val generatedImages: List<GeneratedImage>? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class GeneratedImage(
+    val image: ImageBytes? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class ImageBytes(
+    val imageBytes: String? = null // base64 encoded
+)
+
 interface GeminiApiService {
-    @POST("v1beta/models/gemini-3.5-flash:generateContent")
+    @POST("v1beta/models/{model}:generateContent")
     suspend fun generateContent(
+        @Path("model") model: String,
         @Query("key") apiKey: String,
         @Body request: GenerateContentRequest
     ): GenerateContentResponse
+
+    @POST("v1beta/models/imagen-3.0-generate-002:generateImages")
+    suspend fun generateImages(
+        @Query("key") apiKey: String,
+        @Body request: GenerateImagesRequest
+    ): GenerateImagesResponse
 }
 
 object RetrofitClient {
@@ -68,3 +107,4 @@ object RetrofitClient {
         retrofit.create(GeminiApiService::class.java)
     }
 }
+
