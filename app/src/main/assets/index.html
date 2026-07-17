@@ -207,6 +207,73 @@
             transform: scale(1.02);
         }
 
+        /* Portfolio Filters */
+        .filter-btn {
+            padding: 10px 22px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            background-color: transparent;
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border-dark);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            outline: none;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(229, 193, 88, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px rgba(229, 193, 88, 0.3);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: #000;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(15px);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background-color: #fff;
+            box-shadow: 0 6px 24px rgba(229, 193, 88, 0.5);
+            transform: translateY(-4px);
+        }
+
         /* Portfolio */
         .portfolio-grid {
             display: grid;
@@ -819,6 +886,29 @@
     <!-- Portfolio Section -->
     <section id="portfolio" style="padding-top: 40px;">
         <div id="portfolio-header-container"></div>
+        
+        <!-- Filter Bar -->
+        <div class="portfolio-filters" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 25px auto 15px auto; max-width: 1100px; padding: 0 20px;">
+            <button class="filter-btn active" onclick="filterPortfolio('all', this)">
+                <i class="fas fa-th-large"></i> الكل
+            </button>
+            <button class="filter-btn" onclick="filterPortfolio('kitchen', this)">
+                <i class="fas fa-utensils"></i> مطابخ خشبية
+            </button>
+            <button class="filter-btn" onclick="filterPortfolio('bedroom', this)">
+                <i class="fas fa-bed"></i> غرف نوم وأثاث
+            </button>
+            <button class="filter-btn" onclick="filterPortfolio('doors', this)">
+                <i class="fas fa-door-open"></i> أبواب ونوافذ
+            </button>
+            <button class="filter-btn" onclick="filterPortfolio('decor', this)">
+                <i class="fas fa-hammer"></i> ديكورات خشبية
+            </button>
+            <button class="filter-btn" onclick="filterPortfolio('other', this)">
+                <i class="fas fa-ellipsis-h"></i> أخرى
+            </button>
+        </div>
+
         <div class="portfolio-grid" id="portfolio-grid-container" style="margin-top: 25px;">
             <!-- Loaded Dynamically -->
         </div>
@@ -1295,6 +1385,16 @@
                             <input type="text" id="portfolioTitle" class="form-control" placeholder="مثال: مطبخ خشب زان عصري">
                         </div>
                         <div class="form-group">
+                            <label for="portfolioCategory">تصنيف العمل</label>
+                            <select id="portfolioCategory" class="form-control" style="background-color: var(--bg-dark); color: var(--text-primary); border: 1px solid var(--border-dark); padding: 10px; border-radius: 5px; width: 100%; box-sizing: border-box;">
+                                <option value="kitchen">مطابخ خشبية</option>
+                                <option value="bedroom">غرف نوم وأثاث</option>
+                                <option value="doors">أبواب ونوافذ</option>
+                                <option value="decor">ديكورات خشبية</option>
+                                <option value="other">أخرى</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label>صورة العمل المنجز</label>
                             <div class="upload-container" id="portfolioUploadContainer">
                                 <div class="upload-dropzone" id="portfolioDropzone" onclick="document.getElementById('portfolioFileInput').click()" ondragover="handleDragOver(event, this)" ondragleave="handleDragLeave(event, this)" ondrop="handleDrop(event, this, 'portfolioImg', 'portfolioPreviewImg')">
@@ -1408,22 +1508,36 @@
 
     <!-- JavaScript Engine -->
     <script>
+        // Optimization Helper to compress Unsplash image loading
+        function optimizeUnsplashUrl(url, targetWidth = 500) {
+            if (!url) return url;
+            if (url.includes('unsplash.com')) {
+                try {
+                    let cleanUrl = url.split('?')[0];
+                    return `${cleanUrl}?auto=format&fit=crop&q=50&w=${targetWidth}`;
+                } catch (e) {
+                    return url;
+                }
+            }
+            return url;
+        }
+
         // Default content template
         const defaultSiteData = {
             heroTitle: "رامي النجار",
             heroSubtitle: "نجار محترف لجميع أعمال الأخشاب والديكورات",
             aboutText: "أهلاً بك في موقعي! أنا رامي، نجار محترف متخصص في تصميم وتنفيذ كافة أنواع الأعمال الخشبية. بفضل سنوات من الخبرة، أقدم لعملائي جودة استثنائية واهتماماً دقيقاً بالتفاصيل في كل قطعة أصنعها. سواء كنت تبحث عن مطبخ عصري، أبواب متينة، أو ديكورات خشبية فريدة، فأنتم في المكان الصحيح.",
             services: [
-                { id: "s_1", title: "مطابخ خشبية", desc: "تصميم وتفصيل مطابخ عصرية وكلاسيكية بأجود أنواع الخشب المقاوم للرطوبة والحرارة.", img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800" },
-                { id: "s_2", title: "أبواب ونوافذ", desc: "صناعة أبواب داخلية وخارجية بمتانة عالية وتصميمات فنية تناسب كافة المساحات والأذواق.", img: "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=80&w=800" },
-                { id: "s_3", title: "أثاث منزلي تفصيل", desc: "تنفيذ غرف نوم، طاولات طعام، دواليب، وغرف معيشة تلبي احتياجاتك ومساحاتك بشكل مثالي.", img: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=800" },
-                { id: "s_4", title: "ديكورات خشبية", desc: "إضافة لمسات فنية لبيتك أو مكتبك من خلال تجليد الحوائط وتصميم مكتبات تليفزيون معاصرة.", img: "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=80&w=800" }
+                { id: "s_1", title: "مطابخ خشبية", desc: "تصميم وتفصيل مطابخ عصرية وكلاسيكية بأجود أنواع الخشب المقاوم للرطوبة والحرارة.", img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=50&w=500" },
+                { id: "s_2", title: "أبواب ونوافذ", desc: "صناعة أبواب داخلية وخارجية بمتانة عالية وتصميمات فنية تناسب كافة المساحات والأذواق.", img: "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=50&w=500" },
+                { id: "s_3", title: "أثاث منزلي تفصيل", desc: "تنفيذ غرف نوم، طاولات طعام، دواليب، وغرف معيشة تلبي احتياجاتك ومساحاتك بشكل مثالي.", img: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=50&w=500" },
+                { id: "s_4", title: "ديكورات خشبية", desc: "إضافة لمسات فنية لبيتك أو مكتبك من خلال تجليد الحوائط وتصميم مكتبات تليفزيون معاصرة.", img: "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=50&w=500" }
             ],
             portfolio: [
-                { id: "p_1", title: "مطبخ عصري من خشب الزان", img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800" },
-                { id: "p_2", title: "طاولة طعام خشب طبيعي", img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&q=80&w=800" },
-                { id: "p_3", title: "أبواب داخلية بتشطيب ممتاز", img: "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=80&w=800" },
-                { id: "p_4", title: "تجليد و ديكورات جدارية خشبية", img: "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=80&w=800" }
+                { id: "p_1", title: "مطبخ عصري من خشب الزان", img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=50&w=500", category: "kitchen" },
+                { id: "p_2", title: "طاولة طعام خشب طبيعي", img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&q=50&w=500", category: "bedroom" },
+                { id: "p_3", title: "أبواب داخلية بتشطيب ممتاز", img: "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=50&w=500", category: "doors" },
+                { id: "p_4", title: "تجليد و ديكورات جدارية خشبية", img: "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=50&w=500", category: "decor" }
             ],
             contact: {
                 phone: "01116785889",
@@ -1471,6 +1585,18 @@
                     }
                 });
             });
+
+            // Scroll event for Back to Top Button
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            if (backToTopBtn) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        backToTopBtn.classList.add('show');
+                    } else {
+                        backToTopBtn.classList.remove('show');
+                    }
+                });
+            }
         });
 
         // Local Storage / Data management
@@ -1510,14 +1636,29 @@
                     // Backward compatibility: Populate images for existing saved services if they lack it
                     if (siteData.services) {
                         const defaultImgMap = {
-                            "s_1": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800",
-                            "s_2": "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=80&w=800",
-                            "s_3": "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=800",
-                            "s_4": "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=80&w=800"
+                            "s_1": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=50&w=500",
+                            "s_2": "https://images.unsplash.com/photo-1517446540673-98db5f3e9e1c?auto=format&fit=crop&q=50&w=500",
+                            "s_3": "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=50&w=500",
+                            "s_4": "https://images.unsplash.com/photo-1622372738946-62e02505feb3?auto=format&fit=crop&q=50&w=500"
                         };
                         siteData.services.forEach(s => {
                             if (!s.img) {
-                                s.img = defaultImgMap[s.id] || "https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800";
+                                s.img = defaultImgMap[s.id] || "https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=50&w=500";
+                            }
+                        });
+                    }
+
+                    // Backward compatibility: Populate categories for existing saved portfolio items if they lack it
+                    if (siteData.portfolio) {
+                        const defaultCatMap = {
+                            "p_1": "kitchen",
+                            "p_2": "bedroom",
+                            "p_3": "doors",
+                            "p_4": "decor"
+                        };
+                        siteData.portfolio.forEach(p => {
+                            if (!p.category) {
+                                p.category = defaultCatMap[p.id] || "other";
                             }
                         });
                     }
@@ -1531,6 +1672,29 @@
             renderWebsiteContent();
         }
 
+        let activePortfolioFilter = 'all';
+
+        function filterPortfolio(category, btn) {
+            activePortfolioFilter = category;
+            
+            // Update button styles
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.classList.remove('active');
+            });
+            if (btn) {
+                btn.classList.add('active');
+            }
+            
+            renderWebsiteContent();
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
         function saveSiteDataLocally() {
             localStorage.setItem('ramy_carpentry_data', JSON.stringify(siteData));
         }
@@ -1538,12 +1702,12 @@
         // Render Website dynamic content
         function renderWebsiteContent() {
             const defaultBanners = {
-                hero: "https://images.unsplash.com/photo-1598305086036-7c975a538568?auto=format&fit=crop&q=80",
-                about: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=800",
-                services: "https://images.unsplash.com/photo-1426927308491-6380b6a9936f?auto=format&fit=crop&q=80&w=800",
-                portfolio: "https://images.unsplash.com/photo-1507312436339-df140ac34b35?auto=format&fit=crop&q=80&w=800",
-                reviews: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=800",
-                contact: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800"
+                hero: "https://images.unsplash.com/photo-1598305086036-7c975a538568?auto=format&fit=crop&q=60&w=1200",
+                about: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=60&w=1000",
+                services: "https://images.unsplash.com/photo-1426927308491-6380b6a9936f?auto=format&fit=crop&q=60&w=1000",
+                portfolio: "https://images.unsplash.com/photo-1507312436339-df140ac34b35?auto=format&fit=crop&q=60&w=1000",
+                reviews: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=60&w=1000",
+                contact: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=60&w=1000"
             };
 
             // Hero
@@ -1551,12 +1715,12 @@
             document.getElementById('hero-subtitle').innerText = siteData.heroSubtitle;
             document.title = `${siteData.heroTitle} - نجار محترف`;
             
-            const heroBanner = siteData.heroBanner || defaultBanners.hero;
+            const heroBanner = optimizeUnsplashUrl(siteData.heroBanner || defaultBanners.hero, 1200);
             document.getElementById('home').style.backgroundImage = `linear-gradient(rgba(23, 15, 11, 0.85), rgba(23, 15, 11, 0.85)), url('${heroBanner}')`;
 
             // About Header
             const aboutTitle = siteData.aboutTitle || "من أنا";
-            const aboutBanner = siteData.aboutBanner || defaultBanners.about;
+            const aboutBanner = optimizeUnsplashUrl(siteData.aboutBanner || defaultBanners.about, 1000);
             document.getElementById('about-header-container').innerHTML = `
                 <div class="section-banner" style="background-image: url('${aboutBanner}');">
                     <h2 class="section-banner-title">${aboutTitle}</h2>
@@ -1566,7 +1730,7 @@
 
             // Services Header
             const servicesTitle = siteData.servicesTitle || "خدماتنا";
-            const servicesBanner = siteData.servicesBanner || defaultBanners.services;
+            const servicesBanner = optimizeUnsplashUrl(siteData.servicesBanner || defaultBanners.services, 1000);
             document.getElementById('services-header-container').innerHTML = `
                 <div class="section-banner" style="background-image: url('${servicesBanner}');">
                     <h2 class="section-banner-title">${servicesTitle}</h2>
@@ -1577,10 +1741,11 @@
             const servicesContainer = document.getElementById('services-grid-container');
             servicesContainer.innerHTML = '';
             siteData.services.forEach(service => {
-                const serviceImgUrl = service.img || 'https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800';
+                const serviceImgUrl = service.img || 'https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=50&w=500';
+                const optimizedImg = optimizeUnsplashUrl(serviceImgUrl, 500);
                 servicesContainer.innerHTML += `
                     <div class="service-card">
-                        <img src="${serviceImgUrl}" alt="${service.title}" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
+                        <img src="${optimizedImg}" alt="${service.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=50&w=500'">
                         <h3>${service.title}</h3>
                         <p>${service.desc}</p>
                     </div>
@@ -1589,7 +1754,7 @@
 
             // Portfolio Header
             const portfolioTitle = siteData.portfolioTitle || "معرض الأعمال";
-            const portfolioBanner = siteData.portfolioBanner || defaultBanners.portfolio;
+            const portfolioBanner = optimizeUnsplashUrl(siteData.portfolioBanner || defaultBanners.portfolio, 1000);
             document.getElementById('portfolio-header-container').innerHTML = `
                 <div class="section-banner" style="background-image: url('${portfolioBanner}');">
                     <h2 class="section-banner-title">${portfolioTitle}</h2>
@@ -1599,28 +1764,45 @@
             // Portfolio
             const portfolioContainer = document.getElementById('portfolio-grid-container');
             portfolioContainer.innerHTML = '';
-            siteData.portfolio.forEach((item, index) => {
-                const escapedTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '\\"');
-                const escapedImg = item.img.replace(/'/g, "\\'").replace(/"/g, '\\"');
-                portfolioContainer.innerHTML += `
-                    <div class="portfolio-item" onclick="openLightbox('${escapedImg}', '${escapedTitle}')" style="cursor: pointer; animation-delay: ${index * 0.08}s;">
-                        <img src="${item.img}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
-                        <div class="portfolio-overlay">
-                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 15px; box-sizing: border-box;">
-                                <div class="text" style="margin-bottom: 12px; border-top: 1.5px solid var(--primary); border-bottom: 1.5px solid var(--primary); width: 100%; font-size: 1.1rem; padding: 10px 5px; box-sizing: border-box; background-color: rgba(0, 0, 0, 0.4);">${item.title}</div>
-                                <div style="display: flex; gap: 8px; justify-content: center;">
-                                    <span class="btn" style="padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px; background-color: var(--primary); color: #000; border-radius: 4px; font-weight: bold; pointer-events: none;">
-                                        <i class="fas fa-search-plus"></i> تكبير
-                                    </span>
-                                    <button class="btn" onclick="shareProject('${escapedTitle}', '${escapedImg}', event)" style="padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px; background-color: transparent; border: 1.5px solid var(--primary); color: var(--primary); border-radius: 4px; font-weight: bold; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.backgroundColor='var(--primary)'; this.style.color='#000';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--primary)';">
-                                        <i class="fas fa-share-alt"></i> مشاركة
-                                    </button>
+            
+            // Filter portfolio items based on active filter
+            const filteredPortfolio = siteData.portfolio.filter(item => {
+                if (activePortfolioFilter === 'all') return true;
+                return (item.category || 'other') === activePortfolioFilter;
+            });
+
+            if (filteredPortfolio.length === 0) {
+                portfolioContainer.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px 20px; color: var(--text-secondary);">
+                        <i class="fas fa-images" style="font-size: 3rem; margin-bottom: 15px; color: var(--border-dark);"></i>
+                        <p style="font-size: 1.1rem; font-weight: bold;">لا توجد أعمال في هذا التصنيف حالياً.</p>
+                    </div>
+                `;
+            } else {
+                filteredPortfolio.forEach((item, index) => {
+                    const escapedTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '\\"');
+                    const escapedImg = item.img.replace(/'/g, "\\'").replace(/"/g, '\\"');
+                    const optimizedImg = optimizeUnsplashUrl(item.img, 500);
+                    portfolioContainer.innerHTML += `
+                        <div class="portfolio-item" onclick="openLightbox('${escapedImg}', '${escapedTitle}')" style="cursor: pointer; animation-delay: ${index * 0.08}s;">
+                            <img src="${optimizedImg}" alt="${item.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=50&w=500'">
+                            <div class="portfolio-overlay">
+                                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 15px; box-sizing: border-box;">
+                                    <div class="text" style="margin-bottom: 12px; border-top: 1.5px solid var(--primary); border-bottom: 1.5px solid var(--primary); width: 100%; font-size: 1.1rem; padding: 10px 5px; box-sizing: border-box; background-color: rgba(0, 0, 0, 0.4);">${item.title}</div>
+                                    <div style="display: flex; gap: 8px; justify-content: center;">
+                                        <span class="btn" style="padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px; background-color: var(--primary); color: #000; border-radius: 4px; font-weight: bold; pointer-events: none;">
+                                            <i class="fas fa-search-plus"></i> تكبير
+                                        </span>
+                                        <button class="btn" onclick="shareProject('${escapedTitle}', '${escapedImg}', event)" style="padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px; background-color: transparent; border: 1.5px solid var(--primary); color: var(--primary); border-radius: 4px; font-weight: bold; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.backgroundColor='var(--primary)'; this.style.color='#000';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--primary)';">
+                                            <i class="fas fa-share-alt"></i> مشاركة
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
 
             // Reviews Header
             const reviewsTitle = siteData.reviewsTitle || "آراء العملاء";
@@ -1997,11 +2179,11 @@
                 setTimeout(function() {
                     // Choose a premium woodwork Unsplash picture
                     var premiumWoodImages = [
-                        "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800", // kitchen
-                        "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800", // wood decor
-                        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800", // kitchen/cabinet
-                        "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800", // interior custom wood
-                        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800"  // elegant woodwork
+                        "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=50&w=500", // kitchen
+                        "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=50&w=500", // wood decor
+                        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=50&w=500", // kitchen/cabinet
+                        "https://images.unsplash.com/photo-1497366216548-37526070297c?q=50&w=500", // interior custom wood
+                        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=50&w=500"  // elegant woodwork
                     ];
                     var randImg = premiumWoodImages[Math.floor(Math.random() * premiumWoodImages.length)];
                     var mockData = {
@@ -2028,6 +2210,20 @@
                 // Set the title
                 if (data.title) {
                     document.getElementById('portfolioTitle').value = data.title;
+                    
+                    // Auto-detect category based on title text
+                    const text = data.title;
+                    let detectedCat = 'other';
+                    if (text.includes('مطبخ') || text.includes('مطابخ')) {
+                        detectedCat = 'kitchen';
+                    } else if (text.includes('غرف') || text.includes('غرفة') || text.includes('سرير') || text.includes('دولاب') || text.includes('طاولة') || text.includes('أثاث') || text.includes('طاولات')) {
+                        detectedCat = 'bedroom';
+                    } else if (text.includes('باب') || text.includes('أبواب') || text.includes('شباك') || text.includes('شبابيك') || text.includes('نافذة') || text.includes('نوافذ')) {
+                        detectedCat = 'doors';
+                    } else if (text.includes('ديكور') || text.includes('ديكورات') || text.includes('تجليد') || text.includes('مكتبة') || text.includes('مكتبات') || text.includes('جدار')) {
+                        detectedCat = 'decor';
+                    }
+                    document.getElementById('portfolioCategory').value = detectedCat;
                 }
                 
                 // Set the image url and trigger standard preview
@@ -2159,10 +2355,11 @@
             }
 
             siteData.services.forEach(service => {
-                const serviceImgUrl = service.img || 'https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800';
+                const serviceImgUrl = service.img || 'https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=50&w=500';
+                const optimizedImg = optimizeUnsplashUrl(serviceImgUrl, 250);
                 container.innerHTML += `
                     <div class="admin-item-card">
-                        <img src="${serviceImgUrl}" class="image-preview" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
+                        <img src="${optimizedImg}" class="image-preview" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=50&w=500'">
                         <div class="admin-item-card-header" style="border-bottom:none; padding-bottom:0; margin-top:5px;">
                             <strong style="color: var(--primary); font-size: 1.1rem;">${service.title}</strong>
                             <div class="admin-item-actions">
@@ -2269,12 +2466,20 @@
             }
 
             siteData.portfolio.forEach(item => {
+                const optimizedImg = optimizeUnsplashUrl(item.img, 250);
+                let catLabel = "أخرى";
+                if (item.category === "kitchen") catLabel = "مطابخ";
+                else if (item.category === "bedroom") catLabel = "غرف وأثاث";
+                else if (item.category === "doors") catLabel = "أبواب ونوافذ";
+                else if (item.category === "decor") catLabel = "ديكورات";
+
                 container.innerHTML += `
                     <div class="admin-item-card">
-                        <img src="${item.img}" class="image-preview" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=80&w=800'">
-                        <div class="admin-item-card-header" style="border-bottom:none; padding-bottom:0; margin-top:5px;">
+                        <img src="${optimizedImg}" class="image-preview" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1534224039826-c7a0dea0e66a?auto=format&fit=crop&q=50&w=500'">
+                        <div class="admin-item-card-header" style="border-bottom:none; padding-bottom:0; margin-top:5px; flex-direction: column; align-items: flex-start; gap: 4px;">
                             <strong style="color: var(--text-primary); font-size: 1rem;">${item.title}</strong>
-                            <div class="admin-item-actions">
+                            <span style="font-size: 0.78rem; background-color: rgba(229, 193, 88, 0.12); color: var(--primary); padding: 2px 8px; border-radius: 12px; font-weight: bold; margin-bottom: 5px;">${catLabel}</span>
+                            <div class="admin-item-actions" style="align-self: stretch; display: flex; justify-content: flex-end; gap: 8px;">
                                 <button class="action-btn edit" onclick="editPortfolio('${item.id}')">تعديل</button>
                                 <button class="action-btn delete" onclick="deletePortfolio('${item.id}')">حذف</button>
                             </div>
@@ -2288,6 +2493,7 @@
             const id = document.getElementById('editPortfolioId').value;
             const title = document.getElementById('portfolioTitle').value.trim();
             const img = document.getElementById('portfolioImg').value.trim();
+            const category = document.getElementById('portfolioCategory').value;
 
             if (!title || !img) {
                 alert('الرجاء تعبئة عنوان العمل وصورة العمل أولاً!');
@@ -2300,13 +2506,15 @@
                 if (index !== -1) {
                     siteData.portfolio[index].title = title;
                     siteData.portfolio[index].img = img;
+                    siteData.portfolio[index].category = category;
                 }
             } else {
                 // Adding new project
                 const newProject = {
                     id: 'p_' + Date.now(),
                     title: title,
-                    img: img
+                    img: img,
+                    category: category
                 };
                 siteData.portfolio.push(newProject);
             }
@@ -2323,6 +2531,7 @@
                 document.getElementById('editPortfolioId').value = item.id;
                 document.getElementById('portfolioTitle').value = item.title;
                 document.getElementById('portfolioImg').value = item.img;
+                document.getElementById('portfolioCategory').value = item.category || 'other';
                 
                 if (item.img) {
                     document.getElementById('portfolioPreviewImg').src = item.img;
@@ -2352,6 +2561,7 @@
             document.getElementById('editPortfolioId').value = '';
             document.getElementById('portfolioTitle').value = '';
             document.getElementById('portfolioImg').value = '';
+            document.getElementById('portfolioCategory').value = 'kitchen';
             document.getElementById('portfolioFileInput').value = '';
             document.getElementById('portfolioPreviewContainer').style.display = 'none';
             document.getElementById('portfolioDropzone').style.display = 'block';
@@ -2581,6 +2791,11 @@
 
             setTimeout(() => { statusDiv.style.display = 'none'; }, 5000);
         }
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top" onclick="scrollToTop()" title="العودة للأعلى">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
     </script>
 </body>
 </html>
