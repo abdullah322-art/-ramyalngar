@@ -104,7 +104,17 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                     )
                 )
 
-                val response = RetrofitClient.service.generateContent("gemini-3.1-pro-preview", apiKey, request)
+                val response = try {
+                    RetrofitClient.service.generateContent("gemini-3.1-pro-preview", apiKey, request)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    val fallbackRequest = GenerateContentRequest(
+                        contents = listOf(Content(parts = listOf(Part(prompt)))),
+                        systemInstruction = sysInst,
+                        generationConfig = GenerationConfig(temperature = 0.7f)
+                    )
+                    RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, fallbackRequest)
+                }
                 val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text ?: ""
                 
                 var cleanJson = responseText.trim()
@@ -118,15 +128,15 @@ class WebAppInterface(private val context: Context, private val webView: WebView
 
                 // Execute callback on Main WebView Thread
                 webView.post {
-                    val escapedJson = cleanJson.replace("'", "\\'")
-                    webView.evaluateJavascript("javascript:$callbackJs('$escapedJson')", null)
+                    val base64Json = android.util.Base64.encodeToString(cleanJson.toByteArray(Charsets.UTF_8), android.util.Base64.NO_WRAP)
+                    webView.evaluateJavascript("javascript:$callbackJs(decodeURIComponent(escape(window.atob('$base64Json'))))", null)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 webView.post {
                     val errorMsg = "{\"error\": \"${e.localizedMessage ?: "Unknown error"}\"}"
-                    val escapedError = errorMsg.replace("'", "\\'")
-                    webView.evaluateJavascript("javascript:$callbackJs('$escapedError')", null)
+                    val base64Json = android.util.Base64.encodeToString(errorMsg.toByteArray(Charsets.UTF_8), android.util.Base64.NO_WRAP)
+                    webView.evaluateJavascript("javascript:$callbackJs(decodeURIComponent(escape(window.atob('$base64Json'))))", null)
                 }
             }
         }
@@ -161,21 +171,15 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                 
                 // Execute callback on Main WebView Thread
                 webView.post {
-                    val escapedText = responseText.replace("\\", "\\\\")
-                                                .replace("'", "\\'")
-                                                .replace("\n", "\\n")
-                                                .replace("\r", "")
-                    webView.evaluateJavascript("javascript:$callbackJs(true, '$escapedText')", null)
+                    val base64Text = android.util.Base64.encodeToString(responseText.toByteArray(Charsets.UTF_8), android.util.Base64.NO_WRAP)
+                    webView.evaluateJavascript("javascript:$callbackJs(true, decodeURIComponent(escape(window.atob('$base64Text'))))", null)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 webView.post {
                     val errorMsg = e.localizedMessage ?: "حدث خطأ غير متوقع في معالجة طلبك."
-                    val escapedError = errorMsg.replace("\\", "\\\\")
-                                                .replace("'", "\\'")
-                                                .replace("\n", "\\n")
-                                                .replace("\r", "")
-                    webView.evaluateJavascript("javascript:$callbackJs(false, '$escapedError')", null)
+                    val base64Text = android.util.Base64.encodeToString(errorMsg.toByteArray(Charsets.UTF_8), android.util.Base64.NO_WRAP)
+                    webView.evaluateJavascript("javascript:$callbackJs(false, decodeURIComponent(escape(window.atob('$base64Text'))))", null)
                 }
             }
         }
@@ -201,26 +205,36 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                         thinkingConfig = ThinkingConfig(thinkingLevel = ThinkingLevel.HIGH.name)
                     )
                 )
-                val response = RetrofitClient.service.generateContent("gemini-3.1-pro-preview", apiKey, request)
+                val response = try {
+                    RetrofitClient.service.generateContent("gemini-3.1-pro-preview", apiKey, request)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    val fallbackRequest = GenerateContentRequest(
+                        contents = listOf(
+                            Content(
+                                parts = listOf(
+                                    Part(text = textPrompt),
+                                    Part(inlineData = Blob(mimeType = mimeType, data = base64Data))
+                                )
+                            )
+                        ),
+                        generationConfig = GenerationConfig(temperature = 0.7f)
+                    )
+                    RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, fallbackRequest)
+                }
                 val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text
                     ?: "يا فندم الصورة جميلة خالص بس حصلت مشكلة في قرائتها.. ارفعها تاني عيني ليك يا باشا!"
                 
                 webView.post {
-                    val escapedText = responseText.replace("\\", "\\\\")
-                                                .replace("'", "\\'")
-                                                .replace("\n", "\\n")
-                                                .replace("\r", "")
-                    webView.evaluateJavascript("javascript:$callbackJs(true, '$escapedText')", null)
+                    val base64Text = android.util.Base64.encodeToString(responseText.toByteArray(Charsets.UTF_8), android.util.Base64.NO_WRAP)
+                    webView.evaluateJavascript("javascript:$callbackJs(true, decodeURIComponent(escape(window.atob('$base64Text'))))", null)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 webView.post {
                     val errorMsg = e.localizedMessage ?: "حدث خطأ أثناء تحليل الصورة."
-                    val escapedError = errorMsg.replace("\\", "\\\\")
-                                                .replace("'", "\\'")
-                                                .replace("\n", "\\n")
-                                                .replace("\r", "")
-                    webView.evaluateJavascript("javascript:$callbackJs(false, '$escapedError')", null)
+                    val base64Text = android.util.Base64.encodeToString(errorMsg.toByteArray(Charsets.UTF_8), android.util.Base64.NO_WRAP)
+                    webView.evaluateJavascript("javascript:$callbackJs(false, decodeURIComponent(escape(window.atob('$base64Text'))))", null)
                 }
             }
         }
@@ -255,11 +269,8 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                 e.printStackTrace()
                 webView.post {
                     val errorMsg = e.localizedMessage ?: "حدث خطأ أثناء ابتكار التصميم."
-                    val escapedError = errorMsg.replace("\\", "\\\\")
-                                                .replace("'", "\\'")
-                                                .replace("\n", "\\n")
-                                                .replace("\r", "")
-                    webView.evaluateJavascript("javascript:$callbackJs(false, '$escapedError')", null)
+                    val base64Text = android.util.Base64.encodeToString(errorMsg.toByteArray(Charsets.UTF_8), android.util.Base64.NO_WRAP)
+                    webView.evaluateJavascript("javascript:$callbackJs(false, decodeURIComponent(escape(window.atob('$base64Text'))))", null)
                 }
             }
         }
@@ -278,6 +289,7 @@ fun HtmlScreen() {
                     settings.javaScriptEnabled = true
                     settings.domStorageEnabled = true
                     webViewClient = WebViewClient()
+                    webChromeClient = android.webkit.WebChromeClient()
                     addJavascriptInterface(WebAppInterface(context, this), "AndroidInterface")
                     loadUrl("file:///android_asset/index.html")
                 }

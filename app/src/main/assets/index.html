@@ -3533,6 +3533,82 @@
                 });
             }
         });
+
+        // GORGEOUS CUSTOM TOAST NOTIFICATION SYSTEM
+        window.showToast = function(message, type = 'success') {
+            let container = document.getElementById('custom-toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'custom-toast-container';
+                container.style.position = 'fixed';
+                container.style.bottom = '30px';
+                container.style.left = '50%';
+                container.style.transform = 'translateX(-50%)';
+                container.style.zIndex = '999999';
+                container.style.display = 'flex';
+                container.style.flexDirection = 'column';
+                container.style.gap = '10px';
+                container.style.alignItems = 'center';
+                container.style.width = '90%';
+                container.style.maxWidth = '400px';
+                container.style.pointerEvents = 'none';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            toast.style.background = 'rgba(23, 15, 11, 0.95)';
+            toast.style.border = '2px solid ' + (type === 'error' ? 'var(--error, #e74c3c)' : 'var(--primary, #d4af37)');
+            toast.style.color = '#fff';
+            toast.style.padding = '12px 24px';
+            toast.style.borderRadius = '30px';
+            toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.6)';
+            toast.style.fontSize = '1rem';
+            toast.style.fontWeight = 'bold';
+            toast.style.textAlign = 'center';
+            toast.style.display = 'flex';
+            toast.style.alignItems = 'center';
+            toast.style.gap = '10px';
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(20px)';
+            toast.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            toast.style.pointerEvents = 'auto';
+            toast.style.direction = 'rtl';
+
+            const icon = document.createElement('i');
+            if (type === 'error') {
+                icon.className = 'fas fa-exclamation-circle';
+                icon.style.color = 'var(--error, #e74c3c)';
+            } else {
+                icon.className = 'fas fa-check-circle';
+                icon.style.color = 'var(--primary, #d4af37)';
+            }
+            toast.appendChild(icon);
+
+            const textSpan = document.createElement('span');
+            textSpan.innerText = message;
+            toast.appendChild(textSpan);
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+            }, 50);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 4000);
+        };
+
+        // Intercept global standard alerts and render them via our high-end custom toast!
+        window.alert = function(msg) {
+            let isError = msg.includes('خطأ') || msg.includes('فشل') || msg.includes('Error') || msg.includes('لم نتمكن') || msg.includes('عذراً');
+            window.showToast(msg, isError ? 'error' : 'success');
+        };
     </script>
 
     <!-- Gemini AI Chatbot Widget -->
