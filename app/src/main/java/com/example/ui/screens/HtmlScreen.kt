@@ -212,26 +212,14 @@ class WebAppInterface(private val context: Context, private val webView: WebView
                         )
                     ),
                     generationConfig = GenerationConfig(
-                        temperature = null,
-                        thinkingConfig = ThinkingConfig(thinkingLevel = ThinkingLevel.HIGH.name)
+                        temperature = 0.7f
                     )
                 )
                 val response = try {
-                    RetrofitClient.service.generateContent("gemini-3.1-pro-preview", apiKey, request)
+                    RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, request)
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    val fallbackRequest = GenerateContentRequest(
-                        contents = listOf(
-                            Content(
-                                parts = listOf(
-                                    Part(text = textPrompt),
-                                    Part(inlineData = Blob(mimeType = mimeType, data = base64Data))
-                                )
-                            )
-                        ),
-                        generationConfig = GenerationConfig(temperature = 0.7f)
-                    )
-                    RetrofitClient.service.generateContent("gemini-3.5-flash", apiKey, fallbackRequest)
+                    throw e
                 }
                 val responseText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text
                     ?: "يا فندم الصورة جميلة خالص بس حصلت مشكلة في قرائتها.. ارفعها تاني عيني ليك يا باشا!"
@@ -253,36 +241,23 @@ class WebAppInterface(private val context: Context, private val webView: WebView
 
     @JavascriptInterface
     fun generateImageWithGemini(prompt: String, resolution: String, callbackJs: String) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             try {
-                val apiKey = BuildConfig.GEMINI_API_KEY
+                // Enhance prompt for better results
+                val enhancedPrompt = "Luxury premium high-quality woodwork carpentry, highly detailed, photorealistic studio interior render, natural wood grain details, master carpenter finish: $prompt"
+                val encodedPrompt = android.net.Uri.encode(enhancedPrompt)
+                val width = if (resolution == "4k") 1024 else 800
+                val height = if (resolution == "4k") 1024 else 800
                 
-                // Append resolution modifier to prompt
-                val enhancedPrompt = "Luxury premium high-quality woodwork carpentry by Ramy Alngar, highly detailed $resolution resolution: $prompt. Photorealistic studio interior render, natural wood grain details, master carpenter finish, 8k masterpiece."
+                // Use Pollinations AI for free, fast, high-quality real AI image generation
+                val imageUrl = "https://image.pollinations.ai/prompt/$encodedPrompt?width=$width&height=$height&nologo=true"
                 
-                val request = GenerateImagesRequest(
-                    prompt = enhancedPrompt,
-                    numberOfImages = 1,
-                    aspectRatio = "1:1"
-                )
-                
-                val response = RetrofitClient.service.generateImages(apiKey, request)
-                val base64Image = response.generatedImages?.firstOrNull()?.image?.imageBytes
-                
-                webView.post {
-                    if (base64Image != null) {
-                        webView.evaluateJavascript("javascript:$callbackJs(true, '$base64Image')", null)
-                    } else {
-                        webView.evaluateJavascript("javascript:$callbackJs(false, 'لم نتمكن من ابتكار التصميم حالياً، جرب تكتب تفاصيل تانية يا باشا!')", null)
-                    }
-                }
+                webView.evaluateJavascript("javascript:$callbackJs(true, '$imageUrl', true)", null)
             } catch (e: Exception) {
                 e.printStackTrace()
-                webView.post {
-                    val errorMsg = e.localizedMessage ?: "حدث خطأ أثناء ابتكار التصميم."
-                    val base64Text = android.util.Base64.encodeToString(errorMsg.toByteArray(Charsets.UTF_8), android.util.Base64.NO_WRAP)
-                    webView.evaluateJavascript("javascript:$callbackJs(false, decodeURIComponent(escape(window.atob('$base64Text'))))", null)
-                }
+                val errorMsg = e.localizedMessage ?: "حدث خطأ أثناء ابتكار التصميم."
+                val base64Text = android.util.Base64.encodeToString(errorMsg.toByteArray(Charsets.UTF_8), android.util.Base64.NO_WRAP)
+                webView.evaluateJavascript("javascript:$callbackJs(false, decodeURIComponent(escape(window.atob('$base64Text'))))", null)
             }
         }
     }

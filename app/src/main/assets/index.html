@@ -2393,6 +2393,7 @@
 
             saveSiteDataLocally();
             renderWebsiteContent();
+            closeDashboard();
             alert('تم حفظ إعدادات الصفحات والبنرات وتطبيقها بنجاح! 🎉');
         }
 
@@ -2624,6 +2625,7 @@
 
             saveSiteDataLocally();
             renderWebsiteContent();
+            closeDashboard();
             alert('تم حفظ وتحديث معلومات الموقع بنجاح! ستظهر التعديلات فوراً.');
         }
 
@@ -2690,6 +2692,8 @@
             renderWebsiteContent();
             resetServiceForm();
             renderAdminServices();
+            closeDashboard();
+            closeDashboard();
             alert('تم حفظ الخدمة بنجاح!');
         }
 
@@ -2808,6 +2812,7 @@
             renderWebsiteContent();
             resetPortfolioForm();
             renderAdminPortfolio();
+            closeDashboard();
             alert('تم حفظ المشروع الجديد في المعرض!');
         }
 
@@ -2928,6 +2933,7 @@
             resetReviewForm();
             renderAdminReviews();
             renderWebsiteContent();
+            closeDashboard();
             alert('تم حفظ تقييم العميل بنجاح!');
         }
 
