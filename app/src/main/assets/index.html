@@ -2900,7 +2900,7 @@
 
         // --- Gemini Chatbot Logic ---
         let chatbotHistory = [];
-        const ramySystemInstruction = "أنت 'مساعد ورشة الأسطى رامي النجار الذكي'؛ نجّار مصري خبير، دافئ، بشوش ومتحدث فصيح بلهجة مصرية نجارية ودية ترحيبية للغاية. ورشة الأسطى رامي متخصصة في أرقى الديكورات وأعمال النجارة المودرن والكلاسيك (مطابخ، غرف نوم، أبواب، خزائن، مكتبات تلفزيون وتجليد حوائط). أجب بدقة واحترافية وبشكل مبهج، واستخدم مصطلحات حقيقية وصحيحة في مهنة النجارة (مثل خشب الزان الأحمر، الأرو الطبيعي، المفصلات الهيدروليك الصامتة، دهانات البولي يوريثان المقاومة للرطوبة والخدش، قشرة الأرو الممتازة، والكونتر المعالج). إذا سأل العميل عن الأسعار، وضح له أن السعر يعتمد على الأبعاد ونوع الخشب والتشطيب المطلوب، واعرض عليه تقديم تقدير تقريبي أو حثه على ملء استمارة طلب التواصل أو التواصل المباشر مع الأسطى رامي عبر واتساب لتحديد موعد معاينة مجانية ورفع المقاسات بدقة.";
+        const ramySystemInstruction = "أنت 'الأسطى رامي النجار' بنفسك؛ معلم نجار مصري خبير وصاحب الورشة، راجل دافئ، بشوش، لسانك ينقط عسل، وبترحب بالزبائن بكلمات مصرية أصيلة زي 'يا فندم'، 'يا باشا'، 'يا ست الهوانم'، 'منور الورشة'، 'على راسي من فوق'. ورشتك متخصصة في أرقى الديكورات وأعمال النجارة المودرن والكلاسيك (مطابخ، غرف نوم، أبواب، خزائن، تجليد حوائط، ومكتبات تلفزيون). اتكلم بلهجة مصرية عامية نجارية ودية للغاية ومحبوبة، مع مصطلحات حقيقية وصحيحة في مهنة النجارة (مثل: خشب الزان الأحمر الروماني المبخر، الأرو الأمريكي الطبيعي، الموسكي الفنلندي، المفصلات الهيدروليك الإيطالي الباكم الصامتة، سحابات الأدراج رمان البلي، دهانات البولي يوريثان والدوكو المغسول المقاوم للرطوبة والخدش، وقشرة الأرو الممتازة). إذا سأل العميل عن الأسعار، قوله بكل حب وود إن الشغل المظبوط المضمون بيتحسب بالمتر المربع أو الطولي وحسب نوع الخشب والتشطيب، وإنه يكتب تفاصيل طلبه أو يضغط على زرار الواتساب عشان تروحله بنفسك تعمل معاينة مجانية وترفع المقاسات بالملّي وتعمله خصم محترم. خلي ردودك دايماً مبهجة ومقنعة وتبين إنك أسطى قديم وصنايعي شاطر بتخاف على مال الزبون وبتعمل شغل يعيش العمر كله على أبوه!";
 
         function toggleChatWindow() {
             const chatWin = document.getElementById('chatbot-window');
@@ -3008,7 +3008,7 @@
             } else {
                 // Mock response as fallback if not in Android app
                 setTimeout(() => {
-                    onGeminiChatResponse(true, "أهلاً بك يا فندم! أنا أعمل حالياً داخل بيئة تجريبية، ولكن عند تشغيل التطبيق على الهاتف سأتصل فوراً بخوادم Gemini لتوفير إجابات حقيقية وذكية!");
+                    onGeminiChatResponse(true, "يا مرحب بيك يا فندم! أنا الأسطى رامي النجار معاك بنفسي.. بما إننا شغالين تجريبي دلوقتي، فالرد ده متسجل؛ لكن أول ما تشغل التطبيق على الموبايل هكون معاك لحظة بلحظة بذكاء اصطناعي حقيقي من Gemini وهنخطط لكل حاجة سوا يا فندم!");
                 }, 1000);
             }
         }
@@ -3038,7 +3038,7 @@
                 );
             } else {
                 setTimeout(() => {
-                    onGeminiChatResponse(true, "أهلاً بك يا فندم! أنا أعمل حالياً داخل بيئة تجريبية، ولكن عند تشغيل التطبيق على الهاتف سأتصل فوراً بخوادم Gemini لتوفير إجابات حقيقية وذكية!");
+                    onGeminiChatResponse(true, "حبيبي يا غالي! تسلملي على سؤالك.. أنا الأسطى رامي النجار بنفسي معاك. عشان إحنا في البيئة التجريبية، فالخدمة شغالة بكفاءة كاملة على الموبايل وبتتصل بـ Gemini مباشرة؛ وهناك هرد عليك بكل التفاصيل الفنية عن الصنعة المظبوطة ونوع الخشب!");
                 }, 1000);
             }
         }
@@ -3070,7 +3070,7 @@
             <span id="chatbot-notification-badge" style="position: absolute; top: 0px; right: 0px; background-color: var(--error); width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 2px solid var(--surface-dark);"></span>
             <!-- Tooltip -->
             <div id="chatbot-tooltip" style="position: absolute; right: 70px; background-color: var(--surface-dark); color: var(--text-primary); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1.5px solid var(--primary); opacity: 0; pointer-events: none; transition: opacity 0.3s; display: flex; align-items: center; gap: 6px;">
-                <span>تحدث مع مساعد الأسطى رامي الذكي! 🪵✨</span>
+                <span>دردش مع الأسطى رامي النجار نفسه! 🪵✨</span>
             </div>
         </button>
 
@@ -3083,7 +3083,7 @@
                         <i class="fas fa-hammer"></i>
                     </div>
                     <div style="text-align: right;">
-                        <h5 style="color: var(--text-primary); margin: 0; font-size: 0.9rem; font-weight: bold;">مساعد الأسطى رامي الذكي</h5>
+                        <h5 style="color: var(--text-primary); margin: 0; font-size: 0.9rem; font-weight: bold;">الأسطى رامي النجار (شخصياً)</h5>
                         <span style="color: var(--success); font-size: 0.72rem; display: flex; align-items: center; gap: 4px; margin-top: 1px;">
                             <span style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--success); display: inline-block;"></span> متصل بالذكاء الاصطناعي
                         </span>
@@ -3099,17 +3099,17 @@
                 <!-- Welcome Message -->
                 <div class="bot-msg-wrapper" style="align-self: flex-start; display: flex; gap: 8px; max-width: 85%; margin-bottom: 5px;">
                     <div style="width: 28px; height: 28px; border-radius: 50%; background-color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #000; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-                        <i class="fas fa-robot"></i>
+                        <i class="fas fa-hammer" style="font-size: 0.8rem;"></i>
                     </div>
                     <div style="background-color: var(--surface-variant); color: var(--text-primary); padding: 10px 14px; border-radius: 2px 14px 14px 14px; font-size: 0.9rem; line-height: 1.5; text-align: right; border: 1px solid var(--border-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-                        يا أهلاً بك يا فندم في ورشة الأسطى رامي! 🪵✨ أنا مساعده الذكي، جاهز أساعدك في اختيار التصميم ونوع الخشب المناسب (زان، أرو، كونتر)، وتجيب تقدير مبدئي للأسعار لأي مطبخ، باب، أو دولاب تفصيل. تفضل اسألني أي سؤال!
+                        يا مرحب بيك يا فندم في ورشتي المتواضعة! 🪵✨ أنا الأسطى رامي النجار بنفسي معاك هنا. اسألني عن أي تصميم، أو نوع خشب (زان، أرو، موسكي، كونتر)، أو لو عايز تعرف الفرق وتكلفة الشغل المظبوط إيه.. عيني ليك، ورشتنا بتعمل شغل على أبوه يعيش معاك العمر كله!
                     </div>
                 </div>
 
                 <!-- Live Typing Indicator -->
                 <div id="chatbot-typing-indicator" style="display: none; align-self: flex-start; gap: 8px; max-width: 85%;">
                     <div style="width: 28px; height: 28px; border-radius: 50%; background-color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #000; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-                        <i class="fas fa-robot"></i>
+                        <i class="fas fa-hammer" style="font-size: 0.8rem;"></i>
                     </div>
                     <div style="background-color: var(--surface-variant); color: var(--text-secondary); padding: 12px 16px; border-radius: 2px 14px 14px 14px; font-size: 0.9rem; display: flex; align-items: center; gap: 4px; border: 1px solid var(--border-dark);">
                         <span class="typing-dot" style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--text-secondary); display: inline-block;"></span>
@@ -3121,14 +3121,14 @@
 
             <!-- Suggested Questions Bar -->
             <div id="chatbot-suggestions" style="padding: 8px 12px; background-color: var(--bg-dark); border-top: 1px solid var(--border-dark); display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; white-space: nowrap; -webkit-overflow-scrolling: touch;">
-                <button onclick="sendSuggestedQuestion('ما هي أسعار تفصيل المطابخ لديكم؟')" style="background-color: rgba(229,193,88,0.08); border: 1.5px solid rgba(229,193,88,0.3); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; white-space: nowrap;">أسعار المطابخ 📐</button>
-                <button onclick="sendSuggestedQuestion('ما الفرق بين خشب الزان الأحمر والأرو؟')" style="background-color: rgba(229,193,88,0.08); border: 1.5px solid rgba(229,193,88,0.3); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; white-space: nowrap;">الفرق بين الزان والأرو 🪵</button>
-                <button onclick="sendSuggestedQuestion('أريد حجز موعد لرفع المقاسات والمعاينة')" style="background-color: rgba(229,193,88,0.08); border: 1.5px solid rgba(229,193,88,0.3); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; white-space: nowrap;">حجز موعد معاينة 🤝</button>
+                <button onclick="sendSuggestedQuestion('عايز أعرف أسعار تفصيل المطابخ يا أسطى رامي؟')" style="background-color: rgba(229,193,88,0.08); border: 1.5px solid rgba(229,193,88,0.3); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; white-space: nowrap;">أسعار المطابخ 📐</button>
+                <button onclick="sendSuggestedQuestion('إيه أحسن نوع خشب للأبواب والدواليب؟')" style="background-color: rgba(229,193,88,0.08); border: 1.5px solid rgba(229,193,88,0.3); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; white-space: nowrap;">أحسن نوع خشب 🪵</button>
+                <button onclick="sendSuggestedQuestion('عايز أحجز معاك موعد لرفع المقاسات والمعاينة')" style="background-color: rgba(229,193,88,0.08); border: 1.5px solid rgba(229,193,88,0.3); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; white-space: nowrap;">حجز موعد معاينة 🤝</button>
             </div>
 
             <!-- Input Area -->
             <div style="padding: 10px 12px; background-color: var(--surface-dark); border-top: 2px solid var(--border-dark); display: flex; gap: 8px; align-items: center;">
-                <input type="text" id="chatbot-input" placeholder="اكتب سؤالك للأستاذ رامي هنا..." style="flex: 1; padding: 10px 12px; border-radius: 8px; border: 1.5px solid var(--border-dark); background-color: var(--bg-dark); color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.2s; text-align: right; direction: rtl;" onkeydown="if(event.key === 'Enter') sendChatbotMessage()">
+                <input type="text" id="chatbot-input" placeholder="اسأل الأسطى رامي مباشرة..." style="flex: 1; padding: 10px 12px; border-radius: 8px; border: 1.5px solid var(--border-dark); background-color: var(--bg-dark); color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.2s; text-align: right; direction: rtl;" onkeydown="if(event.key === 'Enter') sendChatbotMessage()">
                 <button onclick="sendChatbotMessage()" style="width: 38px; height: 38px; border-radius: 8px; background-color: var(--primary); color: #000; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: transform 0.2s; outline: none;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
                     <i class="fas fa-paper-plane" style="transform: rotate(180deg);"></i>
                 </button>
