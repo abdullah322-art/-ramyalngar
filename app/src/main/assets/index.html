@@ -1217,6 +1217,30 @@
 
 
 
+    <!-- MODAL 1: Admin Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border-dark); padding-bottom: 15px; margin-bottom: 20px;">
+                <div class="modal-title" style="font-size: 1.3rem;"><i class="fas fa-lock" style="color: var(--primary); margin-left: 8px;"></i> تسجيل الدخول للإدارة</div>
+                <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+            </div>
+            <div class="form-group" style="position: relative; text-align: right;">
+                <label for="adminPassword" style="margin-bottom: 10px; display: block; font-weight: bold;">كلمة مرور لوحة التحكم</label>
+                <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                    <input type="password" id="adminPassword" class="form-control" placeholder="أدخل كلمة المرور" style="padding-left: 45px; width: 100%;" onkeydown="if(event.key === 'Enter') submitLogin()">
+                    <i id="toggleModalPassword" class="fas fa-eye" onclick="togglePasswordVisibility('adminPassword', this)" style="position: absolute; left: 15px; color: var(--text-secondary); cursor: pointer; font-size: 1.1rem; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-secondary)'"></i>
+                </div>
+            </div>
+            <div id="modalLoginError" style="color: var(--error); margin-bottom: 15px; font-weight: bold; display: none; font-size: 0.9rem; text-align: right; animation: modalFadeIn 0.2s;">
+                <i class="fas fa-exclamation-circle" style="margin-left: 5px;"></i> كلمة المرور غير صحيحة! يرجى إعادة المحاولة والتحقق من كلمة المرور.
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="btn" style="flex: 1; padding: 12px; font-size: 1rem; font-weight: bold;" onclick="submitLogin()">دخول</button>
+                <button class="btn" style="flex: 1; background-color: var(--surface-variant); color: var(--text-primary); padding: 12px; font-size: 1rem; font-weight: bold;" onclick="closeLoginModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL 2: Fullscreen Admin Dashboard -->
     <div id="dashboardModal" class="modal" style="align-items: flex-start; padding: 40px 20px;">
         <div class="admin-dashboard">
@@ -2275,35 +2299,33 @@
 
         // Login Redirect and Inline Controls
         function openLoginModal() {
-            // Smoothly scroll to the inline admin section instead of showing a floating modal popup
-            const loginSection = document.getElementById('admin-login-section');
-            if (loginSection) {
-                loginSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
-                // Trigger a beautiful glowing pulse animation to capture the user's attention
-                loginSection.style.boxShadow = '0 0 25px rgba(229, 193, 88, 0.9)';
-                loginSection.style.borderColor = 'var(--primary)';
-                
-                setTimeout(() => {
-                    loginSection.style.boxShadow = '';
-                    loginSection.style.borderColor = 'var(--border-dark)';
-                }, 2000);
-
-                const passwordInput = document.getElementById('inlineAdminPassword');
-                if (passwordInput) {
-                    setTimeout(() => {
-                        passwordInput.focus();
-                    }, 600);
-                }
-            }
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('modalLoginError').style.display = 'none';
+            setTimeout(() => { document.getElementById('adminPassword').focus(); }, 100);
         }
 
         function closeLoginModal() {
-            // No-op since we use inline password entries now
+            document.getElementById('loginModal').style.display = 'none';
         }
 
         function submitLogin() {
-            // No-op since we use inline login
+            const pwd = document.getElementById('adminPassword').value.trim();
+            if (pwd === siteData.password) {
+                isAdminLoggedIn = true;
+                closeLoginModal();
+                renderAdminInlineSection(); // Just update the UI if needed
+                openDashboard();
+            } else {
+                const errorDiv = document.getElementById('modalLoginError');
+                errorDiv.style.display = 'block';
+                const inputDiv = document.getElementById('adminPassword').parentElement;
+                inputDiv.style.transform = 'translateX(8px)';
+                setTimeout(() => { inputDiv.style.transform = 'translateX(-8px)'; }, 50);
+                setTimeout(() => { inputDiv.style.transform = 'translateX(4px)'; }, 100);
+                setTimeout(() => { inputDiv.style.transform = 'translateX(-4px)'; }, 150);
+                setTimeout(() => { inputDiv.style.transform = 'translateX(0)'; }, 200);
+            }
         }
 
         function renderAdminInlineSection() {
